@@ -22,7 +22,7 @@ function Main () {
         <span> {user.userLocation} </span>
       </div>
       <div className="topView">
-        {/* {pageState} */}
+        {pageState}
       </div>
       <div className="bottomView">
         <div className="BMenuBar"> 

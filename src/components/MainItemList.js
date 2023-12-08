@@ -18,6 +18,7 @@ function MainItemList() {
 
 
   React.useEffect(() => {
+    console.log('메인리스트 유즈이펙트 실행됨');
     dispatch(loadMainposts());
   }, [boardList, dispatch]);
 

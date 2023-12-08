@@ -1,5 +1,5 @@
-// import { createSlice } from "@reduxjs/toolkit";
-// import { instance } from "../../util/axios";
+import { createSlice } from "@reduxjs/toolkit";
+import { get, post } from "../../util/axios";
 
 // // 찜하기
 // export const postLike = (postId) => {
@@ -29,7 +29,7 @@
 //   };
 // };
 
-// // 게시물 등록
+// 게시물 등록
 // export const carrotPost = (newPost, navigate) => {
 //   return async function (dispatch) {
 //     try {
@@ -43,7 +43,7 @@
 //   };
 // };
 
-// // 게시물 수정
+// 게시물 수정
 // export const modyfyPost = (modifyPostInfo, navigate) => {
 //   return async function (dispatch) {
 //     await instance
@@ -89,19 +89,19 @@
 //   };
 // };
 
-// // 메인화면 포스트 리드
-// export const loadMainposts = () => {
-//   return async function (dispatch) {
-//     await instance
-//       .get("/api/post")
-//       .then((re) => {
-//         dispatch(roadPosts(re.data.posts));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+// 메인화면 포스트 리드
+export const loadMainposts = () => {
+  return async function (dispatch) {
+    await get("/product/home/0/강남구")
+      .then((res) => {
+        console.log(res);
+        // dispatch(roadPosts(res.data.posts));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 // // 판매목록 리드
 // export const loadSalseposts = () => {
@@ -142,37 +142,37 @@
 //   };
 // };
 
-// const postSlice = createSlice({
-//   name: "post",
-//   initialState: {
-//     postList: [],
-//     post: {},
-//   },
-//   reducers: {
-//     uploadPost: (state, action) => {
-//       state.postList.push(action.payload);
-//     },
-//     getLoadPost: (state, action) => {
-//       state.post = action.payload;
-//     },
-//     roadPosts: (state, action) => {
-//       state.postList = action.payload;
-//     },
-//     setLike: (state, action) => {
-//       state.post.likeNum = action.payload.likeNum;
-//       state.post.userLike = action.payload.userLike;
-//     },
-//     changeTradeState: (state, action) => {
-//       state.postList = state.postList.map((post) => {
-//         if (post.postId === action.payload.id) {
-//           post.tradeState = action.payload.tradeState;
-//         }
-//         return post;
-//       });
-//     },
-//   },
-// });
+const postSlice = createSlice({
+  name: "post",
+  initialState: {
+    postList: [],
+    post: {},
+  },
+  reducers: {
+    uploadPost: (state, action) => {
+      state.postList.push(action.payload);
+    },
+    getLoadPost: (state, action) => {
+      state.post = action.payload;
+    },
+    roadPosts: (state, action) => {
+      state.postList = action.payload;
+    },
+    setLike: (state, action) => {
+      state.post.likeNum = action.payload.likeNum;
+      state.post.userLike = action.payload.userLike;
+    },
+    changeTradeState: (state, action) => {
+      state.postList = state.postList.map((post) => {
+        if (post.postId === action.payload.id) {
+          post.tradeState = action.payload.tradeState;
+        }
+        return post;
+      });
+    },
+  },
+});
 
-// const { uploadPost, getLoadPost, roadPosts, changeTradeState, setLike } =
-//   postSlice.actions;
-// export default postSlice.reducer;
+const { uploadPost, getLoadPost, roadPosts, changeTradeState, setLike } =
+  postSlice.actions;
+export default postSlice.reducer;

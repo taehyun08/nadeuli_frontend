@@ -9,12 +9,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  deletePost,
-  postUnLike,
-  carrotGetPost,
-  postLike,
-} from "../redux/modules/post";
+// import {
+//   deletePost,
+//   postUnLike,
+//   carrotGetPost,
+//   postLike,
+// } from "../redux/modules/post";
 
 import Modal from "../components/Modal";
 
@@ -42,16 +42,16 @@ function Detail() {
   // 금액 콤마(,) 찍어서 보여주기
   let carrotPrice = postPrice?.toLocaleString("ko-KR");
 
-  useEffect(() => {
-    dispatch(carrotGetPost(postId));
-  }, [dispatch, postId]);
+  // useEffect(() => {
+  //   dispatch(carrotGetPost(postId));
+  // }, [dispatch, postId]);
 
   // 관심하트
   const likeHeart = () => {
     if (postDetail.userLike) {
-      dispatch(postUnLike(postId)); // userlike가 true면 false로 바꿔주라
+      // dispatch(postUnLike(postId)); // userlike가 true면 false로 바꿔주라
     } else {
-      dispatch(postLike(postId));
+      // dispatch(postLike(postId));
     }
   };
 
@@ -83,7 +83,7 @@ function Detail() {
                 </ButtonModify>
                 <ButtonDelete
                   onClick={() => {
-                    dispatch(deletePost(postId, navigate));
+                    // dispatch(deletePost(postId, navigate));
                     alert("삭제가 완료되었습니다. ");
                   }}
                 >

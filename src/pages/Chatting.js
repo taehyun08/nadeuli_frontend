@@ -2,7 +2,7 @@ import "../public/css/chatting.css"
 import styled from "styled-components";
 
 import React, { useState, useEffect, useRef } from "react";
-import { changeTradeStateDB } from "../redux/modules/post";
+// import { changeTradeStateDB } from "../redux/modules/post";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";

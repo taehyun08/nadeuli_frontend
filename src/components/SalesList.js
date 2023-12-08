@@ -3,7 +3,7 @@ import styled, { css } from "styled-components";
 import { FiMoreVertical } from "react-icons/fi";
 
 import { useEffect, useState } from "react";
-import { changeTradeStateDB, loadSalseposts } from "../redux/modules/post";
+// import { changeTradeStateDB, loadSalseposts } from "../redux/modules/post";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -23,9 +23,9 @@ function SalesList() {
   const COMPLETE_SELL = 1;
   const [tab, setTab] = useState(NOW_SELL);
 
-  useEffect(() => {
-    dispatch(loadSalseposts());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(loadSalseposts());
+  // }, [dispatch]);
 
   useEffect(() => {
     console.log(postList);
@@ -122,7 +122,7 @@ function SalesList() {
                 {list.tradeState === "0" && (
                   <button
                     onClick={() => {
-                      dispatch(changeTradeStateDB(list.postId, "1")); // 예약으로 바꾸기
+                      // dispatch(changeTradeStateDB(list.postId, "1")); // 예약으로 바꾸기
                     }}
                   >
                     예약중
@@ -131,7 +131,7 @@ function SalesList() {
                 {list.tradeState === "1" && (
                   <button
                     onClick={() => {
-                      dispatch(changeTradeStateDB(list.postId, "0"));
+                      // dispatch(changeTradeStateDB(list.postId, "0"));
                     }}
                   >
                     거래중
@@ -140,7 +140,7 @@ function SalesList() {
                 {(list.tradeState === "0" || list.tradeState === "1") && (
                   <button
                     onClick={() => {
-                      dispatch(changeTradeStateDB(list.postId, "2"));
+                      // dispatch(changeTradeStateDB(list.postId, "2"));
                     }}
                   >
                     거래완료
@@ -158,7 +158,7 @@ function SalesList() {
                   </ButtonModify>
                   <ButtonDelete
                     onClick={() => {
-                      dispatch(deletePost(list.postId, navigate));
+                      // dispatch(deletePost(list.postId, navigate));
                       alert("삭제가 완료되었습니다. ");
                     }}
                   >
