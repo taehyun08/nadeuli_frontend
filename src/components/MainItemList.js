@@ -1,4 +1,4 @@
-import "../public/css/listForm.css";
+import "../style/css/listForm.css";
 import styled from "styled-components";
 import { FaPlus } from "react-icons/fa";
 import { BsHeart } from "react-icons/bs";

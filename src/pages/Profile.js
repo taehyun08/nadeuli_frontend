@@ -6,95 +6,95 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { useRef } from "react";
 import { storage } from "../shared/firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { instance } from "../shared/axios";
 import { useDispatch, useSelector } from "react-redux";
 import { backupCarrotUserProfile, getCarrotUserInfo } from "../redux/modules/user";
 import { current } from "@reduxjs/toolkit";
 
 function Profile() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const dispatch = useDispatch();
+  // const navigate = useNavigate();
+  // const location = useLocation();
+  // const dispatch = useDispatch();
 
-  const userRedux = useSelector((state) => state.user);
-  const [user, setUser] = useState({});
+  // const userRedux = useSelector((state) => state.user);
+  // const [user, setUser] = useState({});
 
-  const nickRef = useRef(null);
-  const fileRef = useRef(null);
+  // const nickRef = useRef(null);
+  // const fileRef = useRef(null);
 
-  useEffect(() => {
-    if (userRedux.isLogin && userRedux.nickname !== "") {
-      load();
-    }
-    console.log(userRedux);
-  }, [userRedux]);
+  // useEffect(() => {
+  //   if (userRedux.isLogin && userRedux.nickname !== "") {
+  //     load();
+  //   }
+  //   console.log(userRedux);
+  // }, [userRedux]);
 
-  const load = async () => {
-    console.log(userRedux);
-    setUser(userRedux);
-    if (userRedux.save.nickname) {
-      nickRef.current.value = userRedux.save.nickname;
-      setUser((current) => {
-        return {...current, nickname: userRedux.save.nickname}
-      });
-    }
+  // const load = async () => {
+  //   console.log(userRedux);
+  //   setUser(userRedux);
+  //   if (userRedux.save.nickname) {
+  //     nickRef.current.value = userRedux.save.nickname;
+  //     setUser((current) => {
+  //       return {...current, nickname: userRedux.save.nickname}
+  //     });
+  //   }
 
-    if (userRedux.save.userImg) {
-      setUser((current) => {
-        return {...current, userImg: userRedux.save.userImg}
-      });
-    }
+  //   if (userRedux.save.userImg) {
+  //     setUser((current) => {
+  //       return {...current, userImg: userRedux.save.userImg}
+  //     });
+  //   }
 
-    if (userRedux.save.userLocation) {
-      console.log("작동");
-      setUser((current) => {
-        return {...current, userLocation: userRedux.save.userLocation}
-      });
-    }
-  }
+  //   if (userRedux.save.userLocation) {
+  //     console.log("작동");
+  //     setUser((current) => {
+  //       return {...current, userLocation: userRedux.save.userLocation}
+  //     });
+  //   }
+  // }
 
-  const selectFile = (e) => {
-    let reader = new FileReader();
+  // const selectFile = (e) => {
+  //   let reader = new FileReader();
 
-    reader.onload = (e) => {
-      var img = document.getElementById("previewImage");
-      img.setAttribute("src", e.target.result);
-      dispatch(backupCarrotUserProfile({userImg: e.target.result}));
-    }
+  //   reader.onload = (e) => {
+  //     var img = document.getElementById("previewImage");
+  //     img.setAttribute("src", e.target.result);
+  //     dispatch(backupCarrotUserProfile({userImg: e.target.result}));
+  //   }
 
-    reader.readAsDataURL(e.target.files[0]);
-  }
+  //   reader.readAsDataURL(e.target.files[0]);
+  // }
 
-  const send = async () => {
-    let data = {};
+  // const send = async () => {
+  //   let data = {};
 
-    let url;
-    if (fileRef.current?.files[0]) {
-      const image = fileRef.current?.files[0];
+  //   let url;
+  //   if (fileRef.current?.files[0]) {
+  //     const image = fileRef.current?.files[0];
 
-      const _upload = ref(storage, `images/${image.name}`);
+  //     const _upload = ref(storage, `images/${image.name}`);
   
-      const snapshot = await uploadBytes(_upload, image);
-      url = await getDownloadURL(_upload);
-    } else {
-      url = user?.userImg;
-    }
+  //     const snapshot = await uploadBytes(_upload, image);
+  //     url = await getDownloadURL(_upload);
+  //   } else {
+  //     url = user?.userImg;
+  //   }
 
-    data = {
-      nickname: nickRef.current.value,
-      userLocation: user?.userLocation,
-      userImg: url
-    }
+  //   data = {
+  //     nickname: nickRef.current.value,
+  //     userLocation: user?.userLocation,
+  //     userImg: url
+  //   }
 
-    await instance.put("/api/user/edit", data);
-    dispatch(getCarrotUserInfo());
-    navigate("/mypage")
-  }
+  //   await instance.put("/api/user/edit", data);
+  //   dispatch(getCarrotUserInfo());
+  //   navigate("/mypage")
+  // }
 
-  const onClick = (e) => {
-    send();
-  }
+  // const onClick = (e) => {
+  //   send();
+  // }
 
   return (
     <Wrap>

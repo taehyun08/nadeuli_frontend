@@ -1,94 +1,56 @@
 import styled from "styled-components";
 import { IoIosClose, IoIosCamera } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import { useState, useRef, useEffect } from "react";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { storage } from "../shared/firebase";
-import { carrotPost } from "../redux/modules/post";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useRef } from "react";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { storage } from "../shared/firebase";
+import { modyfyPost } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
 // 이미지 업로드
 
-function Add() {
+function Modify(props) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const param = useParams();
+  const postId = param.postid;
+  console.log(postId)
   const fileInput = useRef();
   const img_ref = useRef();
   const title_ref = useRef();
   const price_ref = useRef();
   const content_ref = useRef();
-  const chk_ref = useRef();
   const [category, setCategory] = useState();
-  const [imageSrc, setImageSrc] = useState();
+  const [imageSrc, setImageSrc] = useState(); // 프리뷰
   const [enteredNum, setEnterdNum] = useState();
-  const [price, setPrice] = useState(0);
-  const post = useSelector((state) => state.post.postList)
-  
+
   const location = useSelector((state) => state.user.userLocation);
 
-  const changeCategory = (e) => {
-    setCategory(e.target.value);
-  };
+  const changeCategory = (e) => { setCategory(e.target.value);};
 
-  useEffect(() => {
-    if (price) {
-      chk_ref.current.checked = true;
-      chk_ref.current.disabled = false; // 비활성화
-    } else {
-      chk_ref.current.checked = false;
-      chk_ref.current.disabled = true;
-    }
-  }, [price]);
+  //파일처리
+  // const selectFile = async (e) => {
+  //   const uploded_file = await uploadBytes(
+  //     ref(storage, `images/${e.target.files[0].name}`), e.target.files[0]);
+  //   const file_url = await getDownloadURL(uploded_file.ref);
+  //   img_ref.current = { url: file_url };
+  //   const reader = new FileReader();
+  //   const file = e.target.files[0];
+  //   reader.readAsDataURL(file);
+  //   reader.onloadend = () => { setImageSrc(reader.result); };
+  // };
 
-  // useEffect(() => {
-  //   console.log(post)
-
-  // },[post])
-
-  // 파일 업로드
-  const selectFile = async (e) => {
-    const uploded_file = await uploadBytes(
-      ref(storage, `images/${e.target.files[0].name}`),
-      e.target.files[0] // 어떤 파일 저장 할건지
-    );
-
-    // 스토리지로 url 다운로드
-    const file_url = await getDownloadURL(uploded_file.ref);
-
-    img_ref.current = { url: file_url };
-
-    // 프리뷰
-    const reader = new FileReader();
-    const file = e.target.files[0];
-
-    // 파일내용 읽어오기
-    reader.readAsDataURL(file);
-
-    //읽기가 끝나면 발생하는 이벤트 핸들러
-    reader.onloadend = () => {
-      //reader.result는 파일 내용물
-      setImageSrc(reader.result);
-    };
-  };
-
-  // 금액 콤마(,) 찍기
-
+  // 가격표 콤마
   const priceComma = (e) => {
-    setPrice(e.target.value);
     let value = e.target.value;
     value = Number(value.replaceAll(",", ""));
-    if (isNaN(value)) {
-      //NaN인지 판별
-      value = 0;
-    } else {
-      setEnterdNum(value.toLocaleString("ko-KR"));
-    }
+    if (isNaN(value)) { value = 0;} 
+    else { setEnterdNum(value.toLocaleString("ko-KR"));}
   };
-
-  // 콤마제거
-  const commaRemovePrice = enteredNum?.replace(/,/g, ""); // g -> global
+  const commaRemovePrice = enteredNum?.replace(/,/g, "");
   let numberPrice = parseInt(commaRemovePrice);
-  //console.log(numberPrice);
 
+  // 디스패치 업로드 
   const upload = () => {
     const newPost = {
       title: title_ref.current.value,
@@ -96,28 +58,22 @@ function Add() {
       content: content_ref.current.value,
       category: category,
       price: numberPrice,
+      postId : postId
     };
-
-    dispatch(carrotPost(newPost, navigate));
+    dispatch(modyfyPost(newPost, navigate));
   };
 
   return (
     <Wrap>
       <Header>
-        <IoIosClose
-          size="25"
-          onClick={() => {
-            navigate("/main");
-          }}
-        />
-        <h4>중고거래 글쓰기</h4>
-        <h5 onClick={upload}>완료</h5>
+        <IoIosClose size="25" onClick={() => { navigate("/main"); }}/>
+            <h4>수정하기</h4>
+            <h5 onClick={upload}>완료</h5>
       </Header>
 
       {/* 사진업로드 */}
       <Container>
-        <File>
-          <label htmlFor="file">
+        <File> <label htmlFor="file">
             <IoIosCamera className="camera" />
           </label>
           <input type="file" id="file" ref={fileInput} onChange={selectFile} />
@@ -130,7 +86,6 @@ function Add() {
           </Title>
 
           <Categorie>
-            {/* <div>카테고리 선택</div> */}
             <select name="category" id="category" onChange={changeCategory}>
               <option value="none">카테고리 선택</option>
               <option value="디지털기기">디지털기기</option>
@@ -149,35 +104,26 @@ function Add() {
               <option value="기타">기타 중고물품</option>
               <option value="삽니다">삽니다</option>
             </select>
-            {/* <IoIosArrowForward /> */}
           </Categorie>
 
-          <Locate>
-            <div>{location}</div>
-            {/* <IoIosArrowForward /> */}
-          </Locate>
+          <Locate> <div>{location}</div> </Locate>
         </div>
 
         <Price>
-          <input
-            type="text"
-            placeholder="가격 [선택사항]"
+          <input type="text" placeholder="가격 [선택사항]"
             ref={price_ref}
             onChange={priceComma}
-            value={enteredNum || ""}
-          />
+            value={enteredNum || ""} />
           <label htmlFor="price">
-            <input type="checkbox" id="price" ref={chk_ref} />
+            <input type="radio" id="price" />
             가격 제안받기
           </label>
         </Price>
 
-        <textarea
-          cols="40"
-          rows="5"
-          placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될 수 있어요.)"
-          ref={content_ref}
-        />
+        <textarea cols="40" rows="5"
+          placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될
+          수 있어요.)"
+          ref={content_ref} />
       </Container>
     </Wrap>
   );
@@ -245,7 +191,6 @@ const File = styled.div`
 const Title = styled.div`
   padding: 20px 0px;
   border-bottom: 1px solid #dadada;
-
   outline: none;
   input {
     border: none;
@@ -277,10 +222,6 @@ const Price = styled(Title)`
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  input[type="checkbox"] {
-    accent-color: #ff7e36;
-  }
 `;
 
-export default Add;
+export default Modify;

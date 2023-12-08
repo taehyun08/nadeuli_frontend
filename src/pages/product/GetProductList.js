@@ -1,5 +1,5 @@
 import React from 'react';
-import ProductTable from '../../component/cart/ProductTable';
+import ProductTable from '../getgetgetget/Main';
 
 function GetProductList() {
   return (
