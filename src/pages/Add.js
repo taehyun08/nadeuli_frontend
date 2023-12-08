@@ -21,13 +21,13 @@ function Add() {
   const [imageSrc, setImageSrc] = useState();
   const [enteredNum, setEnterdNum] = useState();
   const [price, setPrice] = useState(0);
-  const post = useSelector((state) => state.post.postList)
+  // const post = useSelector((state) => state.post.postList)
   
-  const location = useSelector((state) => state.user.userLocation);
+  // const location = useSelector((state) => state.user.userLocation);
 
-  // const changeCategory = (e) => {
-  //   setCategory(e.target.value);
-  // };
+  const changeCategory = (e) => {
+    setCategory(e.target.value);
+  };
 
   // useEffect(() => {
   //   if (price) {
@@ -72,17 +72,17 @@ function Add() {
 
   // 금액 콤마(,) 찍기
 
-  // const priceComma = (e) => {
-  //   setPrice(e.target.value);
-  //   let value = e.target.value;
-  //   value = Number(value.replaceAll(",", ""));
-  //   if (isNaN(value)) {
-  //     //NaN인지 판별
-  //     value = 0;
-  //   } else {
-  //     setEnterdNum(value.toLocaleString("ko-KR"));
-  //   }
-  // };
+  const priceComma = (e) => {
+    setPrice(e.target.value);
+    let value = e.target.value;
+    value = Number(value.replaceAll(",", ""));
+    if (isNaN(value)) {
+      //NaN인지 판별
+      value = 0;
+    } else {
+      setEnterdNum(value.toLocaleString("ko-KR"));
+    }
+  };
 
   // // 콤마제거
   // const commaRemovePrice = enteredNum?.replace(/,/g, ""); // g -> global
@@ -120,7 +120,7 @@ function Add() {
           <label htmlFor="file">
             <IoIosCamera className="camera" />
           </label>
-          <input type="file" id="file" ref={fileInput} onChange={selectFile} />
+          {/* <input type="file" id="file" ref={fileInput} onChange={selectFile} /> */}
           {imageSrc && <img src={imageSrc} alt="preview-img" />}
         </File>
 
@@ -152,10 +152,10 @@ function Add() {
             {/* <IoIosArrowForward /> */}
           </Categorie>
 
-          <Locate>
-            <div>{location}</div>
-            {/* <IoIosArrowForward /> */}
-          </Locate>
+          {/* <Locate>
+             <div>{location}</div> 
+             <IoIosArrowForward /> 
+          </Locate> */}
         </div>
 
         <Price>
