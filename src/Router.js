@@ -14,11 +14,16 @@ import ProfileLocation from "./pages/ProfileLocation";
 import Chatting from "./pages/Chatting";
 import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
+import DongNeHome from "./pages/dongne/DongNeHome";
+import AddDongNePost from "./pages/dongne/AddDongNePost";
 
 function Router() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/dongNeHome" element={<DongNeHome />} />
+        <Route path="/addDongNePost" element={<AddDongNePost />} />
+
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />

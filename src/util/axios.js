@@ -27,3 +27,5 @@ export const post = async (url, data) => {
     throw error;
   }
 };
+
+export default axiosInstance;
