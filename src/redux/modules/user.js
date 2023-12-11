@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { loadProfile } from "../../shared/axios";
 
+// 회원의 상태를 관리하는 reducer
+// 각 컴포넌트에서 reducer에 정의 된 함수를 호출하면된다.
+// 각 컴포넌트에서는 dispathch를 통해 호출한다
+/*
+const dispatch = useDispatch()
+<button onClick()={()=>{dispatch({type: 타입명})}}</button>
+*/
 export const carrotLoginStatus = (status) => {
   return async function (dispatch) {
     dispatch(updateLogin(status));
