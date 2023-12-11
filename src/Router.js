@@ -1,10 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Start from "./pages/Start";
 import RegisterLocation from "./pages/RegisterLocation";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+import Register from "./pages/member/Register";
+import Login from "./pages/member/Login";
 import Main from "./pages/Main";
-import MyPage from "./pages/MyPage";
+import MyPage from "./pages/member/MyPage";
 import Add from "./pages/Add";
 import Detail from "./pages/Detail";
 import NotFound from "./pages/NotFound";
@@ -12,6 +12,8 @@ import Profile from "./pages/Profile";
 import Modify from "./pages/Modify";
 import ProfileLocation from "./pages/ProfileLocation";
 import Chatting from "./pages/Chatting";
+import FindAccount from "./pages/member/FindAccount";
+import UpdateCellphone from "./pages/member/UpdateCellphone";
 
 function Router() {
   return (
@@ -20,6 +22,8 @@ function Router() {
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/findAccount" element={<FindAccount />} />
+        <Route path="/updateCellphone" element={<UpdateCellphone />} />
         <Route path="/add" element={<Add />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/modify/:postid" element={<Modify />} />
