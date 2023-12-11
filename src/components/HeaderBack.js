@@ -15,7 +15,7 @@ function HeaderBack () {
 }
 
 const Box = styled.div`
-  width: 100%;
+  // width: 100%;
   height: 60px;
   display: flex;
   align-items: center;
