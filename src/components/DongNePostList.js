@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { loadDongNePosts } from '../redux/modules/dongNePost';
 
@@ -6,10 +6,11 @@ import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 function DongNePostList() {
+  const { currentPage, gu } = useParams();
   const dispatch = useDispatch();
-  const [boardList, setBoardList] = useState();
 
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
   const user = useSelector((state) => state.user);
@@ -17,8 +18,8 @@ function DongNePostList() {
   console.log(dongNePostList)
 
   React.useEffect(() => {
-    dispatch(loadDongNePosts(0, '성동구', ''));
-  }, [boardList, dispatch]);
+    dispatch(loadDongNePosts(currentPage, gu, ''));
+  }, [currentPage, gu, dispatch]);
 
   const navigate = useNavigate();
 

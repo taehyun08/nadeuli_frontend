@@ -1,22 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
-import { IoIosClose, IoIosCamera } from "react-icons/io";
+import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
-import { dongNePost } from "../../redux/modules/dongNePost";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { AiFillPicture } from "react-icons/ai";
+import { MdOutlineVideoLibrary } from "react-icons/md";
+import { dongNePost } from "../../redux/modules/dongNePost";
 
 function AddDongNePost() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const fileInput = useRef();
-  const img_ref = useRef();
   const title_ref = useRef();
   const content_ref = useRef();
-  const chk_ref = useRef();
   const [category, setCategory] = useState();
-  const [imageSrc, setImageSrc] = useState();
-  const [enteredNum, setEnterdNum] = useState();
-  const dongNePost = useSelector((state) => state.dongNePost.dongNePost)
+  const img_ref = useRef();
+  const video_ref = useRef();
+  const fileInput = useRef();
+  const [imageSrc, setImageSrc] = useState(null);
+  const [videoSrc, setVideoSrc] = useState(null);
+
+  const dongNePostData = useSelector((state) => state.dongNePost.dongNePost);
   
   const location = useSelector((state) => state.user.userLocation);
 
@@ -25,52 +28,52 @@ function AddDongNePost() {
   };
 
   // useEffect(() => {
-  //   if (price) {
-  //     chk_ref.current.checked = true;
-  //     chk_ref.current.disabled = false; // 비활성화
-  //   } else {
-  //     chk_ref.current.checked = false;
-  //     chk_ref.current.disabled = true;
-  //   }
-  // }, [price]);
-
-  // useEffect(() => {
   //   console.log(dongNePost);
   // }, [dongNePost]);
 
   // 파일 업로드
-  const selectFile = async (e) => {
-    // const uploded_file = await uploadBytes(
-    //   ref(storage, `images/${e.target.files[0].name}`),
-    //   e.target.files[0] // 어떤 파일 저장 할건지
-    // );
+  const selectFile = (e) => {
+    const file = e.target.files[0];
+    const fileType = file.type.split("/")[0];
 
-  //   // 스토리지로 url 다운로드
-  //   const file_url = await getDownloadURL(uploded_file.ref);
+    if (fileType === "image") {
+      if (e.target.files.length <= 10) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setImageSrc(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("사진은 최대 10장까지 업로드 가능합니다.");
+        e.target.value = null;
+      }
+    } else if (fileType === "video") {
+      if (e.target.files.length === 1) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setVideoSrc(reader.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert("영상은 1개까지 업로드 가능합니다.");
+        e.target.value = null;
+      }
+    }
+  }
 
-  //   img_ref.current = { url: file_url };
+  const addDongNePost = () => {
+    if (!category || category === "none") {
+      alert("게시물 카테고리를 선택해주세요!");
+      return;
+    }
 
-  //   // 프리뷰
-  //   const reader = new FileReader();
-  //   const file = e.target.files[0];
-
-  //   // 파일내용 읽어오기
-  //   reader.readAsDataURL(file);
-
-  //   //읽기가 끝나면 발생하는 이벤트 핸들러
-  //   reader.onloadend = () => {
-  //     //reader.result는 파일 내용물
-  //     setImageSrc(reader.result);
-  //   };
-  // };
-
-
-  const upload = () => {
     const newDongNePost = {
+      gu: location,
+      category: category === "잡담" ? 1 : 2,
       title: title_ref.current.value,
-      postImg: img_ref.current.url,
       content: content_ref.current.value,
-      category: category
+      postImg: imageSrc,
+      postVideo: videoSrc
     };
 
     dispatch(dongNePost(newDongNePost, navigate));
@@ -81,73 +84,75 @@ return (
   <Wrap>
     <Header>
       <IoIosClose
-        size="25"
+        size="30"
         onClick={() => {
           navigate("/dongNeHome");
         }}
       />
-      <h4>중고거래 글쓰기</h4>
-      {/* <h5 onClick={upload}>완료</h5> */}
+      <h4>동네나드리 글쓰기</h4>
+      <h5 onClick={addDongNePost}>완료</h5>
     </Header>
 
-    {/* 사진업로드 */}
     <Container>
-      <File>
-        <label htmlFor="file">
-          <IoIosCamera className="camera" />
-        </label>
-        <input type="file" id="file" ref={fileInput} onChange={selectFile} />
-        {imageSrc && <img src={imageSrc} alt="preview-img" />}
-      </File>
-
       <div>
         <Title>
-          <input placeholder="글 제목" ref={title_ref} />
+          <input placeholder="제목을 입력하세요" ref={title_ref} />
         </Title>
 
         <Categorie>
           {/* <div>카테고리 선택</div> */}
           <select name="category" id="category" onChange={changeCategory}>
-            <option value="none">카테고리 선택</option>
-            <option value="디지털기기">디지털기기</option>
-            <option value="생활가전">생활가전</option>
-            <option value="가구&인테리어">가구/인테리어</option>
-            <option value="유아동">유아동</option>
-            <option value="생활&가공식품">생활/가공식품</option>
-            <option value="유아도서">유아도서</option>
-            <option value="스포츠/레저">스포츠/레저</option>
-            <option value="여성패션">여성패션/잡화</option>
-            <option value="남성패션">남성패션/잡화</option>
-            <option value="게임&취미">게임/취미</option>
-            <option value="뷰티&미용">뷰티/미용</option>
-            <option value="반려동물용품">반려동물용품</option>
-            <option value="도서&티켓&음반">도서/티켓/음반</option>
-            <option value="기타">기타 중고물품</option>
-            <option value="삽니다">삽니다</option>
+            <option value="none">게시물 카테고리를 선택해주세요.</option>
+            <option value="잡담">잡담</option>
+            <option value="홍보">홍보</option>
           </select>
-          {/* <IoIosArrowForward /> */}
         </Categorie>
-
-        <Locate>
-          <div>{location}</div>
-          {/* <IoIosArrowForward /> */}
-        </Locate>
       </div>
 
       <textarea
         cols="40"
         rows="5"
-        placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될 수 있어요.)"
+        placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.\n
+        1. 사진은 최대 10장까지 가능합니다.\n
+        2. 영상은 1개까지 가능합니다.`}
         ref={content_ref}
       />
+
+       {/* 사진 업로드 */}
+       <File>
+        <label htmlFor="file">
+          <AiFillPicture className="camera" />
+        </label>
+        <input
+          type="file"
+          id="file"
+          ref={fileInput}
+          onChange={selectFile}
+          accept="image/*"
+          multiple
+        />
+        {imageSrc && <img src={imageSrc} alt="preview-img" />}
+
+      {/* 영상 업로드 */}
+        <label htmlFor="video-file">
+          <MdOutlineVideoLibrary className="video" />
+        </label>
+        <input
+          type="file"
+          id="video-file"
+          ref={fileInput}
+          onChange={selectFile}
+          accept="video/*"
+        />
+        {videoSrc && <video controls src={videoSrc} />}
+      </File>
     </Container>
   </Wrap>
 );
 }
-}
 const Wrap = styled.div`
 box-sizing: border-box;
-font-size: 13px;
+font-size: 18px;
 
 input {
   font-size: 13px;
@@ -158,10 +163,12 @@ textarea {
   border: none;
   outline: none;
   resize: none;
+  font-size: 18px;
+  height: 400px; /* 높이 조절 */
 }
 textarea::placeholder {
   color: #dadada;
-  font-size: 13px;
+  font-size: 18px;
 }
 `;
 const Header = styled.header`
@@ -169,14 +176,16 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 
-padding: 16px 15px;
+padding: 25px 20px;
 border-bottom: 1px solid #dadada;
 
 h4 {
   font-weight: 800;
+  font-size: 20px; /* 원하는 크기로 수정 */
 }
 h5 {
-  color: #ff7e36;
+  color: #4da6ff;
+  font-size: 16px;
 }
 `;
 const Container = styled.div`
@@ -188,7 +197,11 @@ padding: 30px 0px;
 border-bottom: 1px solid #dadada;
 
 .camera {
-  font-size: 35px;
+  font-size: 50px;
+  margin-right: 10px; 
+}
+.video {
+  font-size: 50px;
 }
 label {
   cursor: pointer;
@@ -198,25 +211,28 @@ input[type="file"] {
 }
 
 img {
-  width: 130px;
-  height: 130px;
+  width: 50px;
+  height: 50;
   margin-left: 10px;
   border-radius: 5px;
 }
 `;
 
 const Title = styled.div`
-padding: 20px 0px;
+padding: 25px 0px;
 border-bottom: 1px solid #dadada;
 
 outline: none;
 input {
   border: none;
   outline: none;
+  font-size: 25px;
 }
 
 input::placeholder {
   color: #dadada;
+  border: none;
+  font-size: 25px;
 }
 `;
 const Categorie = styled(Title)`
@@ -227,22 +243,7 @@ select {
   width: 100%;
   border: none;
   outline: none;
-  font-size: 14px;
-}
-`;
-
-const Locate = styled(Title)`
-display: flex;
-justify-content: space-between;
-`;
-
-const Price = styled(Title)`
-display: flex;
-align-items: center;
-justify-content: space-between;
-
-input[type="checkbox"] {
-  accent-color: #ff7e36;
+  font-size: 20px;
 }
 `;
 

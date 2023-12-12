@@ -2,30 +2,54 @@ import { createSlice } from '@reduxjs/toolkit';
 import axiosInstance from '../../util/axios';
 
 // 게시물 등록
-export const dongNePost = (newDongNePost, navigate) => {
+// export const dongNePost = (newDongNePost, navigate) => {
+//   return async function (dispatch) {
+//     try {
+//       const requestBody = {
+//         gu: newDongNePost.gu,
+//         category: newDongNePost.category,
+//         title: newDongNePost.title,
+//         content: newDongNePost.content,
+//         writer: {
+//           tag: "Bss3",
+//           nickname: "엄준식"
+//         }
+//         // postImg: img_ref.current.url,
+//         // postVideo: video_ref.current.url
+//       };
+
+//       const res = await axiosInstance.post('/dongNe/addPost', requestBody);
+//       console.log(res); 
+//       dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
+//       navigate('/main');
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+// };
+
+// 게시물 등록
+export const dongNePost = (newDongNePost, navigate, imgFile, videoFile) => {
   return async function (dispatch) {
     try {
-      const requestBody = {
-        gu: "성동구",
-        dongNe: "송정동",
-        writer: {
-          tag: "W4z7",
-          nickname: "엄준식",
+      const formData = new FormData();
+      formData.append('gu', newDongNePost.gu);
+      formData.append('category', newDongNePost.category);
+      formData.append('title', newDongNePost.title);
+      formData.append('content', newDongNePost.content);
+      formData.append('writer[tag]', 'Bss3');
+      formData.append('writer[nickname]', '엄준식');
+      formData.append('postImg', imgFile);
+      formData.append('postVideo', videoFile);
+      
+      const res = await axiosInstance.post('/dongNe/addPost', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
-        postCategory: 1,
-        title: "우리끼리2 게시물1",
-        content: "되면 진짜 내손에 장을 지진다",
-        orikkiriName: "우리끼리2",
-        orikkiriPicture: "우리끼리2 프로필사진.png",
-        orikkiri: {
-          orikkiriId: 2,
-        },
-        images: ["우리끼리사진1.png", "우리끼리사진2.png"],
-      };
+      });
 
-      const res = await axiosInstance.post('/dongNe/addPost', requestBody);
-      console.log(res); // 실제 응답은 콘솔에 찍힐 것입니다.
-      dispatch(addDongNePost(newDongNePost));
+      console.log(res); 
+      dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
       navigate('/main');
     } catch (err) {
       console.log(err);
@@ -66,9 +90,6 @@ export const loadDongNeHomePosts = (currentPage, gu, searchKeyword) => {
 
 
 
-
-
-
 const dongNePostSlice = createSlice({
   name: 'dongNePost',
   initialState: {
@@ -94,6 +115,6 @@ const dongNePostSlice = createSlice({
   },
 });
 
-export const { loadDongNePosts, addDongNePost, getLoadDongNePost, deleteDongNePost, likeDongNePost } = dongNePostSlice.actions;
+export const { loadDongNePosts, addDongNePost, getLoadDongNePost, deleteDongNePost } = dongNePostSlice.actions;
 
 export default dongNePostSlice.reducer;

@@ -8,22 +8,6 @@ import { MdDeliveryDining } from "react-icons/md";
 import { HiClipboardDocumentList } from "react-icons/hi2";
 
 
-const BottomBarContainer = styled.div`
-  background-color: #f8f8f8;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 0;
-`;
-
-const MenuBox = styled.div`
-  text-align: center;
-  cursor: pointer;
-`;
-
 const BottomBar = () => {
   const navigate = useNavigate();
 
@@ -52,5 +36,21 @@ const BottomBar = () => {
     </BottomBarContainer>
   );
 };
+
+const BottomBarContainer = styled.div`
+  background-color: #f8f8f8;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 10px 0;
+`;
+
+const MenuBox = styled.div`
+  text-align: center;
+  cursor: pointer;
+`;
 
 export default BottomBar;
