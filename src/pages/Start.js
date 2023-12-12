@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import logo from "../public/images/logo.png";
+import kakao from "../public/images/kakao.png"
+import google from "../public/images/google.png"
+import naver from "../public/images/naver.png"
 import { Link } from "react-router-dom";
 import { useState } from "react";
 
@@ -10,12 +13,14 @@ function Start () {
       <Intro>
         <h1><img src={logo} alt="당근마켓 로고" /></h1>
         <h2>당신 근처의 당근 마켓</h2>
-        <p>중고 거래부터 동네 정보까지,<br/>지금 내 동네를 선택하고 시작해보세요!</p>
       </Intro>
       <Select>
         <WrapBottom>
-          <button><Link to="/location">시작하기</Link></button>
-          <p>이미 계정이 있나요? <span><Link to="/login">로그인</Link></span></p>
+          <button className="signUp"><Link to="/register">나드리 회원가입</Link></button>
+          <button><Link to="/login">나드리 로그인</Link></button>
+          <button className="google"><Link to="/location"><img src={google} alt="구글로그인 아이콘"/></Link></button>
+          <button className="kakao"><Link to="/location"><img src={kakao} alt="카카오로그인 아이콘"/></Link></button>
+          <button className="naver"><Link to="/location"><img src={naver} alt="네이버로그인 아이콘"/></Link></button>
         </WrapBottom>
       </Select>
     </Box>
@@ -30,7 +35,7 @@ const Box = styled.div`
 `;
 
 const Intro = styled.div`
-  height: 100%;
+  height: 40%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -57,23 +62,32 @@ const Intro = styled.div`
 
 const Select = styled.div`
   position: relative;
+  height:50%
 `;
 
 const WrapBottom = styled.div`
+
+
+
   width: 100%;
-  height: 140px;
+  height: 100%;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 
+  .signUp{
+    width: 40%;
+  }
+
   button {
-    width: 85%;
-    height: 50px;
-    border: none;
+    width: 75%;
+    height: 13%;
     border-radius: 5px;
+    margin-top: 10px;
     color: ${props => props.theme.color.white};
+    overflow:hidden;
     font-weight: bold;
 
     a {
@@ -89,12 +103,19 @@ const WrapBottom = styled.div`
         background-color: ${props => props.theme.hoverColor.orange};
       }
     }
+
+    img{
+      width:100%;
+
+    }
+
   }
 
   p {
     margin-top: 30px;
     span {
-      color: ${props => props.theme.color.orange};
+      color:black;
+      font-weight:bold;
     }
   }
 `;
