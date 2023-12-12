@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { get, post } from "../../util/axios";
+import axios from 'axios';
 
 // // 찜하기
 // export const postLike = (postId) => {
@@ -30,18 +31,22 @@ import { get, post } from "../../util/axios";
 // };
 
 // 게시물 등록
-// export const carrotPost = (newPost, navigate) => {
-//   return async function (dispatch) {
-//     try {
-//       const res = await instance.post("api/post", newPost);
-//       //console.log(res)
-//       dispatch(uploadPost(newPost));
-//     navigate("/main");
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-// };
+export const carrotPost = (formData, navigate) => {
+  return async function (dispatch) {
+    try {
+      const res = await axios.post('http://localhost:8080/product/addProduct', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(res)
+      dispatch(uploadPost(formData));
+    navigate("/main");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 // 게시물 수정
 // export const modyfyPost = (modifyPostInfo, navigate) => {
@@ -74,28 +79,31 @@ import { get, post } from "../../util/axios";
 //   };
 // };
 
-// // 게시물 상세 조회
-// export const carrotGetPost = (postId) => {
-//   return async function (dispatch) {
-//     await instance
-//       .get(`api/post/${postId}`)
-//       .then((res) => {
-//         // console.log(res.data);
-//         dispatch(getLoadPost(res.data.detailPost));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
-
-// 메인화면 포스트 리드
-export const loadMainposts = () => {
+// 게시물 상세 조회
+export const carrotGetPost = (postId) => {
   return async function (dispatch) {
-    await get("/product/home/0/강남구")
+
+    console.log('11');
+    await get(`product/getProduct/${postId}`)
       .then((res) => {
         console.log(res);
-        // dispatch(roadPosts(res.data.posts));
+        dispatch(getLoadPost(res));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
+// 메인화면 포스트 리드
+export const loadMainposts = (dongNe) => {
+  return async function (dispatch, getState) {
+    await get(`/product/home/0/${dongNe}`)
+      .then((res) => {
+        console.log(res);
+        dispatch(roadPosts(res));
+        const currentState = getState();
+        console.log('Current state:', currentState);
       })
       .catch((err) => {
         console.log(err);

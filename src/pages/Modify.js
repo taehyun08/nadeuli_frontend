@@ -76,7 +76,7 @@ function Modify(props) {
         <File> <label htmlFor="file">
             <IoIosCamera className="camera" />
           </label>
-          <input type="file" id="file" ref={fileInput} onChange={selectFile} />
+          {/* <input type="file" id="file" ref={fileInput} onChange={selectFile} /> */}
           {imageSrc && <img src={imageSrc} alt="preview-img" />}
         </File>
 

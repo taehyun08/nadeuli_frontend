@@ -8,11 +8,11 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import { carrotGetPost } from "../redux/modules/post";
 // import {
 //   deletePost,
 //   postUnLike,
-//   carrotGetPost,
+//   
 //   postLike,
 // } from "../redux/modules/post";
 
@@ -21,7 +21,7 @@ import Modal from "../components/Modal";
 function Detail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const [heart, setHeart] = useState(false); // 찜하기
+  const [heart, setHeart] = useState(false); // 찜하기
   const postDetail = useSelector((state) => state.post.post);
   const postPrice = Number(postDetail?.price);
   const params = useParams();
@@ -42,9 +42,9 @@ function Detail() {
   // 금액 콤마(,) 찍어서 보여주기
   let carrotPrice = postPrice?.toLocaleString("ko-KR");
 
-  // useEffect(() => {
-  //   dispatch(carrotGetPost(postId));
-  // }, [dispatch, postId]);
+  useEffect(() => {
+    dispatch(carrotGetPost(postId));
+  }, [dispatch, postId]);
 
   // 관심하트
   const likeHeart = () => {
@@ -72,7 +72,7 @@ function Detail() {
           <FiMoreVertical onClick={openModal} />
 
           <Modal open={modalOpen} close={closeModal}>
-            {user?.nickname === postDetail?.nickname ? (
+            {user?.tag === postDetail?.tag ? (
               <ButtonWrap>
                 <ButtonModify
                   onClick={() => {
@@ -98,7 +98,7 @@ function Detail() {
       </Header>
 
       <div>
-        <img src={postDetail?.postImg} alt="postImg" />
+        <img src={postDetail?.images} alt="postImg" />
       </div>
 
       <Container>
