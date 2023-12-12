@@ -2,7 +2,7 @@ import "../public/css/chatting.css"
 import styled from "styled-components";
 
 import React, { useState, useEffect, useRef } from "react";
-import { changeTradeStateDB } from "../redux/modules/post";
+// import { changeTradeStateDB } from "../redux/modules/post";
 
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
@@ -76,13 +76,13 @@ return (
       </div>
       
        <div className="saleList">
-        <img src={sellPInfo.postImg}/>
+        {/* <img src={sellPInfo.postImg}/> */}
         <span className="productInfo">
           
-          <p>{sellPInfo.title}</p>
-          <p>{Number(sellPInfo.price).toLocaleString("ko-KR")}원</p>
-          <span> {sellState === "1" ? ( <Book>예약중</Book>) : sellState === "2" ? ( <SoldOut>거래완료</SoldOut> ) 
-                                : ( "" )} </span>
+          {/* <p>{sellPInfo.title}</p> */}
+          {/* <p>{Number(sellPInfo.price).toLocaleString("ko-KR")}원</p> */}
+          {/* <span> {sellState === "1" ? ( <Book>예약중</Book>) : sellState === "2" ? ( <SoldOut>거래완료</SoldOut> ) 
+                                : ( "" )} </span> */}
         </span>
         {sellState === "1" ? (  <button disabled >예약중</button>) : sellState === "2" ? ( <button disabled>거래완료</button> ) 
          : sellState === "0" ? ( <button style={{background : '#FF7E36', color:'white'}} onClick={()=>{
@@ -94,7 +94,7 @@ return (
       </div>
     
       <div className="chattingBody" ref={scrollRef}>
-      {chat && chat.map((list, index) => (
+      {/* {chat && chat.map((list, index) => (
         <div key={index}>
           {list.nickname === user.nickname ?
 
@@ -123,7 +123,7 @@ return (
             </div>
           }
           </div>
-        ))}
+        ))} */}
 
       
       </div>

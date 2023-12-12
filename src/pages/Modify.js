@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useRef } from "react";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { storage } from "../shared/firebase";
-import { modyfyPost } from "../redux/modules/post";
+// import { modyfyPost } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
 // 이미지 업로드
 
@@ -60,7 +60,7 @@ function Modify(props) {
       price: numberPrice,
       postId : postId
     };
-    dispatch(modyfyPost(newPost, navigate));
+    // dispatch(modyfyPost(newPost, navigate));
   };
 
   return (
@@ -76,7 +76,7 @@ function Modify(props) {
         <File> <label htmlFor="file">
             <IoIosCamera className="camera" />
           </label>
-          <input type="file" id="file" ref={fileInput} onChange={selectFile} />
+          {/* <input type="file" id="file" ref={fileInput} onChange={selectFile} /> */}
           {imageSrc && <img src={imageSrc} alt="preview-img" />}
         </File>
 

@@ -18,7 +18,8 @@ function MainItemList() {
 
 
   React.useEffect(() => {
-    dispatch(loadMainposts());
+    console.log('메인리스트 유즈이펙트 실행됨');
+    dispatch(loadMainposts(user.userLocation));
   }, [boardList, dispatch]);
 
   const navigate = useNavigate();
@@ -27,12 +28,12 @@ function MainItemList() {
       {mainPostList &&
         mainPostList.map((list, index) => (
           <div key={index}>
-            {user.userLocation === list.userLocation ? (
+            {
               <CardBox className="card">
                 <div
                   style={{ display: "flex" }}
                   onClick={() => {
-                    navigate("/detail/" + list.postId+"/"+list.tradeState);
+                    navigate("/detail/" + list.productId+"/"+list.tradeState);
                   }}
                 >
                   <Img src={list.postImg} />
@@ -95,9 +96,7 @@ function MainItemList() {
                   {list.likeNum}
                 </div>
               </CardBox>
-            ) : (
-              ""
-            )}
+            }
           </div>
         ))}
 
