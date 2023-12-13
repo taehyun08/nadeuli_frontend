@@ -49,9 +49,9 @@ export const backupCarrotUserProfile = (data) => {
 }
 
 //Reducer
-//createSlice는 리듀서 함수와 액션 생성자를 함께 생성하는 유틸리티 함수
+//createSlice는 리듀서 함수와 액션 생성자를 함께 생성하는 유틸리티 함수 
 const memberSlice = createSlice({
-  // createSlice 함수에서 name 속성은 리듀서의 이름을 지정
+  // createSlice 함수에서 name 속성은 리듀서의 이름을 지정  
   // createSlice로 생성된 객체는 리듀서와 액션을 모두 포함하며 그 객체를 슬라이스 라고한다.
   // 슬라이스는 일종의 모듈화된 Redux 리듀서와 액션을 담고 있는 단위
   // 각각의 리듀서 함수는 reducers 객체 내에 정의된다
