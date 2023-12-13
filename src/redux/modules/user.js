@@ -42,7 +42,7 @@ const userSlice = createSlice({
   initialState: {
     isLogin: false,
     nickname: "",
-    userLocation: "성동구",
+    userLocation: "강남구",
     userImg: "",
     save: {
       nickname: null,

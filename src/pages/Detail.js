@@ -8,9 +8,9 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { carrotGetPost } from "../redux/modules/post";
+import { carrotGetPost, deletePost } from "../redux/modules/post";
 // import {
-//   deletePost,
+//   
 //   postUnLike,
 //   
 //   postLike,
@@ -83,7 +83,7 @@ function Detail() {
                 </ButtonModify>
                 <ButtonDelete
                   onClick={() => {
-                    // dispatch(deletePost(postId, navigate));
+                    dispatch(deletePost(postId, navigate));
                     alert("삭제가 완료되었습니다. ");
                   }}
                 >
@@ -98,7 +98,7 @@ function Detail() {
       </Header>
 
       <div>
-        <img src={postDetail?.images} alt="postImg" />
+        {postDetail && <img src={postDetail.images?.[0]} alt="postImg" />}
       </div>
 
       <Container>
@@ -129,7 +129,7 @@ function Detail() {
               <FaRegSmile size={20} />
             </div>
 
-            <p>매너온도</p>
+            <p>친화력</p>
           </Ondo>
         </ProfileBar>
 
