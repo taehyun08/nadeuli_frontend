@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDongNePostList } from '../redux/modules/dongNePost';
+import Topbar from "./TopBar";
 
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
@@ -9,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 
 function DongNePostList() {
   const gu = "성동구";
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -19,35 +21,17 @@ function DongNePostList() {
     dispatch(GetDongNePostList(currentPage, gu, ''));
   }, [currentPage, gu, dispatch]);
 
-  const navigate = useNavigate();
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
   console.log("dongNePostList:", dongNePostList);
 
   return (
-    <div className="DongNePostListBox">
+    <div className="MainListBox">
       {dongNePostList.map((post) => (
           <div key={post.postId}>
             <CardBox className="card">
               <div
                 style={{ display: "flex" }}
                 onClick={() => {
-                  // navigate("/detail/" + list.postId+"/"+list.tradeState);
+                  navigate("/getDongNePost/" + post.postId);
                 }}
               >
                 <Img src={post.images[0]} alt="Post Image" />

@@ -4,10 +4,11 @@
   flex-direction: column;
   margin-left: 10px;
   margin-top: 10px;
+  
 }
 
 .writer-name {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: bold;
   margin-right: 5px;
 }
@@ -15,6 +16,7 @@
 .writer-dongne {
   font-size: 14px;
   font-weight: bold;
+  margin-top: 5px;
 }
 
 .post-time {

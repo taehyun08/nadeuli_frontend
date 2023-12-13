@@ -1,16 +1,16 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import DongNePostList from '../../components/DongNePostList';
+import TopBar from '../../components/TopBar';
 import BottomBar from '../../components/BottonBar';
 
+
 function DongNeHome() {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.member);
 
   return (
     <div className="Wrap">
-      <div className="TMenuBar">
-        <span> {user.userLocation} </span>
-      </div>
+      <TopBar/>
       <div className="topView">
         <DongNePostList />
       </div>
