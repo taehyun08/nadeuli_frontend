@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import HeaderBack from "../components/HeaderBack";
-import { backupCarrotUserProfile } from "../redux/modules/user";
+// import { backupCarrotUserProfile } from "../redux/modules/user";
 
 function ProfileLocation (props) {
   const dispatch = useDispatch();
@@ -17,7 +17,7 @@ function ProfileLocation (props) {
   const navigate = useNavigate();
 
   const locationClick = (name) => {
-    dispatch(backupCarrotUserProfile({userLocation: name}));
+    // dispatch(backupCarrotUserProfile({userLocation: name}));
     navigate("/profile");
   }
 

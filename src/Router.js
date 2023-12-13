@@ -14,8 +14,11 @@ import ProfileLocation from "./pages/ProfileLocation";
 import Chatting from "./pages/Chatting";
 import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
+import OAuth2RedirectHandler from "./pages/member/OAuth2RedirectHandler";
 import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
+import AddStreaming from "./pages/dongne/AddStreaming";
+import GetDongNePost from "./pages/dongne/GetDongNePost";
 import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -24,12 +27,17 @@ function Router() {
       <Routes>
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
+        <Route path="/addStreaming" element={<AddStreaming />} />
+        <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
+
         <Route path="/addTradeReview" element={<AddTradeReview />} />
+
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
+        <Route path="/login/oauth2/code/kakao" element={<OAuth2RedirectHandler />} />
         <Route path="/add" element={<Add />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/modify/:postid" element={<Modify />} />

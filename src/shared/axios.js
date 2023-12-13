@@ -1,24 +1,91 @@
-import axios from "axios";
+import axios from 'axios';
+import member from '../redux/modules/member';
 
+// 환경 변수에서 기본 URL을 가져옵니다.
+const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+// Axios의 인스턴스를 생성합니다.
 export const instance = axios.create({
-  baseURL: "http://54.180.121.151"
+    baseURL: BASE_URL,
 });
 
+// Axios 요청 인터셉터를 설정합니다.
 instance.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`
+    // 요청 전달되기 전 작업을 처리합니다.
+    (config) => {
+        // 토큰을 가져옵니다.
+        const token = localStorage.getItem('token');
+
+        // 토큰이 존재하면 요청 헤더에 Authorization 헤더를 추가하여 토큰을 전송합니다.
+        if (token) {
+            config.headers.get['Authorization'] = `Bearer ${token}`;
+        }
+
+        // 처리된 config를 반환합니다.
+        return config;
+    },
+    // 요청 에러가 있는 작업을 처리합니다.
+    (error) => {
+        // 에러가 발생하면 콘솔에 에러 로그를 출력합니다.
+        console.error(error);
+
+        // 에러를 Promise를 통해 다음 핸들러로 전파합니다.
+        return Promise.reject(error);
     }
-    return config;
-  },
-  (error) => {
-    console.log(error);
-    return Promise.reject(error);
-  }
 );
 
-export const login = async (users) => await instance.post("/api/user/login", users);
-export const register = async (users) => await instance.post("/api/user/signup", users);
-export const editProfile = async (userImg, nickname, userLocation) => await instance.put("/api/user/edit", {userImg, nickname, userLocation});
-export const loadProfile = async () => await instance.get("/api/user/me");
+// 사용자 로그인 요청을 처리하는 함수
+export const login = async (memberDTO) => {
+    console.log(memberDTO)
+    return await instance.post('/nadeuli/login', { memberDTO });
+};
+
+// 사용자 회원가입 요청을 처리하는 함수
+export const addMember = async (memberDTO, gpsDTO) => {
+    return await instance.post('/nadeuli/addMember', { memberDTO, gpsDTO});
+};
+
+// 사용자 프로필 편집 요청을 처리하는 함수
+export const editProfile = async (userImg, nickname, userLocation) => {
+    return await instance.put('/api/user/edit', { userImg, nickname, userLocation });
+};
+
+// 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
+export const loadProfile = async (tag) => {
+    return await instance.get(`/member/getMember/${tag}`);
+};
+
+// 휴대폰 번호로 인증번호를 요청하는 함수
+export const getAuthNumCellphone = async (to) => {
+    return await instance.post(`/auth/sendSms`, { to });
+};
+
+// 이메일로 인증번호를 요청하는 함수
+export const getAuthNumEmail = async (to) => {
+    return await instance.post(`/auth/sendMail`, { to });
+};
+
+// 인증번호를 확인하는 함수
+export const checkAuthNum = async (data) => {
+    return await instance.post(`/auth/verifyNum`, data);
+};
+
+// 사용자 정보를 업데이트하는 함수
+export const updateMember = async (memberDTO) => {
+    return await instance.post(`/member/updateMember`, memberDTO);
+};
+
+// 회원의 이메일을 체크하는 함수
+export const findAccount = async (memberDTO) => {
+    return await instance.post("/nadeuli/findAccount", memberDTO);
+};
+
+// 계정찾기에서 휴대폰번호를 변경하는 함수
+export const updateCellphone = async (memberDTO) => {
+    return await instance.post("/nadeuli/updateCellphone", memberDTO);
+};
+
+//카카오 로그인 요청 함수
+export const kakaoLogin = async (code) => {
+    return await instance.get(`/nadeuli/kakao`)
+}
