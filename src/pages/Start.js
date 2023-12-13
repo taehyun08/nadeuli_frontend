@@ -8,6 +8,12 @@ import { useState } from "react";
 
 
 function Start () {
+  
+  // console.log(process.env.REACT_APP_KAKAO_AUTH_URL)
+  
+  const kakaoLogin = () => {
+    window.location.href = "http://localhost:8080/oauth2/authorization/kakao";
+}
   return (
     <Box>
       <Intro>
@@ -18,8 +24,9 @@ function Start () {
         <WrapBottom>
           <button className="signUp"><Link to="/register">나드리 회원가입</Link></button>
           <button><Link to="/login">나드리 로그인</Link></button>
-          <button className="google"><Link to="/location"><img src={google} alt="구글로그인 아이콘"/></Link></button>
-          <button className="kakao"><Link to="/location"><img src={kakao} alt="카카오로그인 아이콘"/></Link></button>
+          {/* <button className="google"><Link to="/location"><img src={google} alt="구글로그인 아이콘"/></Link></button> */}
+          <button className="google" onClick={kakaoLogin}><img src={google} alt="구글로그인 아이콘"/></button>
+          <button className="kakao" onClick={kakaoLogin}><img src={kakao} alt="카카오로그인 아이콘"/></button>
           <button className="naver"><Link to="/location"><img src={naver} alt="네이버로그인 아이콘"/></Link></button>
         </WrapBottom>
       </Select>

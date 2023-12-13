@@ -14,6 +14,7 @@ import ProfileLocation from "./pages/ProfileLocation";
 import Chatting from "./pages/Chatting";
 import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
+import OAuth2RedirectHandler from "./pages/member/OAuth2RedirectHandler";
 import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
@@ -36,6 +37,7 @@ function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
+        <Route path="/login/oauth2/code/kakao" element={<OAuth2RedirectHandler />} />
         <Route path="/add" element={<Add />} />
         <Route path="/mypage" element={<MyPage />} />
         <Route path="/modify/:postid" element={<Modify />} />

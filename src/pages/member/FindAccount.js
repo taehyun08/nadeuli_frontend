@@ -1,119 +1,146 @@
-import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { carrotLoginStatus, getCarrotUserInfo } from '../../redux/modules/user';
-import { login } from '../../shared/axios';
-import { saveToken } from '../../shared/localStorage';
+import { checkAuthNum, findAccount, getAuthNumEmail } from '../../shared/axios';
 
 function FindAccount() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [btnState, setBtnState] = useState(false);
+    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false); // 새로 추가한 상태
 
-    const ref = {
-        phone: useRef(null),
-        password: useRef(null),
-    };
+    //다음 컴포넌트로 이메일값을 넘기기위해 사용
+    const navigate = useNavigate();
 
-    const confirmLogin = (e) => {
+    const [to, setTo] = useState(''); // 이메일 상태
+    const [authNum, setAuthNum] = useState(''); // 인증번호 상태
+    const handleGetAuthNumBtnClick = (e) => {
         e.preventDefault();
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
 
-        const data = {
-            phoneNum,
-            password,
-        };
-
-        // validation 체크
-        if (/[^0-9]/g.test(phoneNum) || phoneNum.length < 8) {
-            // 안에 숫자가 아닌 값이 있을 경우
-            alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
-            return;
-        }
-
-        // 하기 코드는 테스트 및 분석해봐야 함
-        if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(password)) {
+        if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(to)) {
             alert('올바른 이메일 형식이 아닙니다.');
             return;
         }
 
-        login(data)
+        const memberDTO = {
+            email: to,
+        };
+        console.log(memberDTO);
+        // findAccount 호출 후에 getAuthNumEmail을 실행하거나 알림을 표시
+        findAccount({ memberDTO })
             .then((response) => {
-                alert('로그인 성공!');
-                saveToken(response.data.token);
-                dispatch(carrotLoginStatus(true));
-                dispatch(getCarrotUserInfo());
-                navigate('/main');
+                const isAccountExist = response.data;
+                if (isAccountExist) {
+                    getAuthNumEmail(to)
+                        .then(() => {
+                            alert('인증번호가 발송되었습니다.');
+                            setIsAuthNumBtnDisabled(true); // 버튼 비활성화
+                        })
+                        .catch((err) => {
+                            alert('인증번호 발송 중 오류가 발생했습니다.');
+                        });
+                } else {
+                    alert('존재하지 않거나 올바르지 않은 이메일입니다.');
+                }
             })
             .catch((err) => {
-                alert('로그인 실패!');
+                alert('서버에서 오류가 발생했습니다.');
+            });
+    };
+    const handleCheckAuthNumBtnClick = (e) => {
+        e.preventDefault(); // 폼의 기본 동작을 막음
+        if (!/^[a-zA-Z0-9!@#$%^*+=-]{5}$/.test(authNum)) {
+            // 안에 소문자,대문자,숫자, 특수문자 '!' ~ '+' (괄호 제외)를 제외한 값이 있을 경우
+            alert('인증번호는 숫자 5자리로 입력해야 합니다.');
+            return;
+        }
+
+        const data = {
+            authNumber: authNum,
+            to: to,
+        };
+        checkAuthNum(data)
+            .then((response) => {
+                alert('인증번호가 일치합니다.');
+                setBtnState(true);
+                setIsToEditable(false);
+                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumInputDisabled(true);
+            })
+            .catch((err) => {
+                alert('인증번호가 일치하지 않습니다.');
+                setIsToEditable(true);
             });
     };
 
     const onChange = (e) => {
         // 버튼 활성화
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
+        const updatedTo = e.target.name === 'to' ? e.target.value : to;
+        const updatedAuthNum = e.target.name === 'authNum' ? e.target.value : authNum;
 
-        if (phoneNum.length > 0 && password.length > 0) {
-            setBtnState(true);
-        } else {
-            setBtnState(false);
-        }
+        setTo(updatedTo);
+        setAuthNum(updatedAuthNum);
+    };
+
+    const handleNavigation = (to) => {
+        console.log(to);
+        navigate('/updateCellphone', { state: { data: { email: to } } });
     };
 
     return (
         <Box>
             <HeaderBack />
             <Content>
-                <em>
-                    이메일을 입력 해주세요.
-                </em>
+                <em>이메일을 입력 해주세요.</em>
                 <p>등록된 이메일이 아닐경우 계정을 찾을 수 없습니다.</p>
                 <p>이메일 인증 완료 후 휴대폰 번호를 변경해서 로그인을 진행하셔야합니다.</p>
-                <Form onSubmit={confirmLogin}>
+                <Form>
+                    <div>
+                        <input
+                            className="to"
+                            type="text"
+                            placeholder="이메일"
+                            required
+                            disabled={!isToEditable}
+                            onChange={onChange}
+                            name="to"
+                        />
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleGetAuthNumBtnClick}
+                            disabled={isAuthNumBtnDisabled}
+                        >
+                            인증번호 받기
+                        </Button>
+                    </div>
                     <div>
                         <input
                             className="authNumber"
                             type="text"
-                            placeholder="이메일"
-                            required
-                            minLength={8}
-                            autoComplete="phone"
-                            ref={ref.phone}
-                            onChange={onChange}
-                        />
-                        <Button className="authNumberBtn">인증번호 받기</Button>
-                    </div>
-                    <div>
-                        <input
-                            className="authNumber"
-                            type="password"
                             placeholder="인증번호"
-                            autoComplete="current-password"
                             maxLength={5}
                             required
-                            ref={ref.password}
                             onChange={onChange}
+                            name="authNum"
+                            disabled={isCheckAuthNumInputDisabled} // 인증번호 확인 입력 창의 활성화 여부 설정
                         />
-                        <Button className="authNumberBtn">인증번호 확인</Button>
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleCheckAuthNumBtnClick}
+                            disabled={isCheckAuthNumBtnDisabled}
+                        >
+                            인증번호 확인
+                        </Button>
                     </div>
-                    {/* <input
-                        type="password"
-                        placeholder="비밀번호 확인"
-                        autoComplete="current-password"
-                        minLength={4}
-                        maxLength={16}
-                        required
-                        ref={ref.passwordConfirm}
-                        onChange={onChange}
-                    /> */}
-                    <Button isActive={btnState}>이메일로 계정 찾기</Button>
-                    <p><span><Link to="/updateCellphone">aaa</Link></span></p>
+                    <Button
+                        isActive={btnState}
+                        onClick={() => handleNavigation(to)}
+                    >
+                        이메일로 계정 찾기
+                    </Button>
                 </Form>
             </Content>
         </Box>
@@ -153,7 +180,8 @@ const Form = styled.form`
         }
     }
 
-    .authNumber {
+    .authNumber,
+    .to {
         width: 50%;
     }
     .authNumberBtn {
@@ -169,10 +197,10 @@ const Form = styled.form`
         margin-top: 10px;
     }
 
-    p{
-      margin-top:30px;
-      text-align:center;
-      font-size:18px;
+    p {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 18px;
     }
 `;
 
