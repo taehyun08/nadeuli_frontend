@@ -18,6 +18,7 @@ import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
+import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
   return (
@@ -27,6 +28,8 @@ function Router() {
         <Route path="/addDongNePost" element={<AddDongNePost />} />
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost" element={<GetDongNePost />} />
+
+        <Route path="/addTradeReview" element={<AddTradeReview />} />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />

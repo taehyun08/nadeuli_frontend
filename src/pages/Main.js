@@ -2,7 +2,7 @@ import '../style/css/listForm.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
 
-// import MainItemList from '../../component/MainItemList';
+import MainItemList from '../components/MainItemList';
 
 import React, { useState } from "react";
 
@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 
 function Main () {
   const navigate = useNavigate();
-  // const [pageState, setState] = useState(<MainItemList/>);
+  const [pageState, setState] = useState(<MainItemList/>);
   const user = useSelector((state) => state.user);
 
   return (
@@ -22,7 +22,7 @@ function Main () {
         <span> {user.userLocation} </span>
       </div>
       <div className="topView">
-        {/* {pageState} */}
+        {pageState}
       </div>
       <div className="bottomView">
         <div className="BMenuBar"> 
