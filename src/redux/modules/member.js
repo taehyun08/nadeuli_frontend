@@ -27,10 +27,12 @@ export const getCarrotUserInfo = () => {
 }
 
 export const getMember = (data) => {
-  return async function (dispatch) {
+  return async function (dispatch,getState) {
     try {
       console.log("data는",data)
       dispatch(setMember(data));
+      const currentState = getState();
+      console.log('get이후 Current state:', currentState);
     } catch (err) {
       console.log(err);
     }
