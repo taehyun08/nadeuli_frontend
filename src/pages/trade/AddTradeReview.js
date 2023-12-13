@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 
 function AddTradeReview() {
   const navigate = useNavigate();
