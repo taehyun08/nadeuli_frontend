@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,20 +6,21 @@ import styled from "styled-components";
 import { AiFillPicture } from "react-icons/ai";
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { dongNePost } from "../../redux/modules/dongNePost";
-import Modal from '../../components/Modal';
 
-function AddDongNePost() {
+function AddStreaming() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
   const content_ref = useRef();
   const [category, setCategory] = useState();
-  const imageInput = useRef();
-  const videoInput = useRef();
+  const img_ref = useRef();
+  const video_ref = useRef();
+  const fileInput = useRef();
   const [imageSrc, setImageSrc] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
-  
 
+  const dongNePostData = useSelector((state) => state.dongNePost.dongNePost);
+  
   const location = useSelector((state) => state.user.userLocation);
 
   const changeCategory = (e) => {
@@ -61,33 +62,18 @@ function AddDongNePost() {
       alert("게시물 카테고리를 선택해주세요!");
       return;
     }
-  
-    const formData = new FormData();
-    const postDTO = {
+
+    const newDongNePost = {
+      gu: location,
+      category: category === "잡담" ? 1 : 2,
       title: title_ref.current.value,
       content: content_ref.current.value,
-      postCategory: category === "잡담" ? "1" : "2",
-      gu: location,
-      dongNe: "송정동",
-      writer: { tag: "Bss3" }
+      postImg: imageSrc,
+      postVideo: videoSrc
     };
-  
-    formData.append('postDTO', new Blob([JSON.stringify(postDTO)], { type: "application/json" }));
-  
-    // 이미지 파일 추가
-    if (imageInput.current && imageInput.current.files[0]) {
-      for (const file of imageInput.current.files) {
-        formData.append('images', file);
-      }
-    }
 
-    // 비디오 파일 추가 (비디오 파일 필드가 별도로 존재한다면)
-    if (videoInput.current && videoInput.current.files[0]) {
-      formData.append('video', videoInput.current.files[0]);
-    }
-
-  dispatch(dongNePost(formData, navigate));
-};
+    dispatch(dongNePost(newDongNePost, navigate));
+  };
 
 
 return (
@@ -99,14 +85,15 @@ return (
           navigate("/dongNeHome");
         }}
       />
-      <h4>동네나드리 글쓰기</h4>
+      <h4>스트리밍 홍보</h4>
       <h5 onClick={addDongNePost}>완료</h5>
     </Header>
 
     <Container>
       <div>
         <Title>
-          <input placeholder="제목을 입력하세요" ref={title_ref} />
+        <h4>스트리밍 제목을 입력해주세요.</h4>
+          <input placeholder="제목을 입력해주세요." ref={title_ref} />
         </Title>
 
         <Categorie>
@@ -129,32 +116,32 @@ return (
       />
 
        {/* 사진 업로드 */}
-        <File>
-          <label htmlFor="image-file">
-            <AiFillPicture className="camera" />
-          </label>
-          <input
-            type="file"
-            id="image-file"
-            ref={imageInput}
-            onChange={selectFile}
-            accept="image/*"
-            multiple
-          />
-          {imageSrc && <img src={imageSrc} alt="preview-img" />}
+       <File>
+        <label htmlFor="file">
+          <AiFillPicture className="camera" />
+        </label>
+        <input
+          type="file"
+          id="file"
+          ref={fileInput}
+          onChange={selectFile}
+          accept="image/*"
+          multiple
+        />
+        {imageSrc && <img src={imageSrc} alt="preview-img" />}
 
-        {/* 비디오 업로드 */}
-          <label htmlFor="video-file">
-            <MdOutlineVideoLibrary className="video" />
-          </label>
-          <input
-            type="file"
-            id="video-file"
-            ref={videoInput}
-            onChange={selectFile}
-            accept="video/*"
-          />
-          {videoSrc && <video controls src={videoSrc} />}
+      {/* 영상 업로드 */}
+        <label htmlFor="video-file">
+          <MdOutlineVideoLibrary className="video" />
+        </label>
+        <input
+          type="file"
+          id="video-file"
+          ref={fileInput}
+          onChange={selectFile}
+          accept="video/*"
+        />
+        {videoSrc && <video controls src={videoSrc} />}
       </File>
     </Container>
   </Wrap>
@@ -258,4 +245,4 @@ select {
 `;
 
 
-export default AddDongNePost;
+export default AddStreaming;
