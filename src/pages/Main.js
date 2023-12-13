@@ -2,7 +2,7 @@ import '../style/css/listForm.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
 
-// import MainItemList from '../../component/MainItemList';
+import MainItemList from '../components/MainItemList';
 
 import React, { useState } from "react";
 
@@ -13,7 +13,7 @@ import { useSelector } from 'react-redux';
 
 function Main () {
   const navigate = useNavigate();
-  // const [pageState, setState] = useState(<MainItemList/>);
+  const [pageState, setState] = useState(<MainItemList/>);
   const member = useSelector((state) => state.member);
   console.log('유저 정보:', member);
 
@@ -27,7 +27,7 @@ function Main () {
         <span> 닉네임 : {member.nickname} </span>
       </div>
       <div className="topView">
-        {/* {pageState} */}
+        {pageState}
       </div>
       <div className="bottomView">
         <div className="BMenuBar"> 

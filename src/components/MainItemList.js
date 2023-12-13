@@ -14,7 +14,7 @@ function MainItemList() {
   const [boardList, setBoardList] = useState();
 
   const mainPostList = useSelector((state) => state.post.postList);
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => state.member);
 
   React.useEffect(() => {
     dispatch(loadMainposts(user.userLocation));
