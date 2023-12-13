@@ -1,62 +1,43 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axiosInstance from '../../util/axios';
+import axios from 'axios';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // 게시물 등록
-export const dongNePost = (newDongNePost, navigate) => {
+export const dongNePost = (formData, navigate) => {
   return async function (dispatch) {
     try {
-      const requestBody = {
-        gu: "성동구",
-        dongNe: "송정동",
-        writer: {
-          tag: "W4z7",
-          nickname: "엄준식",
-        },
-        postCategory: 1,
-        title: "우리끼리2 게시물1",
-        content: "되면 진짜 내손에 장을 지진다",
-        orikkiriName: "우리끼리2",
-        orikkiriPicture: "우리끼리2 프로필사진.png",
-        orikkiri: {
-          orikkiriId: 2,
-        },
-        images: ["우리끼리사진1.png", "우리끼리사진2.png"],
-      };
+      const res = await axios.post(`${BASE_URL}/dongNe/addPost`, formData); // 헤더 제거
 
-      const res = await axiosInstance.post('/dongNe/addPost', requestBody);
-      console.log(res); // 실제 응답은 콘솔에 찍힐 것입니다.
-      dispatch(addDongNePost(newDongNePost));
-      navigate('/main');
-    } catch (err) {
-      console.log(err);
+      console.log(res); 
+      dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
+      navigate('/dongNeHome');
+    } catch (error) {
+      if (error.response) {
+        // 요청이 이루어졌으나 서버가 2xx 이외의 상태 코드로 응답
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // 요청이 이루어졌으나 응답을 받지 못함
+        console.log(error.request);
+      } else {
+        // 요청을 만드는 중에 문제가 발생
+        console.log('Error', error.message);
+      }
     }
   };
 };
 
 
 // 동네나드리 게시물 상세 조회
-export const GetDongNePost = (postId) => {
-  return async function (dispatch) {
-    await axiosInstance
-      .get(`/dongNe/getPost/${postId}`)
-      .then((res) => {
-        console.log(res.data);
-        dispatch(getLoadDongNePost(res.data.detailPost));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-};
-
-
-// 동네나드리 홈 포스트 리드
-export const loadDongNeHomePosts = (currentPage, gu, searchKeyword) => {
+export const GetDongNePostDetail = (postId) => {
   return async function (dispatch) {
     try {
-      const response = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
-      dispatch(loadDongNePosts(response.data.dongNePosts));
-      console.log(response.data.dongNePosts)
+      const res = await axiosInstance.get(`/dongNe/getPost/${postId}`);
+      console.log(res.data);
+      dispatch(getLoadDongNePost(res.data));
     } catch (err) {
       console.log(err);
     }
@@ -64,8 +45,18 @@ export const loadDongNeHomePosts = (currentPage, gu, searchKeyword) => {
 };
 
 
-
-
+// 동네나드리 홈 포스트 리드
+export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
+  return async function (dispatch) {
+    try {
+      const res = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
+      dispatch(loadDongNePosts(res.data.dongNePosts));
+      console.log(res.data.dongNePosts);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
 
 
 
@@ -85,7 +76,45 @@ const dongNePostSlice = createSlice({
       state.dongNePostList = action.payload;
     },
     getLoadDongNePost: (state, action) => {
-      state.dongNePost = action.payload;
+      const {
+      postId,
+      title,
+      content,
+      video,
+      streaming,
+      orikkiriId,
+      orikkiriName,
+      orikkiriPicture,
+      postCategory,
+      gu,
+      dongNe,
+      timeAgo,
+      writer:{
+        tag,
+        picture,
+        nickname,
+        dongNe: writerDongNe
+      },
+      images
+      } = action.payload;
+
+      state.dongNePost.postId = postId;
+      state.dongNePost.title = title;
+      state.dongNePost.content = content;
+      state.dongNePost.video = video;
+      state.dongNePost.streaming = streaming;
+      state.dongNePost.orikkiriId = orikkiriId;
+      state.dongNePost.orikkiriName = orikkiriName;
+      state.dongNePost.orikkiriPicture = orikkiriPicture;
+      state.dongNePost.postCategory = postCategory;
+      state.dongNePost.gu = gu;
+      state.dongNePost.dongNe = dongNe;
+      state.dongNePost.timeAgo = timeAgo;
+      state.dongNePost.writerTag = tag;
+      state.dongNePost.writerPicture = picture;
+      state.dongNePost.writerNickname = nickname;
+      state.dongNePost.writerDongNe = writerDongNe;
+      state.dongNePost.images = images;
     },
     deleteDongNePost: (state, action) => {
       // action.payload로 특정 게시물을 삭제할 수 있음
@@ -94,6 +123,6 @@ const dongNePostSlice = createSlice({
   },
 });
 
-export const { loadDongNePosts, addDongNePost, getLoadDongNePost, deleteDongNePost, likeDongNePost } = dongNePostSlice.actions;
+export const { loadDongNePosts, addDongNePost, getLoadDongNePost, deleteDongNePost } = dongNePostSlice.actions;
 
 export default dongNePostSlice.reducer;

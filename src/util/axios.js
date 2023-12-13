@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-// 이거 왜 값을 못 읽어옴?
-const BASE_URL = process.env.REACT_APP_BASE_URL || 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,

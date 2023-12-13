@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { loadDongNePosts } from '../redux/modules/dongNePost';
+import { GetDongNePostList } from '../redux/modules/dongNePost';
 
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
@@ -8,72 +8,87 @@ import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
 function DongNePostList() {
+  const gu = "성동구";
   const dispatch = useDispatch();
-  const [boardList, setBoardList] = useState();
+  const [currentPage, setCurrentPage] = useState(0);
 
+  // 데이터 구조 변경에 따라 필드 수정
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
-  const user = useSelector((state) => state.user);
 
-  console.log(dongNePostList)
-
-  React.useEffect(() => {
-    dispatch(loadDongNePosts(0, '성동구', ''));
-  }, [boardList, dispatch]);
+  useEffect(() => {
+    dispatch(GetDongNePostList(currentPage, gu, ''));
+  }, [currentPage, gu, dispatch]);
 
   const navigate = useNavigate();
 
-  return (
-    <div className="MainListBox">
-      {dongNePostList &&
-        dongNePostList.map((list, index) => (
-          <div key={index}>
-              <CardBox className="card">
-                <div
-                  style={{ display: "flex" }}
-                  onClick={() => {
-                    // navigate("/detail/" + list.postId+"/"+list.tradeState);
-                  }}
-                >
-                  <Img src={list.postImg} />
-                  <TextArea>
-                    <span
-                      style={{
-                        fontSize: "15px",
-                        marginBottom: "5px",
-                        padding: "0 5px",
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      setCurrentPage((prevPage) => prevPage + 1);
+    }
+  };
 
-                        width: "200px",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      {list.title}
-                    </span>
-                    <span
-                      style={{
-                        fontSize: "12px",
-                        padding: "5px",
-                        color: "#AAAAAA",
-                      }}
-                    >
-                      {list.userLocation}
-                    </span>
-                  </TextArea>
-                </div>
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-end",
-                    justifyContent: "space-between",
-                    width: "30px",
-                    fontSize: "14px",
-                  }}
-                >
-                  <BsHeart size="15" />
-                  {list.likeNum}
-                </div>
-              </CardBox>
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  console.log("dongNePostList:", dongNePostList);
+
+  return (
+    <div className="DongNePostListBox">
+      {dongNePostList.map((post) => (
+          <div key={post.postId}>
+            <CardBox className="card">
+              <div
+                style={{ display: "flex" }}
+                onClick={() => {
+                  // navigate("/detail/" + list.postId+"/"+list.tradeState);
+                }}
+              >
+                <Img src={post.images[0]} alt="Post Image" />
+                <TextArea>
+                  <span
+                    style={{
+                      fontSize: "15px",
+                      marginBottom: "5px",
+                      padding: "0 5px",
+                      width: "200px",
+                      textOverflow: "ellipsis",
+                      overflow: "hidden",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {post.title}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "12px",
+                      padding: "5px",
+                      color: "#AAAAAA",
+                    }}
+                  >
+                    {post.dongNe}
+                  </span>
+                </TextArea>
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "flex-end",
+                  justifyContent: "space-between",
+                  width: "30px",
+                  fontSize: "14px",
+                }}
+              >
+                <BsHeart size="15" />
+                {post.likeNum}
+              </div>
+            </CardBox>
           </div>
         ))}
 
@@ -87,7 +102,6 @@ function DongNePostList() {
     </div>
   );
 }
-
 
 const CardBox = styled.div`
   display: flex;
@@ -125,26 +139,5 @@ const Img = styled.img`
   border-radius: 10px;
   object-fit: cover;
 `;
-
-// const TradeState = styled.div`
-//   margin-top: 5px;
-//   display: flex;
-//   align-items: center;
-// `;
-
-// const SoldOut = styled.div`
-//   padding: 6px 5px;
-//   width: 65px;
-//   border-radius: 5px;
-//   background-color: #565656;
-//   color: white;
-//   font-size: 12px;
-//   text-align: center;
-// `;
-
-// const Book = styled(SoldOut)`
-//   width: 55px;
-//   background-color: #34bf9e;
-// `;
 
 export default DongNePostList;
