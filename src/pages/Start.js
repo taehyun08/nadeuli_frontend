@@ -21,7 +21,7 @@ function Start () {
         <h2>당신 근처의 당근 마켓</h2>
       </Intro>
       <Select>
-        <WrapBottom>S
+        <WrapBottom>
           <button className="signUp"><Link to="/register">나드리 회원가입</Link></button>
           <button><Link to="/login">나드리 로그인</Link></button>
           {/* <button className="google"><Link to="/location"><img src={google} alt="구글로그인 아이콘"/></Link></button> */}
