@@ -27,7 +27,7 @@ function Router() {
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
         <Route path="/addStreaming" element={<AddStreaming />} />
-        <Route path="/getDongNePost" element={<GetDongNePost />} />
+        <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
 
         <Route path="/addTradeReview" element={<AddTradeReview />} />
 

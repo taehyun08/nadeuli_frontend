@@ -32,17 +32,15 @@ export const dongNePost = (formData, navigate) => {
 
 
 // 동네나드리 게시물 상세 조회
-export const GetDongNePost = (postId) => {
+export const GetDongNePostDetail = (postId) => {
   return async function (dispatch) {
-    await axiosInstance
-      .get(`/dongNe/getPost/${postId}`)
-      .then((res) => {
-        console.log(res.data);
-        dispatch(getLoadDongNePost(res.data.detailPost));
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    try {
+      const res = await axiosInstance.get(`/dongNe/getPost/${postId}`);
+      console.log(res.data);
+      dispatch(getLoadDongNePost(res.data));
+    } catch (err) {
+      console.log(err);
+    }
   };
 };
 
@@ -66,30 +64,7 @@ const dongNePostSlice = createSlice({
   name: 'dongNePost',
   initialState: {
     dongNePostList: [],
-    dongNePost: {
-      postId: null,
-      title: null,
-      content: null,
-      video: null,
-      streaming: null,
-      orikkiriName: null,
-      orikkiriPicture: null,
-      postCategory: null,
-      gu: null,
-      dongNe: null,
-      timeAgo: null,
-      writer: {
-        tag: null,
-        nickname: null,
-      },
-      orikkiri: {
-        orikkiriId: null,
-        orikkiriName: null,
-        orikkiriPicture: null,
-        masterTag: null,
-      },
-      images: [],
-    },
+    dongNePost: {},
   },
   reducers: {
     addDongNePost: (state, action) => {
@@ -101,7 +76,45 @@ const dongNePostSlice = createSlice({
       state.dongNePostList = action.payload;
     },
     getLoadDongNePost: (state, action) => {
-      state.dongNePost = action.payload;
+      const {
+      postId,
+      title,
+      content,
+      video,
+      streaming,
+      orikkiriId,
+      orikkiriName,
+      orikkiriPicture,
+      postCategory,
+      gu,
+      dongNe,
+      timeAgo,
+      writer:{
+        tag,
+        picture,
+        nickname,
+        dongNe: writerDongNe
+      },
+      images
+      } = action.payload;
+
+      state.dongNePost.postId = postId;
+      state.dongNePost.title = title;
+      state.dongNePost.content = content;
+      state.dongNePost.video = video;
+      state.dongNePost.streaming = streaming;
+      state.dongNePost.orikkiriId = orikkiriId;
+      state.dongNePost.orikkiriName = orikkiriName;
+      state.dongNePost.orikkiriPicture = orikkiriPicture;
+      state.dongNePost.postCategory = postCategory;
+      state.dongNePost.gu = gu;
+      state.dongNePost.dongNe = dongNe;
+      state.dongNePost.timeAgo = timeAgo;
+      state.dongNePost.writerTag = tag;
+      state.dongNePost.writerPicture = picture;
+      state.dongNePost.writerNickname = nickname;
+      state.dongNePost.writerDongNe = writerDongNe;
+      state.dongNePost.images = images;
     },
     deleteDongNePost: (state, action) => {
       // action.payload로 특정 게시물을 삭제할 수 있음

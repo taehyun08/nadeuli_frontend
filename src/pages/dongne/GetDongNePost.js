@@ -1,14 +1,11 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { AiFillPicture } from "react-icons/ai";
-import { MdOutlineVideoLibrary } from "react-icons/md";
-import { dongNePost } from "../../redux/modules/dongNePost";
 import TopDropdownMenu from '../../components/TopDropdownMenu';
 import TopArrowLeft from '../../components/TopArrowLeft';
 import PostInfo from "../../components/PostInfo";
-import { getLoadDongNePost, deleteDongNePost } from '../../redux/modules/dongNePost';
+import { GetDongNePostDetail, deleteDongNePost } from '../../redux/modules/dongNePost';
 
 
 function GetDongNePost() {
@@ -16,22 +13,11 @@ function GetDongNePost() {
   const dispatch = useDispatch();
   const getDongNePost = useSelector((state) => state.dongNePost.dongNePost);
   const params = useParams();
-  const postId = params.postid;
-  const user = useSelector((state) => state.user); // 유저 정보
-
-   // 모달.
-  const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => {
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const postId = params.postId;
 
   useEffect(() => {
-    dispatch(getLoadDongNePost(postId));
+      dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
-
 
 
 return (
@@ -43,24 +29,38 @@ return (
 
     <Container>
       <div>
-        <PostInfo text={"홍보"} />
-        <Img src={user.userImg} />
+        <PostInfo
+          text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
+          writerImg={getDongNePost.writerPicture}
+          writerNickName={getDongNePost.writerNickname}
+          writerDongNe={getDongNePost.writerDongNe}
+          timeAgo={getDongNePost.timeAgo}
+        />
       </div>
       <div>
         <Title>
-          <PostInfo text={"홍보"} />
+          <p>{getDongNePost.title}</p>
         </Title>
 
-        <Categorie>
-          {/* <div>카테고리 선택</div> */}
-          {/* <select name="category" id="category" onChange={changeCategory}>
-            <option value="none">게시물 카테고리를 선택해주세요.</option>
-            <option value="잡담">잡담</option>
-            <option value="홍보">홍보</option>
-          </select> */}
-        </Categorie>
-      </div>
+        <File>
+          <p>{getDongNePost.video}</p>
+          <p>{getDongNePost.image}</p>
+          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+        </File>
 
+        <Content>
+        <p>{getDongNePost.content}</p>
+        </Content>
+      </div>
+      
+      <Comment>
+      <p>댓글 위치</p>
+
+      </Comment>
       <textarea
         cols="40"
         rows="5"
@@ -119,8 +119,8 @@ const Container = styled.div`
 `;
 
 const File = styled.div`
-padding: 30px 0px;
-border-bottom: 1px solid #dadada;
+padding: 30px 30px;
+// border-bottom: 1px solid #dadada;
 
 .camera {
   font-size: 50px;
@@ -137,9 +137,10 @@ input[type="file"] {
 }
 
 img {
-  width: 50px;
-  height: 50;
+  max-width: 100%; /* 최대 너비를 100%로 설정 */
+  max-height: 100%; /* 최대 높이를 100%로 설정 */
   margin-left: 10px;
+  margin-right: 10px;
   border-radius: 5px;
 }
 `;
@@ -161,7 +162,7 @@ input::placeholder {
   font-size: 25px;
 }
 `;
-const Categorie = styled(Title)`
+const Content = styled(Title)`
 display: flex;
 justify-content: space-between;
 
@@ -179,6 +180,19 @@ const Img = styled.img`
     border: 1px solid black;
     margin-left: 20px;
     height: 100px;
+`;
+
+const Comment = styled.div`
+padding: 25px 0px;
+display: flex;
+justify-content: space-between;
+
+select {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 20px;
+}
 `;
 
 
