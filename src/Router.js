@@ -16,6 +16,8 @@ import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
 import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
+import AddStreaming from "./pages/dongne/AddStreaming";
+import GetDongNePost from "./pages/dongne/GetDongNePost";
 
 function Router() {
   return (
@@ -23,6 +25,8 @@ function Router() {
       <Routes>
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
+        <Route path="/addStreaming" element={<AddStreaming />} />
+        <Route path="/getDongNePost" element={<GetDongNePost />} />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />

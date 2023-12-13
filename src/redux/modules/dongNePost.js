@@ -1,58 +1,31 @@
 import { createSlice } from '@reduxjs/toolkit';
 import axiosInstance from '../../util/axios';
+import axios from 'axios';
+
+const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // 게시물 등록
-// export const dongNePost = (newDongNePost, navigate) => {
-//   return async function (dispatch) {
-//     try {
-//       const requestBody = {
-//         gu: newDongNePost.gu,
-//         category: newDongNePost.category,
-//         title: newDongNePost.title,
-//         content: newDongNePost.content,
-//         writer: {
-//           tag: "Bss3",
-//           nickname: "엄준식"
-//         }
-//         // postImg: img_ref.current.url,
-//         // postVideo: video_ref.current.url
-//       };
-
-//       const res = await axiosInstance.post('/dongNe/addPost', requestBody);
-//       console.log(res); 
-//       dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
-//       navigate('/main');
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-// };
-
-// 게시물 등록
-export const dongNePost = (newDongNePost, navigate, imgFile, videoFile) => {
+export const dongNePost = (formData, navigate) => {
   return async function (dispatch) {
     try {
-      const formData = new FormData();
-      formData.append('gu', newDongNePost.gu);
-      formData.append('category', newDongNePost.category);
-      formData.append('title', newDongNePost.title);
-      formData.append('content', newDongNePost.content);
-      formData.append('writer[tag]', 'Bss3');
-      formData.append('writer[nickname]', '엄준식');
-      formData.append('postImg', imgFile);
-      formData.append('postVideo', videoFile);
-      
-      const res = await axiosInstance.post('/dongNe/addPost', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const res = await axios.post(`${BASE_URL}/dongNe/addPost`, formData); // 헤더 제거
 
       console.log(res); 
       dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
-      navigate('/main');
-    } catch (err) {
-      console.log(err);
+      navigate('/dongNeHome');
+    } catch (error) {
+      if (error.response) {
+        // 요청이 이루어졌으나 서버가 2xx 이외의 상태 코드로 응답
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        // 요청이 이루어졌으나 응답을 받지 못함
+        console.log(error.request);
+      } else {
+        // 요청을 만드는 중에 문제가 발생
+        console.log('Error', error.message);
+      }
     }
   };
 };
@@ -75,18 +48,17 @@ export const GetDongNePost = (postId) => {
 
 
 // 동네나드리 홈 포스트 리드
-export const loadDongNeHomePosts = (currentPage, gu, searchKeyword) => {
+export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
   return async function (dispatch) {
     try {
-      const response = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
-      dispatch(loadDongNePosts(response.data.dongNePosts));
-      console.log(response.data.dongNePosts)
-    } catch (err) {
-      console.log(err);
+      const res = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
+      dispatch(loadDongNePosts(res.data.dongNePosts));
+      console.log(res.data.dongNePosts);
+    } catch (error) {
+      console.log(error);
     }
   };
 };
-
 
 
 
@@ -94,7 +66,30 @@ const dongNePostSlice = createSlice({
   name: 'dongNePost',
   initialState: {
     dongNePostList: [],
-    dongNePost: {},
+    dongNePost: {
+      postId: null,
+      title: null,
+      content: null,
+      video: null,
+      streaming: null,
+      orikkiriName: null,
+      orikkiriPicture: null,
+      postCategory: null,
+      gu: null,
+      dongNe: null,
+      timeAgo: null,
+      writer: {
+        tag: null,
+        nickname: null,
+      },
+      orikkiri: {
+        orikkiriId: null,
+        orikkiriName: null,
+        orikkiriPicture: null,
+        masterTag: null,
+      },
+      images: [],
+    },
   },
   reducers: {
     addDongNePost: (state, action) => {
