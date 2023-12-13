@@ -1,108 +1,143 @@
-import { useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { carrotLoginStatus, getCarrotUserInfo } from '../../redux/modules/user';
-import { login } from '../../shared/axios';
-import { saveToken } from '../../shared/localStorage';
+import { checkAuthNum, getAuthNumCellphone, login, updateCellphone, updateMember } from '../../shared/axios';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function UpdateCellphone() {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [btnState, setBtnState] = useState(false);
+    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false);
+    const [to, setTo] = useState('');
+    const [authNum, setAuthNum] = useState('');
 
-    const ref = {
-        phone: useRef(null),
-        password: useRef(null),
-    };
+    const navigate = useNavigate();
 
-    const confirmLogin = (e) => {
+    const location = useLocation();
+    const data = location.state?.data;
+    console.log(data)
+
+    const handleGetAuthNumBtnClick = (e) => {
         e.preventDefault();
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
-
-        const data = {
-            phoneNum,
-            password,
-        };
-
-        // validation 체크
-        if (/[^0-9]/g.test(phoneNum) || phoneNum.length < 8) {
-            // 안에 숫자가 아닌 값이 있을 경우
+        if (/[^0-9]/g.test(to) || to.length < 8) {
             alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
             return;
         }
+        getAuthNumCellphone(to)
+            .then((response) => {
+                alert('인증번호가 발송되었습니다.');
+                setIsAuthNumBtnDisabled(true);
+            })
+            .catch((err) => {
+                alert('이미 존재하거나 올바르지 않은 이메일입니다.');
+            });
+    };
 
-        // 하기 코드는 테스트 및 분석해봐야 함
-        if (!/^[a-zA-Z0-9!@#$%^*+=-]{4,16}$/.test(password)) {
-            // 안에 소문자,대문자,숫자, 특수문자 '!' ~ '+' (괄호 제외)를 제외한 값이 있을 경우
-            alert('비밀번호는 숫자와 영문자, 특수문자(!@#$%^&*+=-) 조합으로 사용할 수 있으며 4~16자리로 입력해야 합니다.');
+    const handleCheckAuthNumBtnClick = (e) => {
+        e.preventDefault();
+        if (!/^[a-zA-Z0-9!@#$%^*+=-]{5}$/.test(authNum)) {
+            alert('인증번호는 숫자 5자리로 입력해야 합니다.');
             return;
         }
 
-        login(data)
+        const data = {
+            authNumber: authNum,
+            to: to,
+        };
+
+        checkAuthNum(data)
+            .then((response) => {
+                alert('인증번호가 일치합니다.');
+                setBtnState(true);
+                setIsToEditable(false);
+                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumInputDisabled(true);
+            })
+            .catch((err) => {
+                alert('인증번호가 일치하지 않습니다.');
+                setIsToEditable(true);
+            });
+    };
+
+    const handleUpdateCellphone = () => {
+        const memberDTO = {
+            // data 객체에서 email 값을 가져와 설정
+            email: data?.email, 
+            cellphone: to,
+        };
+
+        updateCellphone(memberDTO)
             .then((response) => {
                 alert('휴대폰 번호 변경 완료!');
-                saveToken(response.data.token);
-                dispatch(carrotLoginStatus(true));
-                dispatch(getCarrotUserInfo());
-                navigate('/main');
-            }) 
+                navigate('/login');
+            })
             .catch((err) => {
                 alert('휴대폰 번호 변경 실패!');
             });
     };
 
     const onChange = (e) => {
-        // 버튼 활성화
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
+        const updatedTo = e.target.name === 'to' ? e.target.value : to;
+        const updatedAuthNum = e.target.name === 'authNum' ? e.target.value : authNum;
 
-        if (phoneNum.length > 0 && password.length > 0) {
-            setBtnState(true);
-        } else {
-            setBtnState(false);
-        }
+        setTo(updatedTo);
+        setAuthNum(updatedAuthNum);
     };
 
     return (
         <Box>
             <HeaderBack />
             <Content>
-                <em>
-                    휴대폰 번호를 입력해주세요
-                </em>
+                <em>휴대폰 번호를 입력해주세요</em>
                 <p>휴대폰 번호 변경 후 다시 로그인 하셔야 합니다.</p>
-                <Form onSubmit={confirmLogin}>
+                <Form>
+                    <div>
+                        <input
+                            className="to"
+                            type="text"
+                            disabled={!isToEditable}
+                            placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
+                            required
+                            maxLength={11}
+                            onChange={onChange}
+                            name="to"
+                        />
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleGetAuthNumBtnClick}
+                            disabled={isAuthNumBtnDisabled}
+                        >
+                            인증번호 받기
+                        </Button>
+                    </div>
                     <div>
                         <input
                             className="authNumber"
                             type="text"
-                            placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
-                            required
-                            minLength={8}
-                            autoComplete="phone"
-                            ref={ref.phone}
-                            onChange={onChange}
-                        />
-                        <Button className="authNumberBtn">인증번호 받기</Button>
-                    </div>
-                    <div>
-                        <input
-                            className="authNumber"
-                            type="password"
                             placeholder="인증번호"
-                            autoComplete="current-password"
                             maxLength={5}
                             required
-                            ref={ref.password}
                             onChange={onChange}
+                            name="authNum"
+                            disabled={isCheckAuthNumInputDisabled}
                         />
-                        <Button className="authNumberBtn">인증번호 확인</Button>
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleCheckAuthNumBtnClick}
+                            disabled={isCheckAuthNumBtnDisabled}
+                        >
+                            인증번호 확인
+                        </Button>
                     </div>
-                    <Button isActive={btnState}>휴대폰 번호 변경</Button>
+                    <Button
+                        isActive={!btnState}
+                        onClick={handleUpdateCellphone}
+                    >
+                        <Link to="/login">휴대폰 번호 변경</Link>
+                    </Button>
                 </Form>
             </Content>
         </Box>
@@ -142,7 +177,8 @@ const Form = styled.form`
         }
     }
 
-    .authNumber {
+    .authNumber,
+    .to {
         width: 50%;
     }
     .authNumberBtn {
@@ -158,10 +194,10 @@ const Form = styled.form`
         margin-top: 10px;
     }
 
-    p{
-      margin-top:30px;
-      text-align:center;
-      font-size:18px;
+    p {
+        margin-top: 30px;
+        text-align: center;
+        font-size: 18px;
     }
 `;
 

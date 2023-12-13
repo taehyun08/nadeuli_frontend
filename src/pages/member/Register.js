@@ -1,96 +1,141 @@
 import HeaderBack from '../../components/HeaderBack';
 import styled from 'styled-components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useRef, useState } from 'react';
-import { register } from '../../shared/axios';
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { addMember, checkAuthNum, getAuthNumCellphone} from '../../shared/axios';
 import { css } from 'styled-components';
+import { getCurrentPosition } from './Location';
+import { saveToken } from '../../shared/localStorage';
+import { useDispatch } from 'react-redux';
+import { getMember } from '../../redux/modules/member';
 
 function Register() {
-    const location = useLocation();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [btnState, setBtnState] = useState(false);
-    const ref = {
-        phone: useRef(null),
-        password: useRef(null),
-        passwordConfirm: useRef(null),
-        nickname: useRef(null),
+    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false); // 새로 추가한 상태
+
+    const [to, setTo] = useState('');
+    const [authNum, setAuthNum] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [latitude, setLatitude] = useState(null);
+    const [longitude, setLongitude] = useState(null);
+
+    const fetchLocation = async () => {
+        try {
+            const { latitude, longitude } = await getCurrentPosition();
+            console.log('현재 위치:', latitude, longitude);
+            setLatitude(latitude);
+            setLongitude(longitude);
+        } catch (error) {
+            if (error.code === 1) {
+                console.error('사용자가 위치 정보를 거부했습니다.');
+                navigate('/');
+            } else {
+                console.error('위치 정보를 가져오는 중 오류가 발생했습니다:', error);
+            }
+        }
     };
 
-    // useEffect(() => {
-    //   if (!location.state) {
-    //     navigate("/");
-    //   }
-    // }, []);
+    useEffect(() => {
+        fetchLocation();
+    }, []); // 빈 배열을 전달하여 최초 렌더링 시에만 실행되도록 설정
 
-    const confirmRegister = (e) => {
-        e.preventDefault();
-
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
-        const passwordCheck = ref.passwordConfirm.current.value;
-        const nickname = ref.nickname.current.value;
-        const userLocation = location.state;
-
-        const data = {
-            phoneNum,
-            password,
-            passwordCheck,
-            nickname,
-            userLocation,
-        };
-
-        // validation 체크
-        if (/[^0-9]/g.test(phoneNum) || phoneNum.length < 8) {
+    const handleGetAuthNumBtnClick = (e) => {
+        e.preventDefault(); // 폼의 기본 동작을 막음
+        if (/[^0-9]/g.test(to) || to.length < 8) {
             // 안에 숫자가 아닌 값이 있을 경우
             alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
             return;
         }
 
-        if (data.password !== data.passwordCheck) {
-            // 인증번호와 인증번호 확인이 일치하지 않는 경우
-            alert('인증번호가 일치하지 않습니다.');
-            return;
-        }
-
-        // 하기 코드는 테스트 및 분석해봐야 함
-        if (!/^[a-zA-Z0-9!@#$%^*+=-]{5}$/.test(password)) {
+        // 휴대폰 번호가 유효하다면, 인증번호를 받기 위한 요청을 보냄
+        getAuthNumCellphone(to)
+            .then((response) => {
+                alert('인증번호가 발송되었습니다.');
+                setIsAuthNumBtnDisabled(true); // 버튼 비활성화
+            })
+            .catch((err) => {
+                alert('이미 존재하거나 올바르지 않은 이메일입니다.');
+            });
+    };
+    const handleCheckAuthNumBtnClick = (e) => {
+        e.preventDefault(); // 폼의 기본 동작을 막음
+        if (!/^[a-zA-Z0-9!@#$%^*+=-]{5}$/.test(authNum)) {
             // 안에 소문자,대문자,숫자, 특수문자 '!' ~ '+' (괄호 제외)를 제외한 값이 있을 경우
             alert('인증번호는 숫자 5자리로 입력해야 합니다.');
             return;
         }
 
-        if (/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g.test(nickname) || nickname.length < 12) {
+        const data = {
+            authNumber: authNum,
+            to: to,
+        };
+        checkAuthNum(data)
+            .then((response) => {
+                alert('인증번호가 일치합니다.');
+                setBtnState(true);
+                setIsToEditable(false);
+                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumInputDisabled(true);
+            })
+            .catch((err) => {
+                alert('인증번호가 일치하지 않습니다.');
+                setIsToEditable(true);
+            });
+    };
+    const handleAddMemberBtnClick = (e) => {
+        e.preventDefault();
+        if (/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣]/g.test(nickname) || nickname.length < 6 || nickname.length > 12) {
             // 영문자 영어대문자 한글 숫자가 아닐 경우, 문자가 6~12글자인 경우
             alert('닉네임은 숫자, 영문 대/소문자, 한글을 사용하여 6~12자를 입력해야 합니다. 특수문자는 사용할 수 없습니다');
             return;
         }
 
-        register(data)
+        const memberDTO = {
+            cellphone: to,
+            nickname,
+        };
+
+        const gpsDTO = {
+            y: latitude,
+            x: longitude,
+        };
+
+        addMember(memberDTO, gpsDTO)
             .then((response) => {
-                if (response.data.result) {
+                if (response.data) {
+                    console.log(response.data.tag);
+                    // 헤더에서 Authorization 헤더를 찾아 토큰을 추출
+                    const receivedToken = response.headers.get('Authorization');
+                    console.log('receivedToken:', receivedToken);
+                    // 추출한 토큰을 저장 등의 작업 수행
+                    if (receivedToken) {
+                        const token = receivedToken.replace('Bearer ', ''); // 'Bearer ' 부분을 제거
+                        saveToken(token);
+                    }
                     alert('회원가입이 완료되었습니다.');
-                    navigate('/login');
+                    dispatch(getMember(response.data));
+                    navigate('/main');
                 }
             })
             .catch((err) => {
-                const json = JSON.parse(err.request.response);
-                alert(json.message);
+                alert("회원가입에 실패하였습니다 재시도 해주세요");
             });
     };
 
     const onChange = (e) => {
         // 버튼 활성화
-        const phoneNum = ref.phone.current.value;
-        const password = ref.password.current.value;
-        const passwordCheck = ref.passwordConfirm.current.value;
-        const nickname = ref.nickname.current.value;
-        const userLocation = location.state;
+        const updatedTo = e.target.name === 'to' ? e.target.value : to;
+        const updatedAuthNum = e.target.name === 'authNum' ? e.target.value : authNum;
+        const updatedNickname = e.target.name === 'nickname' ? e.target.value : nickname;
 
-        if (phoneNum.length > 0 && password.length > 0 && passwordCheck.length > 0 && nickname.length > 0 && userLocation.length > 0) {
-            setBtnState(true);
-        } else {
-            setBtnState(false);
-        }
+        setTo(updatedTo);
+        setAuthNum(updatedAuthNum);
+        setNickname(updatedNickname);
     };
 
     return (
@@ -103,53 +148,61 @@ function Register() {
                     휴대폰 번호로 가입 해주세요.
                 </em>
                 <p>휴대폰 번호는 안전하게 보관되며 이웃들에게 공개되지 않아요</p>
-                <Form onSubmit={confirmRegister}>
+                <Form>
                     <input
-                        type="nickname"
+                        type="text"
                         placeholder="영문 대/소문자, 한글을 사용하여 6~12자 닉네임"
-                        autoComplete="nickname"
                         required
-                        minLength={6}
-                        ref={ref.nickname}
+                        maxLength={12}
+                        value={nickname}
                         onChange={onChange}
+                        name="nickname"
                     />
                     <div>
                         <input
-                            className="authNumber"
+                            className="to"
                             type="text"
                             placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
                             required
-                            minLength={8}
-                            autoComplete="phone"
-                            ref={ref.phone}
+                            maxLength={11}
+                            disabled={!isToEditable}
                             onChange={onChange}
+                            name="to"
                         />
-                        <Button className="authNumberBtn">인증번호 받기</Button>
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleGetAuthNumBtnClick}
+                            disabled={isAuthNumBtnDisabled}
+                        >
+                            인증번호 받기
+                        </Button>
                     </div>
                     <div>
                         <input
-                            className="authNumber"
-                            type="password"
+                            className="authNum"
+                            type="text"
                             placeholder="인증번호"
-                            autoComplete="current-password"
                             maxLength={5}
                             required
-                            ref={ref.password}
                             onChange={onChange}
+                            name="authNum"
+                            disabled={isCheckAuthNumInputDisabled} // 인증번호 확인 입력 창의 활성화 여부 설정
                         />
-                        <Button className="authNumberBtn">인증번호 확인</Button>
+                        <Button
+                            className="authNumberBtn"
+                            onClick={handleCheckAuthNumBtnClick}
+                            disabled={isCheckAuthNumBtnDisabled}
+                        >
+                            인증번호 확인
+                        </Button>
                     </div>
-                    {/* <input
-                        type="password"
-                        placeholder="비밀번호 확인"
-                        autoComplete="current-password"
-                        minLength={4}
-                        maxLength={16}
-                        required
-                        ref={ref.passwordConfirm}
-                        onChange={onChange}
-                    /> */}
-                    <Button isActive={btnState}>회원가입</Button>
+                    {/* <Button isActive={btnState}> */}
+                    <Button
+                        onClick={handleAddMemberBtnClick}
+                        isActive={!btnState}
+                    >
+                        회원가입
+                    </Button>
                 </Form>
             </Content>
         </Box>
@@ -190,9 +243,9 @@ const Form = styled.form`
         }
     }
 
-    .authNumber {
+    .authNum,
+    .to {
         width: 50%;
-        
     }
 
     .authNumberBtn {
@@ -210,8 +263,8 @@ const Form = styled.form`
 `;
 
 const Button = styled.button`
-    width:80%;
-    margin:20px auto 0;
+    width: 80%;
+    margin: 20px auto 0;
     margin-top: 20px;
     height: 80px;
     border-radius: 5px;

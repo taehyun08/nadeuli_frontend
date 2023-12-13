@@ -14,12 +14,17 @@ import { useSelector } from 'react-redux';
 function Main () {
   const navigate = useNavigate();
   // const [pageState, setState] = useState(<MainItemList/>);
-  const user = useSelector((state) => state.user);
+  const member = useSelector((state) => state.member);
+  console.log('유저 정보:', member);
 
   return (
     <div className="Wrap">
       <div className="TMenuBar"> 
-        <span> {user.userLocation} </span>
+        <span> 태그 : {member.tag} </span>
+        <span> 휴대전화 : {member.cellphone} </span>
+        <span> 동네 : {member.dongNe} </span>
+        <span> 구 : {member.gu} </span>
+        <span> 닉네임 : {member.nickname} </span>
       </div>
       <div className="topView">
         {/* {pageState} */}
