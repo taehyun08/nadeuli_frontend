@@ -16,7 +16,7 @@ function Add() {
   const title_ref = useRef();
   const price_ref = useRef();
   const content_ref = useRef();
-  const chk_ref = useRef();
+  const premium_ref = useRef();
   const [premium, setPremium] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -88,16 +88,25 @@ function Add() {
 
   const upload = () => {
     const files = fileInput.current.files;
-  
+    const title = title_ref.current.value;
+    const content = content_ref.current.value;
+    const price = numberPrice;
+    //const location = location;
+    // !location 잠시 빼둠
+    if (!title || !content || price === undefined) {
+      alert('모든 칸을 입력해주세요.');
+      return;
+    }
+
     if (!files || files.length === 0) {
       console.error('No files selected.');
       return;
     }
   
     const formData = new FormData();
-    formData.append('title', title_ref.current.value);
-    formData.append('content', content_ref.current.value);
-    formData.append('price', numberPrice);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('price', price);
     formData.append('gu', location);
     formData.append('tradingLocation', location);
   
@@ -143,15 +152,21 @@ function Add() {
           <Title>
             <input placeholder="글 제목" ref={title_ref} />
           </Title>
-
+          <br/>
+          
+          
           <Categorie>
             {/* <div>카테고리 선택</div> */}
-            <select name="premium" id="premium" onChange={changePremium}>
+            <select name="premium" id="premium" onChange={changePremium} disabled={!premium_ref.current?.checked}>
               <option value="none">프리미엄 시간 설정</option>
               <option value="1">1시간</option>
               <option value="2">2시간</option>
               <option value="3">3시간</option>
             </select>
+            <label htmlFor="isPremium">
+            <input type="checkbox" id="isPremium" ref={premium_ref} onChange={setPremium} />
+            프리미엄 설정하기
+          </label>
             {/* <IoIosArrowForward /> */}
           </Categorie>
 
@@ -160,17 +175,9 @@ function Add() {
              <IoIosArrowForward /> 
           </Locate> */}
         </div>
-
+        
         <Price>
-          <label htmlFor="price">
-            <input type="checkbox" id="price" ref={chk_ref} />
-            가격 흥정 받기
-          </label>
-          <label htmlFor="isPremium">
-            <input type="checkbox" id="isPremium" ref={chk_ref} />
-            프리미엄 설정하기
-          </label>
-          <br/>
+          
           <input
             type="text"
             placeholder="가격"
@@ -178,9 +185,12 @@ function Add() {
             onChange={priceComma}
             value={enteredNum || ""}
           />
-
+          <label htmlFor="price">
+            <input type="checkbox" id="price" ref={price_ref} />
+            가격 흥정 받기
+          </label>
         </Price>
-
+          
         <textarea
           cols="40"
           rows="5"
@@ -270,7 +280,7 @@ const Categorie = styled(Title)`
   justify-content: space-between;
 
   select {
-    width: 100%;
+    width: 60%;
     border: none;
     outline: none;
     font-size: 14px;
@@ -290,6 +300,9 @@ const Price = styled(Title)`
 
   input[type="checkbox"] {
     accent-color: #ff7e36;
+  }
+  input[type="text"] {
+    width: 68%;
   }
 `;
 

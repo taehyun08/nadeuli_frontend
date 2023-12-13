@@ -49,45 +49,47 @@ export const carrotPost = (formData, navigate) => {
 };
 
 // 게시물 수정
-// export const modyfyPost = (modifyPostInfo, navigate) => {
-//   return async function (dispatch) {
-//     await instance
-//       .put(`/api/post/${modifyPostInfo.postId}`, modifyPostInfo)
-//       .then((re) => {
-//         // dispatch(getLoadPost(re.data));
-//         navigate("/main");
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+export const modifyPost = (formData, navigate) => {
+  return async function (dispatch) {
+    try {
+      const res = await axios.post('http://localhost:8080/product/updateProduct', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(res)
+      // dispatch(getLoadPost(formData));
+    navigate("/main");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
-// //게시물 삭제
-
-// export const deletePost = (postId, navigate) => {
-//   return async function (dispatch) {
-//     await instance
-//       .delete(`/api/post/${postId}`)
-//       .then((re) => {
-//         // dispatch(roadPosts(re.data));
-//         navigate("/main");
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+//게시물 삭제
+export const deletePost = (postId, navigate) => {
+  return async function (dispatch) {
+    console.log('딜릿 실행됨');
+    await get(`/product/deleteProduct/${postId}`)
+      .then((re) => {
+        // dispatch(roadPosts(re.data));
+        navigate("/main");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 // 게시물 상세 조회
 export const carrotGetPost = (postId) => {
-  return async function (dispatch) {
-
-    console.log('11');
-    await get(`product/getProduct/${postId}`)
+  return async function (dispatch, getState) {
+    await get(`/product/getProduct/${postId}`)
       .then((res) => {
         console.log(res);
         dispatch(getLoadPost(res));
+        const currentState = getState();
+        console.log('get이후 Current state:', currentState);
       })
       .catch((err) => {
         console.log(err);

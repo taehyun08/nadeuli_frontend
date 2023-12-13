@@ -1,83 +1,160 @@
 import styled from "styled-components";
 import { IoIosClose, IoIosCamera } from "react-icons/io";
-import { useNavigate, useParams } from "react-router-dom";
-import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
 // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 // import { storage } from "../shared/firebase";
-// import { modyfyPost } from "../redux/modules/post";
+import { modifyPost } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
 // 이미지 업로드
 
-function Modify(props) {
+function Modify() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const param = useParams();
-  const postId = param.postid;
-  console.log(postId)
   const fileInput = useRef();
   const img_ref = useRef();
   const title_ref = useRef();
   const price_ref = useRef();
   const content_ref = useRef();
-  const [category, setCategory] = useState();
-  const [imageSrc, setImageSrc] = useState(); // 프리뷰
+  const bargain_ref = useRef();
+  const premium_ref = useRef();
+  const [premium, setPremium] = useState();
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
   const [enteredNum, setEnterdNum] = useState();
-
+  const [price, setPrice] = useState(0);
+  
+  const post = useSelector((state) => state.post.post)
+  
   const location = useSelector((state) => state.user.userLocation);
 
-  const changeCategory = (e) => { setCategory(e.target.value);};
+  const changePremium = (e) => {
+    setPremium(e.target.value);
+  };
 
-  //파일처리
-  // const selectFile = async (e) => {
-  //   const uploded_file = await uploadBytes(
-  //     ref(storage, `images/${e.target.files[0].name}`), e.target.files[0]);
-  //   const file_url = await getDownloadURL(uploded_file.ref);
-  //   img_ref.current = { url: file_url };
-  //   const reader = new FileReader();
-  //   const file = e.target.files[0];
-  //   reader.readAsDataURL(file);
-  //   reader.onloadend = () => { setImageSrc(reader.result); };
-  // };
+  // useEffect(() => {
+  //   if (price) {
+  //     chk_ref.current.checked = true;
+  //     chk_ref.current.disabled = false; // 비활성화
+  //   } else {
+  //     chk_ref.current.checked = false;
+  //     chk_ref.current.disabled = true;
+  //   }
+  // }, [price]);
 
-  // 가격표 콤마
+  useEffect(() => {
+    // Check if post has values and set them in the inputs
+    if (post) {
+      console.log('post존재');
+      console.log(post);
+      title_ref.current.value = post.title || "";
+      // Set other values similarly...
+      // For premium, use setPremium method
+      setPremium(post.premium || "none");
+      // For price, use setPrice method
+      setEnterdNum(post.price.toLocaleString("ko-KR"));
+      // For content, use content_ref.current.value
+      content_ref.current.value = post.content || "";
+      // downloadAndSetFiles(post.images);
+      setPreviewImages(post.images);
+    }
+  }, [post]);
+
+  // 파일 업로드
+  const selectFile = async (e) => {
+    
+    const files = fileInput.current.files;
+
+    if (!files || files.length === 0) {
+      console.error('No files selected.');
+      return;
+    }
+
+    // 파일 미리보기 생성
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImages((prevPreviews) => [...(prevPreviews || []), reader.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+    // 선택된 이미지들을 상태에 저장
+    setSelectedImages(files);
+  };
+
+  // 금액 콤마(,) 찍기
+
   const priceComma = (e) => {
+    setPrice(e.target.value);
     let value = e.target.value;
     value = Number(value.replaceAll(",", ""));
-    if (isNaN(value)) { value = 0;} 
-    else { setEnterdNum(value.toLocaleString("ko-KR"));}
+    if (isNaN(value)) {
+      //NaN인지 판별
+      value = 0;
+    } else {
+      setEnterdNum(value.toLocaleString("ko-KR"));
+    }
   };
-  const commaRemovePrice = enteredNum?.replace(/,/g, "");
-  let numberPrice = parseInt(commaRemovePrice);
 
-  // 디스패치 업로드 
+  // 콤마제거
+  const commaRemovePrice = enteredNum?.replace(/,/g, ""); // g -> global
+  let numberPrice = parseInt(commaRemovePrice);
+  console.log(numberPrice);
+
+
+  // 업로드
   const upload = () => {
-    const newPost = {
-      title: title_ref.current.value,
-      postImg: img_ref.current.url,
-      content: content_ref.current.value,
-      category: category,
-      price: numberPrice,
-      postId : postId
-    };
-    // dispatch(modyfyPost(newPost, navigate));
+    const files = fileInput.current.files;
+  
+    if (!files || files.length === 0) {
+      console.error('No files selected.');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('title', title_ref.current.value);
+    formData.append('content', content_ref.current.value);
+    formData.append('price', numberPrice);
+    formData.append('gu', location);
+    formData.append('tradingLocation', location);
+    formData.append('productId', post.productId);
+  
+    for (let i = 0; i < files.length; i++) {
+      formData.append('image', files[i]);
+    }
+  
+    dispatch(modifyPost(formData, navigate));
   };
 
   return (
     <Wrap>
       <Header>
-        <IoIosClose size="25" onClick={() => { navigate("/main"); }}/>
-            <h4>수정하기</h4>
-            <h5 onClick={upload}>완료</h5>
+        <IoIosClose
+          size="25"
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <h4>수정하기</h4>
+        <h5 onClick={upload}>완료</h5>
       </Header>
 
       {/* 사진업로드 */}
       <Container>
-        <File> <label htmlFor="file">
+        <File>
+          <label htmlFor="file">
             <IoIosCamera className="camera" />
           </label>
-          {/* <input type="file" id="file" ref={fileInput} onChange={selectFile} /> */}
-          {imageSrc && <img src={imageSrc} alt="preview-img" />}
+          <input type="file" id="file" ref={fileInput} onChange={selectFile} multiple/>
+          {previewImages.map((preview, index) => (
+        <img
+          key={index}
+          src={preview}
+          alt={`Preview ${index + 1}`}
+          style={{ maxWidth: '100px', maxHeight: '100px', margin: '5px' }}
+        />
+      ))}
+          {/* {previewImages && <img src={previewImages} alt="preview-img" />} */}
         </File>
 
         <div>
@@ -86,44 +163,48 @@ function Modify(props) {
           </Title>
 
           <Categorie>
-            <select name="category" id="category" onChange={changeCategory}>
-              <option value="none">카테고리 선택</option>
-              <option value="디지털기기">디지털기기</option>
-              <option value="생활가전">생활가전</option>
-              <option value="가구&인테리어">가구/인테리어</option>
-              <option value="유아동">유아동</option>
-              <option value="생활&가공식품">생활/가공식품</option>
-              <option value="유아도서">유아도서</option>
-              <option value="스포츠/레저">스포츠/레저</option>
-              <option value="여성패션">여성패션/잡화</option>
-              <option value="남성패션">남성패션/잡화</option>
-              <option value="게임&취미">게임/취미</option>
-              <option value="뷰티&미용">뷰티/미용</option>
-              <option value="반려동물용품">반려동물용품</option>
-              <option value="도서&티켓&음반">도서/티켓/음반</option>
-              <option value="기타">기타 중고물품</option>
-              <option value="삽니다">삽니다</option>
+            {/* <div>카테고리 선택</div> */}
+            <select name="premium" id="premium" onChange={changePremium}>
+              <option value="none">프리미엄 시간 설정</option>
+              <option value="1">1시간</option>
+              <option value="2">2시간</option>
+              <option value="3">3시간</option>
             </select>
+            {/* <IoIosArrowForward /> */}
           </Categorie>
 
-          <Locate> <div>{location}</div> </Locate>
+          {/* <Locate>
+             <div>{location}</div> 
+             <IoIosArrowForward /> 
+          </Locate> */}
         </div>
 
         <Price>
-          <input type="text" placeholder="가격 [선택사항]"
+          <label htmlFor="price">
+            <input type="checkbox" id="price" ref={bargain_ref} />
+            가격 흥정 받기
+          </label>
+          <label htmlFor="isPremium">
+            <input type="checkbox" id="isPremium" ref={premium_ref} />
+            프리미엄 설정하기
+          </label>
+          <br/>
+          <input
+            type="text"
+            placeholder="가격"
             ref={price_ref}
             onChange={priceComma}
-            value={enteredNum || ""} />
-          <label htmlFor="price">
-            <input type="radio" id="price" />
-            가격 제안받기
-          </label>
+            value={enteredNum || ""}
+          />
+
         </Price>
 
-        <textarea cols="40" rows="5"
-          placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될
-          수 있어요.)"
-          ref={content_ref} />
+        <textarea
+          cols="40"
+          rows="5"
+          placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될 수 있어요.)"
+          ref={content_ref}
+        />
       </Container>
     </Wrap>
   );
@@ -191,6 +272,7 @@ const File = styled.div`
 const Title = styled.div`
   padding: 20px 0px;
   border-bottom: 1px solid #dadada;
+
   outline: none;
   input {
     border: none;
@@ -219,9 +301,14 @@ const Locate = styled(Title)`
 `;
 
 const Price = styled(Title)`
+  white-space: pre-line
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  input[type="checkbox"] {
+    accent-color: #ff7e36;
+  }
 `;
 
 export default Modify;

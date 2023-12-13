@@ -16,9 +16,7 @@ function MainItemList() {
   const mainPostList = useSelector((state) => state.post.postList);
   const user = useSelector((state) => state.user);
 
-
   React.useEffect(() => {
-    console.log('메인리스트 유즈이펙트 실행됨');
     dispatch(loadMainposts(user.userLocation));
   }, [boardList, dispatch]);
 
@@ -36,7 +34,7 @@ function MainItemList() {
                     navigate("/detail/" + list.productId+"/"+list.tradeState);
                   }}
                 >
-                  <Img src={list.postImg} />
+                  <Img src={list?.images?.[0]} />
                   <TextArea>
                     <span
                       style={{
