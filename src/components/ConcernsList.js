@@ -8,9 +8,9 @@ import { useSelector,  useDispatch } from 'react-redux';
 function ConcernsList () {
     const dispatch = useDispatch();
   
-    useEffect(() => {
-        dispatch(loadConcernsposts());
-    }, [dispatch]);
+    // useEffect(() => {
+    //     dispatch(loadConcernsposts());
+    // }, [dispatch]);
 
     const postList = useSelector((state) => state.post.postList);
 

@@ -1,6 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
 import post from "./modules/post";
 import member from "./modules/member";
+import dongNePost from "./modules/dongNePost";
+
 
 
 /*
@@ -19,7 +21,7 @@ const store = configureStore({
 //user와 post는 각각 다른 Reducer다. 
 //Reducer는 상태 변화를 다루는 함수로, 
 //여러 개의 Reducer를 합쳐 루트 Reducer를 만들 수 있다.
-  reducer: { member, post },
+  reducer: { member, post, dongNePost },
 });
 
 

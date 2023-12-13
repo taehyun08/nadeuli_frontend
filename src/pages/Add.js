@@ -1,286 +1,296 @@
-// import styled from "styled-components";
-// import { IoIosClose, IoIosCamera } from "react-icons/io";
-// import { useNavigate } from "react-router-dom";
-// import { useState, useRef, useEffect } from "react";
-// // import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-// // import { storage } from "../shared/firebase";
-// import { carrotPost } from "../redux/modules/post";
-// import { useDispatch, useSelector } from "react-redux";
-// // 이미지 업로드
+import styled from "styled-components";
+import { IoIosClose, IoIosCamera } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
+import { useState, useRef, useEffect } from "react";
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { storage } from "../shared/firebase";
+import { carrotPost } from "../redux/modules/post";
+import { useDispatch, useSelector } from "react-redux";
+// 이미지 업로드
 
-// function Add() {
-//   const navigate = useNavigate();
-//   const dispatch = useDispatch();
-//   const fileInput = useRef();
-//   const img_ref = useRef();
-//   const title_ref = useRef();
-//   const price_ref = useRef();
-//   const content_ref = useRef();
-//   const chk_ref = useRef();
-//   const [category, setCategory] = useState();
-//   const [imageSrc, setImageSrc] = useState();
-//   const [enteredNum, setEnterdNum] = useState();
-//   const [price, setPrice] = useState(0);
-//   const post = useSelector((state) => state.post.postList)
+function Add() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const fileInput = useRef();
+  const img_ref = useRef();
+  const title_ref = useRef();
+  const price_ref = useRef();
+  const content_ref = useRef();
+  const chk_ref = useRef();
+  const [premium, setPremium] = useState();
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [previewImages, setPreviewImages] = useState([]);
+  const [enteredNum, setEnterdNum] = useState();
+  const [price, setPrice] = useState(0);
+  const post = useSelector((state) => state.post.postList)
   
-//   const location = useSelector((state) => state.user.userLocation);
+  const location = useSelector((state) => state.user.userLocation);
 
-//   // const changeCategory = (e) => {
-//   //   setCategory(e.target.value);
-//   // };
+  const changePremium = (e) => {
+    setPremium(e.target.value);
+  };
 
-//   // useEffect(() => {
-//   //   if (price) {
-//   //     chk_ref.current.checked = true;
-//   //     chk_ref.current.disabled = false; // 비활성화
-//   //   } else {
-//   //     chk_ref.current.checked = false;
-//   //     chk_ref.current.disabled = true;
-//   //   }
-//   // }, [price]);
+  // useEffect(() => {
+  //   if (price) {
+  //     chk_ref.current.checked = true;
+  //     chk_ref.current.disabled = false; // 비활성화
+  //   } else {
+  //     chk_ref.current.checked = false;
+  //     chk_ref.current.disabled = true;
+  //   }
+  // }, [price]);
 
-//   // useEffect(() => {
-//   //   console.log(post)
+  // useEffect(() => {
+  //   console.log(post)
 
-//   // },[post])
+  // },[post])
 
-//   // 파일 업로드
-//   // const selectFile = async (e) => {
-//   //   // const uploded_file = await uploadBytes(
-//   //   //   ref(storage, `images/${e.target.files[0].name}`),
-//   //   //   e.target.files[0] // 어떤 파일 저장 할건지
-//   //   // );
+  // 파일 업로드
+  const selectFile = async (e) => {
+    
+    const files = fileInput.current.files;
 
-//   //   // 스토리지로 url 다운로드
-//   //   const file_url = await getDownloadURL(uploded_file.ref);
+    if (!files || files.length === 0) {
+      console.error('No files selected.');
+      return;
+    }
 
-//   //   img_ref.current = { url: file_url };
+    // 파일 미리보기 생성
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImages((prevPreviews) => [...(prevPreviews || []), reader.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+    // 선택된 이미지들을 상태에 저장
+    setSelectedImages(files);
+  };
 
-//   //   // 프리뷰
-//   //   const reader = new FileReader();
-//   //   const file = e.target.files[0];
+  // 금액 콤마(,) 찍기
 
-//   //   // 파일내용 읽어오기
-//   //   reader.readAsDataURL(file);
+  const priceComma = (e) => {
+    setPrice(e.target.value);
+    let value = e.target.value;
+    value = Number(value.replaceAll(",", ""));
+    if (isNaN(value)) {
+      //NaN인지 판별
+      value = 0;
+    } else {
+      setEnterdNum(value.toLocaleString("ko-KR"));
+    }
+  };
 
-//   //   //읽기가 끝나면 발생하는 이벤트 핸들러
-//   //   reader.onloadend = () => {
-//   //     //reader.result는 파일 내용물
-//   //     setImageSrc(reader.result);
-//   //   };
-//   // };
+  // 콤마제거
+  const commaRemovePrice = enteredNum?.replace(/,/g, ""); // g -> global
+  let numberPrice = parseInt(commaRemovePrice);
+  console.log(numberPrice);
 
-//   // 금액 콤마(,) 찍기
+  const upload = () => {
+    const files = fileInput.current.files;
+  
+    if (!files || files.length === 0) {
+      console.error('No files selected.');
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('title', title_ref.current.value);
+    formData.append('content', content_ref.current.value);
+    formData.append('price', numberPrice);
+    formData.append('gu', location);
+    formData.append('tradingLocation', location);
+  
+    for (let i = 0; i < files.length; i++) {
+      formData.append('image', files[i]);
+    }
+  
+    dispatch(carrotPost(formData, navigate));
+  };
 
-//   // const priceComma = (e) => {
-//   //   setPrice(e.target.value);
-//   //   let value = e.target.value;
-//   //   value = Number(value.replaceAll(",", ""));
-//   //   if (isNaN(value)) {
-//   //     //NaN인지 판별
-//   //     value = 0;
-//   //   } else {
-//   //     setEnterdNum(value.toLocaleString("ko-KR"));
-//   //   }
-//   // };
+  return (
+    <Wrap>
+      <Header>
+        <IoIosClose
+          size="25"
+          onClick={() => {
+            navigate("/main");
+          }}
+        />
+        <h4>중고거래 글쓰기</h4>
+        <h5 onClick={upload}>완료</h5>
+      </Header>
 
-//   // // 콤마제거
-//   // const commaRemovePrice = enteredNum?.replace(/,/g, ""); // g -> global
-//   // let numberPrice = parseInt(commaRemovePrice);
-//   //console.log(numberPrice);
+      {/* 사진업로드 */}
+      <Container>
+        <File>
+          <label htmlFor="file">
+            <IoIosCamera className="camera" />
+          </label>
+          <input type="file" id="file" ref={fileInput} onChange={selectFile} multiple/>
+          {previewImages.map((preview, index) => (
+        <img
+          key={index}
+          src={preview}
+          alt={`Preview ${index + 1}`}
+          style={{ maxWidth: '100px', maxHeight: '100px', margin: '5px' }}
+        />
+      ))}
+          {/* {previewImages && <img src={previewImages} alt="preview-img" />} */}
+        </File>
 
-//   // const upload = () => {
-//   //   const newPost = {
-//   //     title: title_ref.current.value,
-//   //     postImg: img_ref.current.url,
-//   //     content: content_ref.current.value,
-//   //     category: category,
-//   //     price: numberPrice,
-//   //   };
+        <div>
+          <Title>
+            <input placeholder="글 제목" ref={title_ref} />
+          </Title>
 
-//   //   dispatch(carrotPost(newPost, navigate));
-//   // };
+          <Categorie>
+            {/* <div>카테고리 선택</div> */}
+            <select name="premium" id="premium" onChange={changePremium}>
+              <option value="none">프리미엄 시간 설정</option>
+              <option value="1">1시간</option>
+              <option value="2">2시간</option>
+              <option value="3">3시간</option>
+            </select>
+            {/* <IoIosArrowForward /> */}
+          </Categorie>
 
-//   return (
-//     <Wrap>
-//       <Header>
-//         <IoIosClose
-//           size="25"
-//           onClick={() => {
-//             navigate("/main");
-//           }}
-//         />
-//         <h4>중고거래 글쓰기</h4>
-//         {/* <h5 onClick={upload}>완료</h5> */}
-//       </Header>
+          {/* <Locate>
+             <div>{location}</div> 
+             <IoIosArrowForward /> 
+          </Locate> */}
+        </div>
 
-//       {/* 사진업로드 */}
-//       <Container>
-//         <File>
-//           <label htmlFor="file">
-//             <IoIosCamera className="camera" />
-//           </label>
-//           <input type="file" id="file" ref={fileInput} onChange={selectFile} />
-//           {imageSrc && <img src={imageSrc} alt="preview-img" />}
-//         </File>
+        <Price>
+          <label htmlFor="price">
+            <input type="checkbox" id="price" ref={chk_ref} />
+            가격 흥정 받기
+          </label>
+          <label htmlFor="isPremium">
+            <input type="checkbox" id="isPremium" ref={chk_ref} />
+            프리미엄 설정하기
+          </label>
+          <br/>
+          <input
+            type="text"
+            placeholder="가격"
+            ref={price_ref}
+            onChange={priceComma}
+            value={enteredNum || ""}
+          />
 
-//         <div>
-//           <Title>
-//             <input placeholder="글 제목" ref={title_ref} />
-//           </Title>
+        </Price>
 
-//           <Categorie>
-//             {/* <div>카테고리 선택</div> */}
-//             <select name="category" id="category" onChange={changeCategory}>
-//               <option value="none">카테고리 선택</option>
-//               <option value="디지털기기">디지털기기</option>
-//               <option value="생활가전">생활가전</option>
-//               <option value="가구&인테리어">가구/인테리어</option>
-//               <option value="유아동">유아동</option>
-//               <option value="생활&가공식품">생활/가공식품</option>
-//               <option value="유아도서">유아도서</option>
-//               <option value="스포츠/레저">스포츠/레저</option>
-//               <option value="여성패션">여성패션/잡화</option>
-//               <option value="남성패션">남성패션/잡화</option>
-//               <option value="게임&취미">게임/취미</option>
-//               <option value="뷰티&미용">뷰티/미용</option>
-//               <option value="반려동물용품">반려동물용품</option>
-//               <option value="도서&티켓&음반">도서/티켓/음반</option>
-//               <option value="기타">기타 중고물품</option>
-//               <option value="삽니다">삽니다</option>
-//             </select>
-//             {/* <IoIosArrowForward /> */}
-//           </Categorie>
+        <textarea
+          cols="40"
+          rows="5"
+          placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될 수 있어요.)"
+          ref={content_ref}
+        />
+      </Container>
+    </Wrap>
+  );
+}
+const Wrap = styled.div`
+  box-sizing: border-box;
+  font-size: 13px;
 
-//           <Locate>
-//             <div>{location}</div>
-//             {/* <IoIosArrowForward /> */}
-//           </Locate>
-//         </div>
+  input {
+    font-size: 13px;
+  }
 
-//         <Price>
-//           <input
-//             type="text"
-//             placeholder="가격 [선택사항]"
-//             ref={price_ref}
-//             onChange={priceComma}
-//             value={enteredNum || ""}
-//           />
-//           <label htmlFor="price">
-//             <input type="checkbox" id="price" ref={chk_ref} />
-//             가격 제안받기
-//           </label>
-//         </Price>
+  textarea {
+    margin-top: 45px;
+    border: none;
+    outline: none;
+    resize: none;
+  }
+  textarea::placeholder {
+    color: #dadada;
+    font-size: 13px;
+  }
+`;
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-//         <textarea
-//           cols="40"
-//           rows="5"
-//           placeholder="올릴 게시글 내용을 작성해주세요. (가품 및 판매금지품목은 게시가 제한될 수 있어요.)"
-//           ref={content_ref}
-//         />
-//       </Container>
-//     </Wrap>
-//   );
-// }
-// const Wrap = styled.div`
-//   box-sizing: border-box;
-//   font-size: 13px;
+  padding: 16px 15px;
+  border-bottom: 1px solid #dadada;
 
-//   input {
-//     font-size: 13px;
-//   }
+  h4 {
+    font-weight: 800;
+  }
+  h5 {
+    color: #ff7e36;
+  }
+`;
+const Container = styled.div`
+  padding: 0 16px;
+`;
 
-//   textarea {
-//     margin-top: 45px;
-//     border: none;
-//     outline: none;
-//     resize: none;
-//   }
-//   textarea::placeholder {
-//     color: #dadada;
-//     font-size: 13px;
-//   }
-// `;
-// const Header = styled.header`
-//   display: flex;
-//   justify-content: space-between;
-//   align-items: center;
+const File = styled.div`
+  padding: 30px 0px;
+  border-bottom: 1px solid #dadada;
 
-//   padding: 16px 15px;
-//   border-bottom: 1px solid #dadada;
+  .camera {
+    font-size: 35px;
+  }
+  label {
+    cursor: pointer;
+  }
+  input[type="file"] {
+    display: none;
+  }
 
-//   h4 {
-//     font-weight: 800;
-//   }
-//   h5 {
-//     color: #ff7e36;
-//   }
-// `;
-// const Container = styled.div`
-//   padding: 0 16px;
-// `;
+  img {
+    width: 130px;
+    height: 130px;
+    margin-left: 10px;
+    border-radius: 5px;
+  }
+`;
 
-// const File = styled.div`
-//   padding: 30px 0px;
-//   border-bottom: 1px solid #dadada;
+const Title = styled.div`
+  padding: 20px 0px;
+  border-bottom: 1px solid #dadada;
 
-//   .camera {
-//     font-size: 35px;
-//   }
-//   label {
-//     cursor: pointer;
-//   }
-//   input[type="file"] {
-//     display: none;
-//   }
+  outline: none;
+  input {
+    border: none;
+    outline: none;
+  }
 
-//   img {
-//     width: 130px;
-//     height: 130px;
-//     margin-left: 10px;
-//     border-radius: 5px;
-//   }
-// `;
+  input::placeholder {
+    color: #dadada;
+  }
+`;
+const Categorie = styled(Title)`
+  display: flex;
+  justify-content: space-between;
 
-// const Title = styled.div`
-//   padding: 20px 0px;
-//   border-bottom: 1px solid #dadada;
+  select {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 14px;
+  }
+`;
 
-//   outline: none;
-//   input {
-//     border: none;
-//     outline: none;
-//   }
+const Locate = styled(Title)`
+  display: flex;
+  justify-content: space-between;
+`;
 
-//   input::placeholder {
-//     color: #dadada;
-//   }
-// `;
-// const Categorie = styled(Title)`
-//   display: flex;
-//   justify-content: space-between;
+const Price = styled(Title)`
+  white-space: pre-line
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-//   select {
-//     width: 100%;
-//     border: none;
-//     outline: none;
-//     font-size: 14px;
-//   }
-// `;
+  input[type="checkbox"] {
+    accent-color: #ff7e36;
+  }
+`;
 
-// const Locate = styled(Title)`
-//   display: flex;
-//   justify-content: space-between;
-// `;
-
-// const Price = styled(Title)`
-//   display: flex;
-//   align-items: center;
-//   justify-content: space-between;
-
-//   input[type="checkbox"] {
-//     accent-color: #ff7e36;
-//   }
-// `;
-
-// export default Add;
+export default Add;

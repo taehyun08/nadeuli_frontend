@@ -1,39 +1,37 @@
-import "../style/css/listForm.css";
-import styled from "styled-components";
-import { FaPlus } from "react-icons/fa";
-import { BsHeart } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { loadMainposts } from "../redux/modules/post";
+import { useSelector, useDispatch } from 'react-redux';
+import { loadDongNePosts } from '../redux/modules/dongNePost';
 
+import styled from 'styled-components';
+import { FaPlus } from 'react-icons/fa';
+import { BsHeart } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
 
-function MainItemList() {
+function DongNePostList() {
   const dispatch = useDispatch();
   const [boardList, setBoardList] = useState();
 
-  const mainPostList = useSelector((state) => state.post.postList);
+  const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
   const user = useSelector((state) => state.user);
 
+  console.log(dongNePostList)
 
   React.useEffect(() => {
-    console.log('메인리스트 유즈이펙트 실행됨');
-    dispatch(loadMainposts(user.userLocation));
+    dispatch(loadDongNePosts(0, '성동구', ''));
   }, [boardList, dispatch]);
 
   const navigate = useNavigate();
+
   return (
     <div className="MainListBox">
-      {mainPostList &&
-        mainPostList.map((list, index) => (
+      {dongNePostList &&
+        dongNePostList.map((list, index) => (
           <div key={index}>
-            {
               <CardBox className="card">
                 <div
                   style={{ display: "flex" }}
                   onClick={() => {
-                    navigate("/detail/" + list.productId+"/"+list.tradeState);
+                    // navigate("/detail/" + list.postId+"/"+list.tradeState);
                   }}
                 >
                   <Img src={list.postImg} />
@@ -61,26 +59,6 @@ function MainItemList() {
                     >
                       {list.userLocation}
                     </span>
-                    <TradeState>
-                      <span>
-                        {list.tradeState === "1" ? (
-                          <Book>예약중</Book>
-                        ) : list.tradeState === "2" ? (
-                          <SoldOut>거래완료</SoldOut>
-                        ) : (
-                          ""
-                        )}
-                      </span>
-                      <span
-                        style={{
-                          fontSize: "13px",
-                          padding: "5px",
-                          fontWeight: "bold",
-                        }}
-                      >
-                        {Number(list.price).toLocaleString("ko-KR")}원
-                      </span>
-                    </TradeState>
                   </TextArea>
                 </div>
                 <div
@@ -96,20 +74,20 @@ function MainItemList() {
                   {list.likeNum}
                 </div>
               </CardBox>
-            }
           </div>
         ))}
 
       <FixedButton>
         <FaPlus
           onClick={() => {
-            navigate("/add");
+            navigate("/addDongNePost");
           }}
         />
       </FixedButton>
     </div>
   );
 }
+
 
 const CardBox = styled.div`
   display: flex;
@@ -148,25 +126,25 @@ const Img = styled.img`
   object-fit: cover;
 `;
 
-const TradeState = styled.div`
-  margin-top: 5px;
-  display: flex;
-  align-items: center;
-`;
+// const TradeState = styled.div`
+//   margin-top: 5px;
+//   display: flex;
+//   align-items: center;
+// `;
 
-const SoldOut = styled.div`
-  padding: 6px 5px;
-  width: 65px;
-  border-radius: 5px;
-  background-color: #565656;
-  color: white;
-  font-size: 12px;
-  text-align: center;
-`;
+// const SoldOut = styled.div`
+//   padding: 6px 5px;
+//   width: 65px;
+//   border-radius: 5px;
+//   background-color: #565656;
+//   color: white;
+//   font-size: 12px;
+//   text-align: center;
+// `;
 
-const Book = styled(SoldOut)`
-  width: 55px;
-  background-color: #34bf9e;
-`;
+// const Book = styled(SoldOut)`
+//   width: 55px;
+//   background-color: #34bf9e;
+// `;
 
-export default MainItemList;
+export default DongNePostList;
