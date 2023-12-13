@@ -26,7 +26,7 @@ function Modify() {
   
   const post = useSelector((state) => state.post.post)
   
-  const location = useSelector((state) => state.user.userLocation);
+  const location = useSelector((state) => state.member.gu);
 
   const changePremium = (e) => {
     setPremium(e.target.value);

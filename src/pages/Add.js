@@ -24,7 +24,7 @@ function Add() {
   const [price, setPrice] = useState(0);
   const post = useSelector((state) => state.post.postList)
   
-  const location = useSelector((state) => state.user.userLocation);
+  const location = useSelector((state) => state.member.gu);
 
   const changePremium = (e) => {
     setPremium(e.target.value);
