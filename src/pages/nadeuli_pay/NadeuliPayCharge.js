@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import React from "react";
-import { Button } from "@mui/material";
-import HeaderBack from "../../components/HeaderBack";
+
 import PayModal from "../../components/PayModal";
+import NadeuliPay from "../../components/NadeuliPay";
 
 
 function NadeuliPayCharge() {
@@ -51,35 +51,15 @@ function NadeuliPayCharge() {
   }
 
   return (
-    <div style={{ marginTop: '20px', marginLeft: '10px' }}>
-      <HeaderBack title="나드리페이 충전" />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center', // 중앙 정렬
-        }}
-      >
-        <input
-          type="number"
-          placeholder="금액을 입력해주세요."
-          value={inputNumber}
-          onChange={(e) => setInputNumber(e.target.value)}
-          style={{
-            marginTop: '90%',
-            marginBottom: '60px',
-            padding: '10px',
-            width: '250px', // 좌우 길이 조절
-          }}
-        />
-        <Button
-          variant="contained"
-          disableElevation
-          style={{ backgroundColor: '#1976d2', color: 'white', marginBottom: '10px' }}
-          onClick={handleChargeButton}
-        >
-          충전하기
-        </Button>
+    <div>
+        <NadeuliPay 
+            title='나드리페이 충전'
+            buttonName='충전하기'
+            handleButton={handleChargeButton}
+            setInputNumber={setInputNumber}
+            inputNumber={inputNumber}
+            setPayMoney={setPayMoney}
+            />
         <PayModal
             selectedValue={selectedValue}
             open={open}
@@ -87,7 +67,6 @@ function NadeuliPayCharge() {
             payMoney={payMoney}
         />
       </div>
-    </div>
   );
 }
 

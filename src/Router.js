@@ -20,6 +20,8 @@ import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge"
+import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay"
+import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw"
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 
@@ -32,6 +34,8 @@ function Router() {
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
         <Route path="/nadeuliPay/NadeuliPayCharge" element={<NadeuliPayCharge />} />
+        <Route path="/nadeuliPay/NadeuliPayPay" element={<NadeuliPayPay />} />
+        <Route path="/nadeuliPay/NadeuliPayWithdraw" element={<NadeuliPayWithdraw />} />
         {/* <Route path="/addTradeReview" element={<AddTradeReview />} /> */}
 
         <Route path="/location" element={<RegisterLocation />} />
