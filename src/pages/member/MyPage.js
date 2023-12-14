@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { getToken, removeToken } from '../../shared/localStorage';
 import HeaderBack from '../../components/HeaderBack';
 import Modal from '../../components/Modal';
+import TopDropdownMenu from '../../components/TopDropdownMenu'
 
 function MyPage() {
     // const [subMenu, setSubMenu] = useState(<SalesList/>);
@@ -18,7 +19,7 @@ function MyPage() {
     };
 
     const navigate = useNavigate();
-    const user = useSelector((state) => state.user);
+    const member = useSelector((state) => state.member);
 
     const logout = (e) => {
         removeToken();
@@ -47,28 +48,23 @@ function MyPage() {
     //   }
     // }, [navigate]);
 
+    const dropdownMenus = [
+        { label: '프로필 수정', onClick: "" },
+        { label: '회원 목록 조회', onClick: "" },
+        { label: '주문 내역 목록', onClick: "" },
+        { label: '배달 내역 목록', onClick: "" },
+        { label: '비활성화', onClick: openModal },
+        { label: '로그아웃', onClick: "" },
+        // 원하는 만큼 추가
+      ];
+
     return (
         <div className="Wrap">
             <div className="TMenuBar">
                 <TMenuBar>
                     <HeaderBack />
                     <p>내 프로필</p>
-                    <CiMenuKebab
-                        onClick={toggleMenu}
-                        style={{ fontSize: '40px' }}
-                    >
-                        로그아웃
-                    </CiMenuKebab>
-                    {isMenuVisible && (
-                        <SmallMenu>
-                            <p>프로필 수정</p>
-                            <p>로그아웃</p>
-                            <p onClick={openModal}>비활성화</p>
-                            <p>회원 목록 조회</p>
-                            <p>주문 내역 목록</p>
-                            <p>배달 내역 목록</p>
-                        </SmallMenu>
-                    )}
+                    <TopDropdownMenu dropdownMenus={dropdownMenus}/>
                     {isModalVisible && (
                         <Modal open={isModalVisible} close={closeModal} header="비활성화">
                             {/* 모달 내용을 추가하세요 */}
@@ -84,18 +80,18 @@ function MyPage() {
                 <div className="ContentsBox">
                     <MyInfoBox>
                         <div style={{ display: 'flex', alignItems: 'center', lineHeight: '1.5' }}>
-                            <Img src={user.userImg} />
+                            <Img src={member.picture} />
                             <div style={{ paddingLeft: '20px' }}>
                                 <p>
-                                    엄준식<span>aaa</span>
+                                    {member.nickname}<span><i>#{member.tag}</i></span>
                                 </p>
-                                <p>서울특별시 강서구 공항동</p>
-                                <p>친화력 5점</p>
+                                <p>{member.dongNe}</p>
+                                <p>친화력 {member.affinity}점</p>
                             </div>
                         </div>
                     </MyInfoBox>
                     <MyMenuMiddle>
-                        <p style={{ fontSize: '25px' }}>나드리페이 10,000원</p>
+                        <p style={{ fontSize: '25px' }}>나드리페이 {member.nadeuliPayBalance}원</p>
                         <div style={{ display: 'flex', width: '100%', justifyContent: 'space-around', marginTop: '30px' }}>
                             <Circle>
                                 <p>충전</p>
@@ -155,13 +151,13 @@ function MyPage() {
                                 <Circle>
                                     <p>이메일</p>
                                 </Circle>
-                                <p>mayuaa001@gmail.com</p>
+                                <p>{member.email}</p>
                             </div>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                                 <Circle>
                                     <p>휴대폰 번호</p>
                                 </Circle>
-                                <p>010-8989-8989</p>
+                                <p>{member.cellphone}</p>
                             </div>
                         </div>
                     </MyMenuMiddle>
