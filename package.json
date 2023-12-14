@@ -35,7 +35,10 @@
     "extends": [
       "react-app",
       "react-app/jest"
-    ]
+    ],
+    "globals": {
+      "kakao": "readonly"
+    }
   },
   "browserslist": {
     "production": [
