@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -19,12 +19,24 @@ function GetDongNePost() {
       dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
 
+  const handleBackClick = () => {
+    navigate('/dongNeHome');
+  };
+  
+  const handleEditClick = () => {
+    navigate('/addDongNePost');
+  };
+  
+  const handleDeleteClick = () => {
+    deleteDongNePost();
+  };
+
 
 return (
   <Wrap>
     <Header>
-      <TopArrowLeft navigate={"/dongNeHome"}/>
-      <TopDropdownMenu onEditClick={"/addDongNePost"} onDeleteClick={deleteDongNePost}/>
+      <TopArrowLeft onBackClick={handleBackClick}/>
+      <TopDropdownMenu onEditClick={handleEditClick} onDeleteClick={handleDeleteClick}/>
     </Header>
 
     <Container>
@@ -43,32 +55,19 @@ return (
         </Title>
 
         <File>
-          <p>{getDongNePost.video}</p>
-          <p>{getDongNePost.image}</p>
-          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
-          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
-          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
-          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
-          <img src="https://kr.object.ncloudstorage.com/nadeuli/image/스크린샷 2023-12-11 오후 6.40.2320231212101949184.png"/>
+          {getDongNePost && getDongNePost.images && getDongNePost.images.map((image, index) => (
+            <img key={index} src={image} alt={`Image ${index}`} />
+          ))}
         </File>
 
         <Content>
-        <p>{getDongNePost.content}</p>
+          <p>{getDongNePost.content}</p>
         </Content>
       </div>
       
       <Comment>
       <p>댓글 위치</p>
-
       </Comment>
-      <textarea
-        cols="40"
-        rows="5"
-        // placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.\n
-        // 1. 사진은 최대 10장까지 가능합니다.\n
-        // 2. 영상은 1개까지 가능합니다.`}
-        // ref={content_ref}
-      />
     </Container>
   </Wrap>
 );
@@ -100,6 +99,7 @@ const Header = styled.header`
   align-items: center;
   padding: 25px 20px;
   border-bottom: 1px solid #dadada;
+  
   
   h4 {
     font-weight: 800;

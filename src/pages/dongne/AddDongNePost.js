@@ -18,9 +18,11 @@ function AddDongNePost() {
   const videoInput = useRef();
   const [imageSrc, setImageSrc] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
+  const location = useSelector((state) => state.member.gu);
   
 
-  const location = useSelector((state) => state.user.userLocation);
+  // const location = useSelector((state) => state.user.userLocation);
+
 
   const changeCategory = (e) => {
     setCategory(e.target.value);
@@ -163,6 +165,7 @@ return (
 const Wrap = styled.div`
 box-sizing: border-box;
 font-size: 18px;
+max-width: 100%; /* 최대 너비 설정 */
 
 input {
   font-size: 13px;
@@ -173,12 +176,14 @@ textarea {
   border: none;
   outline: none;
   resize: none;
-  font-size: 18px;
+  font-size: 20px;
   height: 400px; /* 높이 조절 */
+  width: 100%; /* 너비 100% 설정 */
+  padding: 10px; /* 내부 여백 추가 */
 }
 textarea::placeholder {
   color: #dadada;
-  font-size: 18px;
+  font-size: 20px;
 }
 `;
 const Header = styled.header`
@@ -186,16 +191,16 @@ display: flex;
 justify-content: space-between;
 align-items: center;
 
-padding: 25px 20px;
+padding: 25px 25px;
 border-bottom: 1px solid #dadada;
 
 h4 {
-  font-weight: 800;
+  font-weight: bold;
   font-size: 20px; /* 원하는 크기로 수정 */
 }
 h5 {
   color: #4da6ff;
-  font-size: 16px;
+  font-size: 18px;
 }
 `;
 const Container = styled.div`
@@ -237,14 +242,15 @@ input {
   border: none;
   outline: none;
   font-size: 25px;
+  width: 100%; /* 너비 100% 설정 */
 }
 
 input::placeholder {
   color: #dadada;
-  border: none;
   font-size: 25px;
 }
 `;
+
 const Categorie = styled(Title)`
 display: flex;
 justify-content: space-between;
