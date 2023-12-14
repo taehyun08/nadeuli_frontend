@@ -14,10 +14,10 @@ function MainItemList() {
   const [boardList, setBoardList] = useState();
 
   const mainPostList = useSelector((state) => state.post.postList);
-  const user = useSelector((state) => state.member);
+  const member = useSelector((state) => state.member);
 
   React.useEffect(() => {
-    dispatch(loadMainposts(user.userLocation));
+    dispatch(loadMainposts(member.gu));
   }, [boardList, dispatch]);
 
   const navigate = useNavigate();

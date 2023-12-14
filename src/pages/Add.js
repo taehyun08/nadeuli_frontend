@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 // import { storage } from "../shared/firebase";
 import { carrotPost } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
+import member from "../redux/modules/member";
 // 이미지 업로드
 
 function Add() {
@@ -17,18 +18,19 @@ function Add() {
   const price_ref = useRef();
   const content_ref = useRef();
   const premium_ref = useRef();
-  const [premium, setPremium] = useState();
+  const premiumTime_ref = useRef();
+  const isBargain_ref = useRef();
+  const {isBargain, setBargain} = useState();
+  const [isPremium, setPremium] = useState();
+  const [premiumTime, setPremiumTime] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [enteredNum, setEnterdNum] = useState();
   const [price, setPrice] = useState(0);
-  const post = useSelector((state) => state.post.postList)
+  const post = useSelector((state) => state.post.postList);
+  const member = useSelector((state) => state.member);
   
   const location = useSelector((state) => state.member.gu);
-
-  const changePremium = (e) => {
-    setPremium(e.target.value);
-  };
 
   // useEffect(() => {
   //   if (price) {
@@ -102,18 +104,32 @@ function Add() {
       console.error('No files selected.');
       return;
     }
-  
+
+    if (member.nadeuliPayBalance < premiumTime*100){
+      alert('나드리페이 잔액이 부족합니다 충전페이지로 이동합니다');
+      navigate("/nadeuliPay/nadeuliPayCharge");
+      return;
+    }
+    console.log('체크박스상태 :', isBargain);
+    const seller = { tag: member.tag };
     const formData = new FormData();
     formData.append('title', title);
     formData.append('content', content);
     formData.append('price', price);
     formData.append('gu', location);
     formData.append('tradingLocation', location);
-  
+    formData.append('isPremium', premium_ref.current.checked);
+    formData.append('isBargain', isBargain_ref.current.checked);
+    if(premiumTime){
+      formData.append('premiumTime', premiumTime_ref.current.value);
+    }
     for (let i = 0; i < files.length; i++) {
       formData.append('image', files[i]);
     }
-  
+    formData.append('seller.tag', member.tag);
+
+
+    console.log(member);
     dispatch(carrotPost(formData, navigate));
   };
 
@@ -154,19 +170,20 @@ function Add() {
           </Title>
           <br/>
           
-          
+          <br/>
+          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance}</p>
           <Categorie>
             {/* <div>카테고리 선택</div> */}
-            <select name="premium" id="premium" onChange={changePremium} disabled={!premium_ref.current?.checked}>
-              <option value="none">프리미엄 시간 설정</option>
-              <option value="1">1시간</option>
-              <option value="2">2시간</option>
-              <option value="3">3시간</option>
+            <select name="premiumTime" id="premiumTime" value={premiumTime} ref={premiumTime_ref} onChange={(e) => setPremiumTime(e.target.value)} disabled={!isPremium}>
+              <option value="0">프리미엄 시간 설정</option>
+              <option value="1">1시간(100원)</option>
+              <option value="2">2시간(200원)</option>
+              <option value="3">3시간(300원)</option>
             </select>
             <label htmlFor="isPremium">
-            <input type="checkbox" id="isPremium" ref={premium_ref} onChange={setPremium} />
-            프리미엄 설정하기
-          </label>
+            <input type="checkbox" id="isPremium" checked={isPremium} ref={premium_ref} onChange={(e) => setPremium(e.target.checked)}/>
+              프리미엄 설정하기
+            </label>
             {/* <IoIosArrowForward /> */}
           </Categorie>
 
@@ -186,7 +203,7 @@ function Add() {
             value={enteredNum || ""}
           />
           <label htmlFor="price">
-            <input type="checkbox" id="price" ref={price_ref} />
+            <input type="checkbox" id="isBargain" onChange={(e) => setBargain(e.target.checked)} ref={isBargain_ref}/>
             가격 흥정 받기
           </label>
         </Price>
