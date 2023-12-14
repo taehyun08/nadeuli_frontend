@@ -104,10 +104,10 @@ function Detail() {
       <Container>
         <ProfileBar>
           <Profile>
-            <img src={postDetail?.userImg} alt="userImg" />
+            <img src={postDetail?.seller.picture} alt="userImg" />
             <Nickname>
-              <p>{postDetail?.nickname}</p>
-              <p>{postDetail?.userLocation}</p>
+              <p>{postDetail?.seller.nickname}</p>
+              {/* <p>{postDetail?.userLocation}</p> */}
             </Nickname>
             <TradeState>
               <span>
