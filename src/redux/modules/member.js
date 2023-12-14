@@ -68,7 +68,7 @@ const memberSlice = createSlice({
     affinity: null,
     email: "guest@gmail.com",
     dongNe: "서울특별시 강서구 공항동",
-    picture: "empty.jpg",
+    picture: "https://kr.object.ncloudstorage.com/nadeuli/image/a20231212100248393.png",
     nadeuliPayBalance: null, 
     isActivate: false,
     isNadeuliDelivery: false,
