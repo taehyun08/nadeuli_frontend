@@ -191,7 +191,7 @@ function Modify() {
           <br/>
           
           <br/>
-          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance}</p>
+          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance.toLocaleString()}원</p>
           <Categorie>
             {/* <div>카테고리 선택</div> */}
             <select name="premiumTime" id="premiumTime" ref={premiumTime_ref} value={premiumTime} onChange={(e) => setPremiumTime(e.target.value)} disabled={!isPremium}>
