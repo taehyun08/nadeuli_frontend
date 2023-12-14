@@ -14,15 +14,17 @@ import AddIcon from '@mui/icons-material/Add';
 import { blue } from '@mui/material/colors';
 import { useSelector } from "react-redux";
 import { post } from "../util/axios";
+import { useNavigate } from "react-router-dom";
 
 const payments = ['토스페이', '카카오페이'];
 
 function PayModal(props) {
-    const member = useSelector((state) => state.member);
+  const navigate = useNavigate();
+  const member = useSelector((state) => state.member);
   const { onClose, selectedValue, open, payMoney } = props;
 
 
-  const requestTossPay = (payMoney) => {
+  const requestTossPay = async (payMoney) => {
     const IMP  = window.IMP;
     IMP.init("imp32856038");
 
@@ -58,7 +60,7 @@ function PayModal(props) {
   }
 
 
-  const requestKakaoPay = (payMoney) => {
+  const requestKakaoPay = async (payMoney) => {
     const IMP  = window.IMP;
     IMP.init("imp32856038");
 
@@ -100,6 +102,7 @@ function PayModal(props) {
   const handleListItemClick = (value) => {
     switch (value) {
         case '토스페이':
+          console.log(payMoney);
           requestTossPay(payMoney)
           console.log('토스페이 선택!');
           // 추가로 수행할 작업을 여기에 추가할 수 있습니다.
