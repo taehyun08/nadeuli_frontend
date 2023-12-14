@@ -17,7 +17,7 @@ function Promotion({searchQuery}) {
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
   // dongNePost.video가 null이 아닌 항목만 필터링한 배열을 만듭니다.
-  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video !== null);
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video !== null && dongNePost.gu === location);
 
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
@@ -27,7 +27,7 @@ function Promotion({searchQuery}) {
     <div className="promotion-container">
       {filteredDongNePostList.map((dongNePost) => (
       <div className="promotion-scroll">
-          <div className="video-card" style={{ display: "flex" }}
+          <div className="video-card" key={dongNePost.postId} style={{ display: "flex" }}
                 onClick={() => {
                   navigate("/getDongNePost/" + dongNePost.postId);
                 }}>

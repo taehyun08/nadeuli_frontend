@@ -16,7 +16,7 @@ function DongNePostList({searchQuery}) {
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
   // dongNePost.video가 null인 항목만 필터링한 배열을 만듭니다.
-  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video === null);
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video === null && dongNePost.gu === location);
 
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
@@ -43,7 +43,7 @@ function DongNePostList({searchQuery}) {
                       fontWeight: "bold",
                       marginBottom: "5px",
                       padding: "0 5px",
-                      width: "300px",
+                      width: "100%",
                       textOverflow: "ellipsis",
                       overflow: "hidden",
                       whiteSpace: "nowrap",
@@ -61,6 +61,7 @@ function DongNePostList({searchQuery}) {
                   >
                     {dongNePost.gu}
                   </span>
+                  
                 </TextArea>
               </div>
               <div
@@ -113,7 +114,7 @@ const CardBox = styled.div`
 const TextArea = styled.div`
   display: flex;
   flex-direction: column;
-  width: 180px;
+  width: 100%;
   padding: 10px;
 `;
 
