@@ -7,8 +7,9 @@ import { FaPlus } from 'react-icons/fa';
 import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
-function DongNePostList() {
-  const gu = "성동구";
+function DongNePostList({searchQuery}) {
+  const location = useSelector((state) => state.member.gu);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
 
@@ -16,38 +17,20 @@ function DongNePostList() {
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
   useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, gu, ''));
-  }, [currentPage, gu, dispatch]);
-
-  const navigate = useNavigate();
-
-  const handleScroll = () => {
-    if (
-      window.innerHeight + document.documentElement.scrollTop ===
-      document.documentElement.offsetHeight
-    ) {
-      setCurrentPage((prevPage) => prevPage + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+    dispatch(GetDongNePostList(currentPage, location, searchQuery));
+  }, [currentPage, location, searchQuery, dispatch]);
 
   console.log("dongNePostList:", dongNePostList);
 
   return (
-    <div className="DongNePostListBox">
+    <div className="MainListBox">
       {dongNePostList.map((post) => (
           <div key={post.postId}>
             <CardBox className="card">
               <div
                 style={{ display: "flex" }}
                 onClick={() => {
-                  // navigate("/detail/" + list.postId+"/"+list.tradeState);
+                  navigate("/getDongNePost/" + post.postId);
                 }}
               >
                 <Img src={post.images[0]} alt="Post Image" />

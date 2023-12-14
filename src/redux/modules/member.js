@@ -27,10 +27,12 @@ export const getCarrotUserInfo = () => {
 }
 
 export const getMember = (data) => {
-  return async function (dispatch) {
+  return async function (dispatch,getState) {
     try {
       console.log("data는",data)
       dispatch(setMember(data));
+      const currentState = getState();
+      console.log('get이후 Current state:', currentState);
     } catch (err) {
       console.log(err);
     }
@@ -60,18 +62,18 @@ const memberSlice = createSlice({
   name: "member",
   //2. 초기상태를 정의함으로써 현재상태를 set
   initialState: {
-    tag: "",
-    cellphone: "",
-    nickname: "",
+    tag: "ABs1",
+    cellphone: "010-1111-1111",
+    nickname: "독감환자",
     affinity: null,
-    email: "",
-    dongNe: "",
-    picture: "",
+    email: "guest@gmail.com",
+    dongNe: "서울특별시 강서구 공항동",
+    picture: "https://kr.object.ncloudstorage.com/nadeuli/image/a20231212100248393.png",
     nadeuliPayBalance: null, 
     isActivate: false,
     isNadeuliDelivery: false,
     role: null,
-    gu: "",
+    gu: "강서구",
     bankName: "",
     bankAccountNum: "",
     blockReason: "",
