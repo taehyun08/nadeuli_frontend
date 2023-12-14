@@ -62,14 +62,14 @@ const memberSlice = createSlice({
   name: "member",
   //2. 초기상태를 정의함으로써 현재상태를 set
   initialState: {
-    tag: "ABs1",
+    tag: "Bss2",
     cellphone: "010-1111-1111",
     nickname: "독감환자",
     affinity: null,
     email: "guest@gmail.com",
     dongNe: "서울특별시 강서구 공항동",
     picture: "https://kr.object.ncloudstorage.com/nadeuli/image/a20231212100248393.png",
-    nadeuliPayBalance: null, 
+    nadeuliPayBalance: 100, 
     isActivate: false,
     isNadeuliDelivery: false,
     role: null,

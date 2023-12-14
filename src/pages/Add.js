@@ -42,10 +42,10 @@ function Add() {
   //   }
   // }, [price]);
 
-  // useEffect(() => {
-  //   console.log(post)
+  useEffect(() => {
+    console.log(member);
 
-  // },[post])
+  },[member])
 
   // 파일 업로드
   const selectFile = async (e) => {
@@ -171,7 +171,7 @@ function Add() {
           <br/>
           
           <br/>
-          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance}</p>
+          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance.toLocaleString()}원</p>
           <Categorie>
             {/* <div>카테고리 선택</div> */}
             <select name="premiumTime" id="premiumTime" value={premiumTime} ref={premiumTime_ref} onChange={(e) => setPremiumTime(e.target.value)} disabled={!isPremium}>
@@ -319,7 +319,7 @@ const Price = styled(Title)`
     accent-color: #ff7e36;
   }
   input[type="text"] {
-    width: 68%;
+    width: 61%;
   }
 `;
 
