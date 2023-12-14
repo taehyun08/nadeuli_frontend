@@ -52,6 +52,7 @@ export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
       const res = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
       dispatch(loadDongNePosts(res.data));
       console.log(res.data);
+      console.log("searchKeyword:" + searchKeyword)
     } catch (error) {
       console.log(error);
     }

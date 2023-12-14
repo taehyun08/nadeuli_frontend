@@ -1,49 +1,58 @@
-/* 이미지 칸 컨테이너 스타일 */
+/* orikkiriList.css */
+
+.top-toolbar {
+  display: flex;
+  background-color: #ffffff;
+  width: 100%;
+  height: 190px;
+  padding-top: 80px;
+  box-shadow: 0px 4px 0px rgba(0, 0, 0, 0.1);
+  overflow-x: scroll; /* 가로 스크롤 가능하도록 설정 */
+  white-space: nowrap; /* 텍스트가 자동으로 줄바꿈되지 않도록 설정 */
+}
+
 .image-container {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 이미지와 텍스트를 컨테이너 상단에 정렬 */
-  width: 60px;
-  margin-right: 20px;
+  justify-content: center;
+  flex-direction: column;
+  margin-right: 30px;
+  margin-left: 10px;
+  
 }
 
-/* 이미지 스타일 */
 .orikkiri-image {
-  width: 60px;
-  height: 60px;
-  border-radius: 50%; /* 원 모양을 만들기 위한 설정 */
+  font-size: 70px;
+  color: #e78111; /* 원하는 색상으로 변경 */
 }
 
-/* 텍스트 스타일 */
-.text {
-  font-size: 10px;
-  margin-top: 5px;
-  text-align: center;
-  color: #000;
-  width: 100%; /* 텍스트를 가로로 꽉 차게 만듭니다. */
-}
-
-/* 세로 선 스타일 */
 .vertical-line {
-  width: 2px;
-  height: 50px;
-  background-color: #000;
-  margin-right: 0px;
+  border-left: 2px solid #000000;
+  height: 80px;
+  /* margin: 0 20px; */
 }
 
-/* 이미지 원 스타일 */
 .circle-image {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  overflow: hidden;
+  background-color: #353232; /* 원하는 색상으로 변경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20px;
 }
 
-/* 이미지 스타일 */
 .image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  max-height: 100%;
   border-radius: 50%;
+}
+
+.orikkiri-text {
+  color: #333; /* 텍스트 색상을 원하는 색상 코드로 변경하세요 */
+  font-size: 16px; /* 텍스트의 글꼴 크기를 원하는 크기로 변경하세요 */
+  font-weight: bold;
+  padding-top: 5px;
+  text-align: center; 
 }

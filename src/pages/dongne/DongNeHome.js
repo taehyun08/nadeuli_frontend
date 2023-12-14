@@ -15,9 +15,7 @@ function DongNeHome() {
     <div className="Wrap">
       <TopBar onSearch={handleSearch} />
         <OrikkiriList/>
-      <div className="promotion">
-        <Promotion />
-      </div> 
+        <Promotion/>
       <div className="MainListBox">
         <DongNePostList searchQuery={searchQuery}/>
       </div>
