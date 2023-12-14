@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDongNePostList } from '../redux/modules/dongNePost';
-
+import '../style/css/postInfo.css';
+import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
-import { FaPlus } from 'react-icons/fa';
-import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
 function DongNePostList({searchQuery}) {
@@ -16,46 +15,51 @@ function DongNePostList({searchQuery}) {
   // 데이터 구조 변경에 따라 필드 수정
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
+  // dongNePost.video가 null인 항목만 필터링한 배열을 만듭니다.
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video === null);
+
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
-  console.log("dongNePostList:", dongNePostList);
+  // console.log("filteredDongNePostList:", filteredDongNePostList);
 
   return (
     <div className="MainListBox">
-      {dongNePostList.map((post) => (
-          <div key={post.postId}>
+      {filteredDongNePostList.map((dongNePost) => (
+          <div key={dongNePost.postId}>
             <CardBox className="card">
               <div
                 style={{ display: "flex" }}
                 onClick={() => {
-                  navigate("/getDongNePost/" + post.postId);
+                  navigate("/getDongNePost/" + dongNePost.postId);
                 }}
               >
-                <Img src={post.images[0]} alt="Post Image" />
+                <Img src={dongNePost.images[0]} alt="Post Image" />
                 <TextArea>
                   <span
                     style={{
-                      fontSize: "15px",
+                      fontSize: "20px",
+                      fontWeight: "bold",
                       marginBottom: "5px",
                       padding: "0 5px",
-                      width: "200px",
+                      width: "300px",
                       textOverflow: "ellipsis",
                       overflow: "hidden",
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {post.title}
+                    {dongNePost.title}
                   </span>
                   <span
                     style={{
-                      fontSize: "12px",
+                      fontSize: "15px",
+                      fontWeight: "bold",
                       padding: "5px",
                       color: "#AAAAAA",
                     }}
                   >
-                    {post.dongNe}
+                    {dongNePost.gu}
                   </span>
                 </TextArea>
               </div>
@@ -64,24 +68,37 @@ function DongNePostList({searchQuery}) {
                   display: "flex",
                   alignItems: "flex-end",
                   justifyContent: "space-between",
-                  width: "30px",
-                  fontSize: "14px",
+                  width: "35px",
+                  fontSize: "16px",
                 }}
               >
-                <BsHeart size="15" />
-                {post.likeNum}
+                <FaRegComment size="20" />
+                {dongNePost.CommentNum}
+                3
               </div>
+              
             </CardBox>
           </div>
         ))}
-
-      <FixedButton>
-        <FaPlus
+      <div>
+        <FixedButton1
           onClick={() => {
             navigate("/addDongNePost");
           }}
-        />
-      </FixedButton>
+        >
+          + 우리끼리
+        </FixedButton1>
+      </div>
+      <div>
+        <FixedButton2
+          onClick={() => {
+            navigate("/addDongNePost");
+          }}
+        >
+          + 글쓰기
+        </FixedButton2>
+      </div>
+    
     </div>
   );
 }
@@ -100,17 +117,35 @@ const TextArea = styled.div`
   padding: 10px;
 `;
 
-const FixedButton = styled.div`
+const FixedButton1 = styled.div`
   display: flex;
   position: fixed;
-  bottom: 120px;
+  bottom: 140px;
   right: 30px;
-  width: 70px;
-  height: 70px;
-  font-size: 30px;
+  width: 120px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
   background-color: ${(props) => props.theme.color.orange};
   color: ${(props) => props.theme.color.white};
-  border-radius: 50%;
+  border-radius: 40px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 6px 0 #999;
+`;
+
+const FixedButton2 = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 80px;
+  right: 30px;
+  width: 120px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: ${(props) => props.theme.color.orange};
+  color: ${(props) => props.theme.color.white};
+  border-radius: 40px;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 6px 0 #999;

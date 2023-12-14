@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { AiFillPicture } from "react-icons/ai";
 import { MdOutlineVideoLibrary } from "react-icons/md";
 import { dongNePost } from "../../redux/modules/dongNePost";
+import { getMember } from "../../redux/modules/member";
 import Modal from '../../components/Modal';
 
 function AddDongNePost() {
@@ -18,6 +19,7 @@ function AddDongNePost() {
   const videoInput = useRef();
   const [imageSrc, setImageSrc] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
+  const getMember = useSelector((state) => state.member);
   const location = useSelector((state) => state.member.gu);
   
 
@@ -70,8 +72,8 @@ function AddDongNePost() {
       content: content_ref.current.value,
       postCategory: category === "잡담" ? "1" : "2",
       gu: location,
-      dongNe: "송정동",
-      writer: { tag: "Bss3" }
+      dongNe: getMember.dongNe,
+      writer: { tag: getMember.tag }
     };
   
     formData.append('postDTO', new Blob([JSON.stringify(postDTO)], { type: "application/json" }));

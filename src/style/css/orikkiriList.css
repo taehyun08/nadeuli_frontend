@@ -1,0 +1,49 @@
+/* 이미지 칸 컨테이너 스타일 */
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* 이미지와 텍스트를 컨테이너 상단에 정렬 */
+  width: 60px;
+  margin-right: 20px;
+}
+
+/* 이미지 스타일 */
+.orikkiri-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* 원 모양을 만들기 위한 설정 */
+}
+
+/* 텍스트 스타일 */
+.text {
+  font-size: 10px;
+  margin-top: 5px;
+  text-align: center;
+  color: #000;
+  width: 100%; /* 텍스트를 가로로 꽉 차게 만듭니다. */
+}
+
+/* 세로 선 스타일 */
+.vertical-line {
+  width: 2px;
+  height: 50px;
+  background-color: #000;
+  margin-right: 0px;
+}
+
+/* 이미지 원 스타일 */
+.circle-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* 이미지 스타일 */
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}

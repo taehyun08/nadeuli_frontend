@@ -58,6 +58,10 @@ return (
           {getDongNePost && getDongNePost.images && getDongNePost.images.map((image, index) => (
             <img key={index} src={image} alt={`Image ${index}`} />
           ))}
+
+          {getDongNePost && getDongNePost.video && (
+            <video src={getDongNePost.video} controls autoPlay />
+          )}
         </File>
 
         <Content>
@@ -137,6 +141,14 @@ input[type="file"] {
 }
 
 img {
+  max-width: 100%; /* 최대 너비를 100%로 설정 */
+  max-height: 100%; /* 최대 높이를 100%로 설정 */
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+video {
   max-width: 100%; /* 최대 너비를 100%로 설정 */
   max-height: 100%; /* 최대 높이를 100%로 설정 */
   margin-left: 10px;
