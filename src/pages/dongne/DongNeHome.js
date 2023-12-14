@@ -1,18 +1,21 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState }from 'react';
 import DongNePostList from '../../components/DongNePostList';
 import TopBar from '../../components/TopBar';
 import BottomBar from '../../components/BottonBar';
 
 
 function DongNeHome() {
-  const user = useSelector((state) => state.member);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (query) => {
+    setSearchQuery(query); // 검색 쿼리 업데이트
+  };
 
   return (
     <div className="Wrap">
-      <TopBar/>
+      <TopBar onSearch={handleSearch} />
       <div className="topView">
-        <DongNePostList />
+        <DongNePostList searchQuery={searchQuery}/>
       </div>
       <BottomBar />
     </div>

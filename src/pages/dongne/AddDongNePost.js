@@ -18,10 +18,11 @@ function AddDongNePost() {
   const videoInput = useRef();
   const [imageSrc, setImageSrc] = useState(null);
   const [videoSrc, setVideoSrc] = useState(null);
+  const location = useSelector((state) => state.member.gu);
   
 
   // const location = useSelector((state) => state.user.userLocation);
-  const location = "성동구";
+
 
   const changeCategory = (e) => {
     setCategory(e.target.value);

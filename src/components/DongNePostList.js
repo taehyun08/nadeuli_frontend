@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDongNePostList } from '../redux/modules/dongNePost';
-import Topbar from "./TopBar";
 
 import styled from 'styled-components';
 import { FaPlus } from 'react-icons/fa';
 import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
 
-function DongNePostList() {
-  const gu = "성동구";
+function DongNePostList({searchQuery}) {
+  const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
@@ -18,8 +17,8 @@ function DongNePostList() {
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
   useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, gu, ''));
-  }, [currentPage, gu, dispatch]);
+    dispatch(GetDongNePostList(currentPage, location, searchQuery));
+  }, [currentPage, location, searchQuery, dispatch]);
 
   console.log("dongNePostList:", dongNePostList);
 
