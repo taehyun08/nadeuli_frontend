@@ -1,6 +1,7 @@
 import '../style/css/listForm.css';
 import { AiFillHome } from 'react-icons/ai';
 import { BiUser } from 'react-icons/bi';
+import BottomBar from '../components/BottonBar'
 
 import MainItemList from '../components/MainItemList';
 
@@ -20,16 +21,12 @@ function Main () {
   return (
     <div className="Wrap">
       <div className="TMenuBar"> 
-        <span> 태그 : {member.tag} </span>
-        <span> 휴대전화 : {member.cellphone} </span>
-        <span> 동네 : {member.dongNe} </span>
-        <span> 구 : {member.gu} </span>
-        <span> 닉네임 : {member.nickname} </span>
+         <span>{member.gu}</span>
       </div>
       <div className="topView">
         {pageState}
       </div>
-      <div className="bottomView">
+      {/* <div className="bottomView">
         <div className="BMenuBar"> 
           <div className="BMenuBox" onClick={() => { navigate("/main") }}>
             <AiFillHome size="30px" color={"black"}/>
@@ -39,7 +36,8 @@ function Main () {
               <p style={{color: "#AAAAAA"}}>MY Carrot</p> 
           </div>        
         </div>
-      </div>
+      </div> */}
+      <BottomBar/>
     </div>
   )
 }

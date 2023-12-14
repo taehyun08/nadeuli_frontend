@@ -18,20 +18,20 @@ const BottomBar = () => {
         <p style={{ color: 'black', fontSize: '12px' }}>HOME</p>
       </MenuBox>
       <MenuBox onClick={() => navigate('/dongNeHome')}>
-        <HiClipboardDocumentList size="30px" color={'#AAAAAA'} />
-        <p style={{ color: '#AAAAAA', fontSize: '12px' }}>동네나드리</p>
+        <HiClipboardDocumentList size="30px" color={'black'} />
+        <p style={{ color: 'black', fontSize: '12px' }}>동네나드리</p>
       </MenuBox>
       <MenuBox onClick={() => navigate('/mypage')}>
-        <MdDeliveryDining size="30px" color={'#AAAAAA'} />
-        <p style={{ color: '#AAAAAA', fontSize: '12px' }}>나드리부름</p>
+        <MdDeliveryDining size="30px" color={'black'} />
+        <p style={{ color: 'black', fontSize: '12px' }}>나드리부름</p>
       </MenuBox>
       <MenuBox onClick={() => navigate('/mypage')}>
-        <IoChatbubblesSharp size="30px" color={'#AAAAAA'} />
-        <p style={{ color: '#AAAAAA', fontSize: '12px' }}>채팅</p>
+        <IoChatbubblesSharp size="30px" color={'black'} />
+        <p style={{ color: 'black', fontSize: '12px' }}>채팅</p>
       </MenuBox>
       <MenuBox onClick={() => navigate('/mypage')}>
-        <BiUser size="30px" color={'#AAAAAA'} />
-        <p style={{ color: '#AAAAAA', fontSize: '12px' }}>내 나드리</p>
+        <BiUser size="30px" color={'black'} />
+        <p style={{ color: 'black', fontSize: '12px' }}>내 나드리</p>
       </MenuBox>
     </BottomBarContainer>
   );
