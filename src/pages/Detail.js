@@ -104,10 +104,10 @@ function Detail() {
       <Container>
         <ProfileBar>
           <Profile>
-            <img src={postDetail?.userImg} alt="userImg" />
+            <img src={postDetail?.seller.picture} alt="userImg" />
             <Nickname>
-              <p>{postDetail?.nickname}</p>
-              <p>{postDetail?.userLocation}</p>
+              <p>{postDetail?.seller.nickname}</p>
+              {/* <p>{postDetail?.userLocation}</p> */}
             </Nickname>
             <TradeState>
               <span>
@@ -150,8 +150,11 @@ function Detail() {
         </Heart>
         <Price>
           <div>
-            <p>{carrotPrice}원</p>
-            <p>가격 제안하기</p>
+          <p>{carrotPrice}원</p>
+          
+          {!postDetail?.isBargain ? ("") : (
+              <p>가격 제안가능</p>
+          )}
           </div>
           <button
             style={{ cursor: "pointer" }}
@@ -345,7 +348,7 @@ const Price = styled.div`
   div :first-child {
     font-weight: 600;
   }
-  div :last-child {
+  div > p:nth-child(2) {
     color: #ff7e36;
     font-size: 14px;
   }

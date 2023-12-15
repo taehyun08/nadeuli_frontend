@@ -22,7 +22,18 @@ import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
 import AddTradeReview from "./pages/trade/AddTradeReview";
 import Test from "./pages/member/test";
-
+import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
+import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
+import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
+import AddDeliveryOrder from "./pages/nadeuli_delivery/AddDeliveryOrder";
+import UpdateDeliveryOrder from "./pages/nadeuli_delivery/UpdateDeliveryOrder";
+import GetDeliveryOrder from "./pages/nadeuli_delivery/GetDeliveryOrder";
+import NadeuliDeliveryHome from "./pages/nadeuli_delivery/NadeuliDeliveryHome";
+import GetMyOrderHistoryList from "./pages/nadeuli_delivery/GetMyOrderHistoryList";
+import SearchLocation from "./pages/nadeuli_delivery/SearchLocation";
+import GetMyDeliveryHistoryList from "./pages/nadeuli_delivery/GetMyDeliveryHistoryList";
+import GetMyAcceptedDeliveryHistoryList from "./pages/nadeuli_delivery/GetMyAcceptedDeliveryHistoryList";
+// import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
   return (
@@ -32,15 +43,26 @@ function Router() {
         <Route path="/addDongNePost" element={<AddDongNePost />} />
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
-
-        <Route path="/addTradeReview" element={<AddTradeReview />} />
+        <Route
+          path="/nadeuliPay/NadeuliPayCharge"
+          element={<NadeuliPayCharge />}
+        />
+        <Route path="/nadeuliPay/NadeuliPayPay" element={<NadeuliPayPay />} />
+        <Route
+          path="/nadeuliPay/NadeuliPayWithdraw"
+          element={<NadeuliPayWithdraw />}
+        />
+        {/* <Route path="/addTradeReview" element={<AddTradeReview />} /> */}
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
-        <Route path="/login/oauth2/code/kakao" element={<OAuth2RedirectHandler />} />
+        <Route
+          path="/login/oauth2/code/kakao"
+          element={<OAuth2RedirectHandler />}
+        />
         <Route path="/add" element={<Add />} />
         <Route path="/test" element={<Test />} />
         <Route path="/getMyProfile" element={<GetMyProfile />} />
@@ -53,6 +75,27 @@ function Router() {
         <Route path="/main" element={<Main />} />
         <Route path="/" element={<Start />} />
         <Route path="*" element={<NotFound />} />
+
+        <Route path="/addDeliveryOrder" element={<AddDeliveryOrder />} />
+        <Route path="/updateDeliveryOrder" element={<UpdateDeliveryOrder />} />
+        <Route
+          path="/getDeliveryOrder/:nadeuliDeliveryId"
+          element={<GetDeliveryOrder />}
+        />
+        <Route path="/nadeuliDeliveryHome" element={<NadeuliDeliveryHome />} />
+        <Route
+          path="/getMyOrderHistoryList"
+          element={<GetMyOrderHistoryList />}
+        />
+        <Route path="/searchLocation" element={<SearchLocation />} />
+        <Route
+          path="/getMyDeliveryHistoryList"
+          element={<GetMyDeliveryHistoryList />}
+        />
+        <Route
+          path="/getMyAcceptedDeliveryHistoryList"
+          element={<GetMyAcceptedDeliveryHistoryList />}
+        />
       </Routes>
     </BrowserRouter>
   );

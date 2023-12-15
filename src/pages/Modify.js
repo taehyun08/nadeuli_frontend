@@ -16,13 +16,17 @@ function Modify() {
   const title_ref = useRef();
   const price_ref = useRef();
   const content_ref = useRef();
-  const bargain_ref = useRef();
   const premium_ref = useRef();
-  const [premium, setPremium] = useState();
+  const premiumTime_ref = useRef();
+  const isBargain_ref = useRef();
+  const [isPremium, setPremium] = useState();
+  const [premiumTime, setPremiumTime] = useState();
+  const [isBargain, setBargain] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
   const [enteredNum, setEnterdNum] = useState();
   const [price, setPrice] = useState(0);
+  const member = useSelector((state) => state.member);
   
   const post = useSelector((state) => state.post.post)
   
@@ -50,7 +54,9 @@ function Modify() {
       title_ref.current.value = post.title || "";
       // Set other values similarly...
       // For premium, use setPremium method
-      setPremium(post.premium || "none");
+      setPremium(post.isPremium || false);
+      setPremiumTime(post.premiumTime || 0);
+      setBargain(post.isBargain || false);
       // For price, use setPrice method
       setEnterdNum(post.price.toLocaleString("ko-KR"));
       // For content, use content_ref.current.value
@@ -105,20 +111,41 @@ function Modify() {
   // 업로드
   const upload = () => {
     const files = fileInput.current.files;
-  
+    const title = title_ref.current.value;
+    const content = content_ref.current.value;
+    const price = numberPrice;
+
+    //const location = location;
+    // !location 잠시 빼둠
+    if (!title || !content || price === undefined) {
+      alert('모든 칸을 입력해주세요.');
+      return;
+    }
+
     if (!files || files.length === 0) {
       console.error('No files selected.');
       return;
     }
-  
+
+    if (member.nadeuliPayBalance < premiumTime*100){
+      alert('나드리페이 잔액이 부족합니다 충전페이지로 이동합니다');
+      navigate("/nadeuliPay/nadeuliPayCharge");
+      return;
+    }
+    console.log('isPremium : ', isPremium);
+    console.log('premiumTime :', premiumTime);
     const formData = new FormData();
-    formData.append('title', title_ref.current.value);
-    formData.append('content', content_ref.current.value);
-    formData.append('price', numberPrice);
+    formData.append('productId', post.productId);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('price', price);
     formData.append('gu', location);
     formData.append('tradingLocation', location);
-    formData.append('productId', post.productId);
-  
+    formData.append('isPremium', premium_ref.current.checked);
+    formData.append('isBargain', isBargain_ref.current.checked);
+    if(premiumTime){
+      formData.append('premiumTime', premiumTime_ref.current.value);
+    }
     for (let i = 0; i < files.length; i++) {
       formData.append('image', files[i]);
     }
@@ -161,15 +188,22 @@ function Modify() {
           <Title>
             <input placeholder="글 제목" ref={title_ref} />
           </Title>
-
+          <br/>
+          
+          <br/>
+          <p style={{ marginLeft: '5px' }}>나의 나드리페이 잔액: {member.nadeuliPayBalance.toLocaleString()}원</p>
           <Categorie>
             {/* <div>카테고리 선택</div> */}
-            <select name="premium" id="premium" onChange={changePremium}>
-              <option value="none">프리미엄 시간 설정</option>
-              <option value="1">1시간</option>
-              <option value="2">2시간</option>
-              <option value="3">3시간</option>
+            <select name="premiumTime" id="premiumTime" ref={premiumTime_ref} value={premiumTime} onChange={(e) => setPremiumTime(e.target.value)} disabled={!isPremium}>
+              <option value="0">프리미엄 시간 설정</option>
+              <option value="1">1시간(100원)</option>
+              <option value="2">2시간(200원)</option>
+              <option value="3">3시간(300원)</option>
             </select>
+            <label htmlFor="isPremium">
+            <input type="checkbox" id="isPremium" checked={isPremium} ref={premium_ref} onChange={(e) => setPremium(e.target.checked)}/>
+              프리미엄 설정하기
+            </label>
             {/* <IoIosArrowForward /> */}
           </Categorie>
 
@@ -178,17 +212,9 @@ function Modify() {
              <IoIosArrowForward /> 
           </Locate> */}
         </div>
-
+        
         <Price>
-          <label htmlFor="price">
-            <input type="checkbox" id="price" ref={bargain_ref} />
-            가격 흥정 받기
-          </label>
-          <label htmlFor="isPremium">
-            <input type="checkbox" id="isPremium" ref={premium_ref} />
-            프리미엄 설정하기
-          </label>
-          <br/>
+          
           <input
             type="text"
             placeholder="가격"
@@ -196,9 +222,12 @@ function Modify() {
             onChange={priceComma}
             value={enteredNum || ""}
           />
-
+          <label htmlFor="price">
+          <input type="checkbox" id="isBargain" checked={isBargain} onChange={(e) => setBargain(e.target.checked)} ref={isBargain_ref}/>
+            가격 흥정 받기
+          </label>
         </Price>
-
+          
         <textarea
           cols="40"
           rows="5"
@@ -288,7 +317,7 @@ const Categorie = styled(Title)`
   justify-content: space-between;
 
   select {
-    width: 100%;
+    width: 60%;
     border: none;
     outline: none;
     font-size: 14px;
@@ -308,6 +337,9 @@ const Price = styled(Title)`
 
   input[type="checkbox"] {
     accent-color: #ff7e36;
+  }
+  input[type="text"] {
+    width: 68%;
   }
 `;
 

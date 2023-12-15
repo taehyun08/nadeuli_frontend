@@ -52,6 +52,7 @@ export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
       const res = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
       dispatch(loadDongNePosts(res.data));
       console.log(res.data);
+      console.log("searchKeyword:" + searchKeyword)
     } catch (error) {
       console.log(error);
     }
@@ -93,7 +94,7 @@ const dongNePostSlice = createSlice({
         tag,
         picture,
         nickname,
-        dongNe: writerDongNe
+        // dongNe: writerDongNe
       },
       images
       } = action.payload;
@@ -113,7 +114,7 @@ const dongNePostSlice = createSlice({
       state.dongNePost.writerTag = tag;
       state.dongNePost.writerPicture = picture;
       state.dongNePost.writerNickname = nickname;
-      state.dongNePost.writerDongNe = writerDongNe;
+      // state.dongNePost.writerDongNe = writerDongNe;
       state.dongNePost.images = images;
     },
     deleteDongNePost: (state, action) => {
