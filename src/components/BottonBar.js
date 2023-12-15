@@ -46,6 +46,7 @@ const BottomBar = () => {
         <IoChatbubblesSharp size="30px" color={selectedMenu === 'chat' ? '#e78111' : 'black'} />
         <p style={{ color: selectedMenu === 'chat' ? '#e78111' : 'black', fontSize: '12px' }}>채팅</p>
       </MenuBox>
+
       <MenuBox
         onClick={() => handleMenuClick('mypage')}
         selected={selectedMenu === 'mypage'}

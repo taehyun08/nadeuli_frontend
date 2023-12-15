@@ -15,10 +15,13 @@ instance.interceptors.request.use(
     (config) => {
         // 토큰을 가져옵니다.
         const token = localStorage.getItem('token');
+        console.log("로컬스토리지에서 토큰을 가져옵니다",token)
 
         // 토큰이 존재하면 요청 헤더에 Authorization 헤더를 추가하여 토큰을 전송합니다.
         if (token) {
-            config.headers.get['Authorization'] = `Bearer ${token}`;
+            config.headers['Authorization'] = `Bearer ${token}`;
+            console.log("react에서 spring으로 토큰을 헤더에 담아서 보냈습니다.")
+            console.log(config)
         }
 
         // 처리된 config를 반환합니다.
@@ -51,7 +54,7 @@ export const editProfile = async (userImg, nickname, userLocation) => {
 };
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
-export const loadProfile = async (tag) => {
+export const getMember = async (tag) => {
     return await instance.get(`/member/getMember/${tag}`);
 };
 
@@ -88,4 +91,9 @@ export const updateCellphone = async (memberDTO) => {
 //카카오 로그인 요청 함수
 export const kakaoLogin = async (code) => {
     return await instance.get(`/nadeuli/kakao`)
+}
+
+//동네 수정 함수
+export const updateDongNe = async (memberDTO, gpsDTO) => {
+    return await instance.post(`/member/updateDongNe`,{memberDTO, gpsDTO})
 }

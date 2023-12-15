@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { addMember, checkAuthNum, getAuthNumCellphone} from '../../shared/axios';
 import { css } from 'styled-components';
-import { getCurrentPosition } from './Location';
+import { getCurrentPosition } from '../../util/Location';
 import { saveToken } from '../../shared/localStorage';
 import { useDispatch } from 'react-redux';
-import { getMember } from '../../redux/modules/member';
+import { getMember, setMember } from '../../redux/modules/member';
 
 function Register() {
     const navigate = useNavigate();
@@ -118,7 +118,7 @@ function Register() {
                         saveToken(token);
                     }
                     alert('회원가입이 완료되었습니다.');
-                    dispatch(getMember(response.data));
+                    dispatch(setMember(response.data));
                     navigate('/main');
                 }
             })
