@@ -29,7 +29,7 @@ const BottomBar = () => {
         <IoChatbubblesSharp size="30px" color={'#black'} />
         <p style={{ color: '#black', fontSize: '12px' }}>채팅</p>
       </MenuBox>
-      <MenuBox onClick={() => navigate('/mypage')}>
+      <MenuBox onClick={() => navigate('/getMyProfile')}>
         <BiUser size="30px" color={'#black'} />
         <p style={{ color: '#black', fontSize: '12px' }}>내 나드리</p>
       </MenuBox>

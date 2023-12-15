@@ -4,7 +4,8 @@ import RegisterLocation from "./pages/RegisterLocation";
 import Register from "./pages/member/Register";
 import Login from "./pages/member/Login";
 import Main from "./pages/Main";
-import MyPage from "./pages/member/MyPage";
+import GetMyProfile from "./pages/member/GetMyProfile";
+import UpdateMember from "./pages/member/UpdateMember";
 import Add from "./pages/Add";
 import Detail from "./pages/Detail";
 import NotFound from "./pages/NotFound";
@@ -20,6 +21,8 @@ import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
 import AddTradeReview from "./pages/trade/AddTradeReview";
+import Test from "./pages/member/test";
+
 
 function Router() {
   return (
@@ -39,7 +42,9 @@ function Router() {
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
         <Route path="/login/oauth2/code/kakao" element={<OAuth2RedirectHandler />} />
         <Route path="/add" element={<Add />} />
-        <Route path="/mypage" element={<MyPage />} />
+        <Route path="/test" element={<Test />} />
+        <Route path="/getMyProfile" element={<GetMyProfile />} />
+        <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid/:trade" element={<Detail />} />
         <Route path="/chatting/:postid/:trade" element={<Chatting />} />

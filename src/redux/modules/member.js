@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { loadProfile } from "../../shared/axios";
+import { getMyProfile, loadProfile } from "../../shared/axios";
 
 // 회원의 상태를 관리하는 reducer
 // 각 컴포넌트에서 reducer에 정의 된 함수를 호출하면된다.
@@ -9,28 +9,12 @@ const dispatch = useDispatch()
 <button onClick()={()=>{dispatch({type: 타입명})}}</button>
 */
 
-export const carrotLoginStatus = (status) => {
-  return async function (dispatch) {
-    // dispatch(updateLogin(status));
-  }
-};
 
-export const getCarrotUserInfo = () => {
-  return async function (dispatch) {
-    try {
-      const response = await loadProfile();
-      dispatch(setMember(response.data.user));
-    } catch (err) {
-      console.log(err);
-    }
-  }
-}
-
-export const getMember = (data) => {
+export const setMember = (data) => {
   return async function (dispatch,getState) {
     try {
       console.log("data는",data)
-      dispatch(setMember(data));
+      dispatch(setMemberState(data));
       const currentState = getState();
       console.log('get이후 Current state:', currentState);
     } catch (err) {
@@ -39,16 +23,6 @@ export const getMember = (data) => {
   }
 }
 
-export const backupCarrotUserProfile = (data) => {
-  return async function (dispatch) {
-    try {
-      // dispatch(backupUser(data));
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-}
 
 //Reducer
 //createSlice는 리듀서 함수와 액션 생성자를 함께 생성하는 유틸리티 함수 
@@ -84,7 +58,7 @@ const memberSlice = createSlice({
   //3. 리듀서 함수의 첫 번째 매개변수 state는 현재의 상태를 나타내며, 
   //   두 번째 매개변수 action은 디스패치된 액션 객체
   reducers: {
-    setMember: (state, action) => {
+    setMemberState: (state, action) => {
       const {
         nickname,
         tag,
@@ -153,5 +127,5 @@ const memberSlice = createSlice({
   },
 });
 
-const { setMember } = memberSlice.actions;
+const { setMemberState } = memberSlice.actions;
 export default memberSlice.reducer;
