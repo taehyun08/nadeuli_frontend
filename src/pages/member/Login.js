@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
 import { login, getAuthNumCellphone, checkAuthNum } from '../../shared/axios';
-import { saveToken } from '../../shared/localStorage';
+import { removeToken, saveToken } from '../../shared/localStorage';
 import { getMember, setMember } from '../../redux/modules/member';
 
 function Login() {
@@ -65,6 +65,7 @@ function Login() {
     };
 
     const handleLoginBtnClick = (e) => {
+        removeToken()
         e.preventDefault();
         const memberDTO = {
             cellphone: to,
