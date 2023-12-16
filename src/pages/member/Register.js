@@ -59,7 +59,7 @@ function Register() {
                 setIsAuthNumBtnDisabled(true); // 버튼 비활성화
             })
             .catch((err) => {
-                alert('이미 존재하거나 올바르지 않은 이메일입니다.');
+                alert('이미 존재하거나 올바르지 않은 휴대폰 번호입니다.');
             });
     };
     const handleCheckAuthNumBtnClick = (e) => {
