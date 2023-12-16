@@ -11,7 +11,7 @@ export const dongNePost = (formData, navigate) => {
       const res = await axios.post(`${BASE_URL}/dongNe/addPost`, formData); // 헤더 제거
 
       console.log(res); 
-      dispatch({ type: 'ADD_DONGNE_POST', payload: res.data });
+      dispatch(addDongNePost(formData));
       navigate('/dongNeHome');
     } catch (error) {
       if (error.response) {
@@ -30,8 +30,7 @@ export const dongNePost = (formData, navigate) => {
   };
 };
 
-
-// 동네나드리 게시물 상세 조회
+// 게시물 상세 조회
 export const GetDongNePostDetail = (postId) => {
   return async function (dispatch) {
     try {
@@ -45,7 +44,7 @@ export const GetDongNePostDetail = (postId) => {
 };
 
 
-// 동네나드리 홈 포스트 리드
+// 홈 게시물 목록 리드
 export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
   return async function (dispatch) {
     try {
@@ -59,8 +58,26 @@ export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
   };
 };
 
+// 게시물 수정
+export const modifyDongNePost = (formData, navigate) => {
+  return async function (dispatch) {
+    try {
+      const res = await axios.orikkiri(`${BASE_URL}/dongNe/updatePost`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log(res)
+      dispatch(updateDongNePost(formData));
+    navigate("/main");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
 
 
+// 리덕스슬라이스
 const dongNePostSlice = createSlice({
   name: 'dongNePost',
   initialState: {
@@ -117,6 +134,9 @@ const dongNePostSlice = createSlice({
       // state.dongNePost.writerDongNe = writerDongNe;
       state.dongNePost.images = images;
     },
+    updateDongNePost: (state, action) => {
+      state.dongNePost = action.payload;
+    },
     deleteDongNePost: (state, action) => {
       // action.payload로 특정 게시물을 삭제할 수 있음
       state.dongNePostList = state.dongNePostList.filter((post) => post.id !== action.payload);
@@ -124,6 +144,6 @@ const dongNePostSlice = createSlice({
   },
 });
 
-export const { loadDongNePosts, addDongNePost, getLoadDongNePost, deleteDongNePost } = dongNePostSlice.actions;
+export const { addDongNePost, loadDongNePosts,  getLoadDongNePost, updateDongNePost, deleteDongNePost } = dongNePostSlice.actions;
 
 export default dongNePostSlice.reducer;
