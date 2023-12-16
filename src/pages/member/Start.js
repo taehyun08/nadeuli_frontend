@@ -15,7 +15,7 @@ const kakaoLogin = () => {
     window.location.href = "http://110.165.19.112:82/oauth2/authorization/kakao";
 }
 const googleLogin = () => {
-  window.location.href = "http://110.165.19.112:82/oauth2/authorization/google";
+  window.location.href = "https://www.nadeuli.kr:82/oauth2/authorization/google";
 }
 const naverLogin = () => {
   window.location.href = "http://110.165.19.112:82/oauth2/authorization/naver";
