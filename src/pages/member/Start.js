@@ -12,13 +12,13 @@ function Start () {
   // console.log(process.env.REACT_APP_KAKAO_AUTH_URL)
   
 const kakaoLogin = () => {
-    window.location.href = "https://110.165.19.112:82/oauth2/authorization/kakao";
+    window.location.href = "https://www.nadeuli.kr/oauth2/authorization/kakao";
 }
 const googleLogin = () => {
-  window.location.href = "https://110.165.19.112:82/oauth2/authorization/google";
+  window.location.href = "https://www.nadeuli.kr/oauth2/authorization/google";
 }
 const naverLogin = () => {
-  window.location.href = "https://110.165.19.112:82/oauth2/authorization/naver";
+  window.location.href = "https://www.nadeuli.kr/oauth2/authorization/naver";
 }
   return (
     <Box>
