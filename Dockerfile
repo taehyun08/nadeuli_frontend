@@ -5,7 +5,7 @@ FROM nginx
 RUN mkdir /app
 
 # work dir 고정
-WORKDIR /app
+#WORKDIR /app
 
 # work dir 에 build 폴더 생성 /app/build
 RUN mkdir ./build
