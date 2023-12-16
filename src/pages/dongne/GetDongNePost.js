@@ -55,13 +55,18 @@ return (
         </Title>
 
         <File>
-          {getDongNePost && getDongNePost.images && getDongNePost.images.map((image, index) => (
-            <img key={index} src={image} alt={`Image ${index}`} />
-          ))}
-
-          {getDongNePost && getDongNePost.video && (
-            <video src={getDongNePost.video} controls autoPlay />
-          )}
+          {getDongNePost && getDongNePost.images && getDongNePost.images.map((image, index) => {
+            const extension = image.split('.').pop().toLowerCase();
+            if (extension === 'mp4') {
+              return (
+                <video key={index} src={image} controls autoPlay />
+              );
+            } else {
+              return (
+                <img key={index} src={image} alt={`Image ${index}`} />
+              );
+            }
+          })}
         </File>
 
         <Content>

@@ -87,7 +87,7 @@ function AddDongNePost() {
 
     // 비디오 파일 추가 (비디오 파일 필드가 별도로 존재한다면)
     if (videoInput.current && videoInput.current.files[0]) {
-      formData.append('video', videoInput.current.files[0]);
+      formData.append('images', videoInput.current.files[0]);
     }
 
   dispatch(dongNePost(formData, navigate));
