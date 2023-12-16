@@ -76,6 +76,20 @@ export const modifyDongNePost = (formData, navigate) => {
   };
 };
 
+// 게시물 댓글 리드
+export const GetPostCommentList= (postId) => {
+  return async function (dispatch) {
+    try {
+      const res = await axiosInstance.get(`/dongNe/getCommentList/${postId}`);
+      dispatch(loadDongNePosts(res.data));
+      console.log(res.data);
+      console.log("getCommentList:" + postId)
+    } catch (error) {
+      console.log(error);
+    }
+  };
+};
+
 
 // 리덕스슬라이스
 const dongNePostSlice = createSlice({
