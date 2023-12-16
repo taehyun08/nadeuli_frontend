@@ -36,18 +36,20 @@ function Promotion({searchQuery}) {
   return (
     <div className="promotion-container">
       {filteredDongNePostList.map((dongNePost) => (
-      <div className="promotion-scroll">
-          <div className="video-card" key={dongNePost.postId} style={{ display: "flex" }}
-                onClick={() => {
-                  navigate("/getDongNePost/" + dongNePost.postId);
-                }}>
-            <video src={dongNePost.images} controls autoPlay muted/>
-            <div className="video-overlay">
-              <h3>{dongNePost.title}</h3>
-            </div>
-          </div>
+
+  <div className="promotion-scroll" key={dongNePost.postId}> {/* key prop 추가 */}
+    <div className="video-card" style={{ display: "flex" }}
+      onClick={() => {
+        navigate("/getDongNePost/" + dongNePost.postId);
+      }}>
+      <video src={dongNePost.video} controls autoPlay muted/>
+      <div className="video-overlay">
+        <h3>{dongNePost.title}</h3>
       </div>
-      ))}
+    </div>
+  </div>
+))}
+
     </div>
   );
 }

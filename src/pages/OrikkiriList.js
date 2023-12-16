@@ -21,7 +21,7 @@ function OrikkiriList({searchQuery}) {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
-  console.log("dongNePostList:", dongNePostList);
+  // console.log("dongNePostList:", dongNePostList);
 
   return (
     <div className="top-toolbar">
@@ -30,7 +30,27 @@ function OrikkiriList({searchQuery}) {
         <div className="orikkiri-text">우리끼리 목록</div>
       </div>
       <div className="vertical-line"></div>
-      
+
+      <div className="image-container">
+          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
+          <div className="orikkiri-text">우리끼리 1</div>
+      </div>
+
+      <div className="image-container">
+          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
+          <div className="orikkiri-text">우리끼리 2</div>
+      </div>
+
+      <div className="image-container">
+          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
+          <div className="orikkiri-text">우리끼리 3</div>
+      </div>
+
+      <div className="image-container">
+          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
+          <div className="orikkiri-text">우리끼리 4</div>
+      </div>
+
       <div className="image-container">
           <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
           <div className="orikkiri-text">우리끼리 1</div>

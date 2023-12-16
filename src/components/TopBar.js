@@ -16,7 +16,9 @@ const Topbar = ({onSearch}) => {
   const handleInputChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query); // 입력 값 업데이트
+    if (e.key === 'Enter') {
     onSearch(query); // 검색 쿼리를 상위 컴포넌트로 전달
+    }
   };
 
   const handleSearch = () => {
