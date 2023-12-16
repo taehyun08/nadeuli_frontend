@@ -30,9 +30,7 @@ function DongNePostList({searchQuery}) {
     return dongNePost.gu === location;
   });
   useEffect(() => {
-    if (searchQuery !== undefined) {
-      dispatch(GetDongNePostList(currentPage, location, searchQuery));
-    }
+    dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
 

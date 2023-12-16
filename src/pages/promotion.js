@@ -42,7 +42,7 @@ function Promotion({searchQuery}) {
       onClick={() => {
         navigate("/getDongNePost/" + dongNePost.postId);
       }}>
-      <video src={dongNePost.video} controls autoPlay muted/>
+      <video src={dongNePost.images} controls autoPlay muted/>
       <div className="video-overlay">
         <h3>{dongNePost.title}</h3>
       </div>
