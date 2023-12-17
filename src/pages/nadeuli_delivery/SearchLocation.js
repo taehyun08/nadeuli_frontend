@@ -105,7 +105,7 @@ const SearchLocation = () => {
 
   const handleConfirmSettings = () => {
     setAddressState({ departure: departureAddress, arrival: arrivalAddress });
-    navigate("/nadeulidelivery/addDeliveryOrder");
+    navigate("/addDeliveryOrder");
   };
 
   return (

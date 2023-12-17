@@ -28,7 +28,7 @@ const GetMyDeliveryHistoryList = () => {
       },
     };
 
-    post("/nadeulidelivery/getMyDeliveryHistoryList", requestData, {
+    post("/nadeuli/nadeulidelivery/getMyDeliveryHistoryList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -43,13 +43,13 @@ const GetMyDeliveryHistoryList = () => {
       .catch((error) => {
         console.log("getMyDeliveryHistoryList 호출 에러!", error);
       });
-  }, []);
+  }, [memberTag]);
 
   const handleNavigateToOrder = (nadeuliDeliveryId) => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 15;
+  const maxLength = 10;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -71,7 +71,7 @@ const GetMyDeliveryHistoryList = () => {
         <Box>
           <OrderTitle>배달 내역 목록</OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "20px" }}></Box>
+        <Box style={{ marginLeft: "60px" }}></Box>
       </HeaderContainer>
       {responseDTOList.map((responseDTO, index) => (
         <CardBox
@@ -82,7 +82,7 @@ const GetMyDeliveryHistoryList = () => {
             <DetailColumn>
               <OrderImage src={responseDTO.images[0]} alt="이미지" />
             </DetailColumn>
-            <DetailColumn style={{ marginRight: "30px" }}>
+            <DetailColumn>
               <DetailLabel style={{ fontWeight: "bold" }}>
                 {truncateTitle(responseDTO.title)}
               </DetailLabel>

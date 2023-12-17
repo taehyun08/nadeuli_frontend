@@ -22,7 +22,7 @@ import { get, post } from "../../util/axios";
 import HeaderBack from "../../components/HeaderBack";
 import { useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const UpdateDeliveryOrder = () => {
   const [orderData, setOrderData] = useState({});
@@ -33,69 +33,30 @@ const UpdateDeliveryOrder = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const member = useSelector((state) => state.member);
   const { nadeuliDeliveryId } = useParams();
+  const location = useLocation();
   const navigate = useNavigate();
-  // const tag = "WVU3";
-  // const memberTag = useSelector((state) => state.member.tag);
-  // const addressState = useSelector((state) => state.address); // Redux 스토어에서 주소 상태 가져오기
-  // const reduxProductType = useSelector((state) => state.productType.value);
-  // const dispatch = useDispatch();
-
-  // // Redux 상태 업데이트 함수
-  // const handleSelectProductType = (type) => {
-  //   dispatch(setProductType(type));
-  // };
-
-  // // 출발지 주소 설정 함수
-  // const handleSetDeparture = (newAddress) => {
-  //   dispatch(setDeparture(newAddress));
-  // };
-
-  // // 도착지 주소 설정 함수
-  // const handleSetArrival = (newAddress) => {
-  //   dispatch(setArrival(newAddress));
-  // };
-
-  // // 주소 상태 업데이트
-  // useEffect(() => {
-  //   setOrderData((prevData) => ({
-  //     ...prevData,
-  //     departure: addressState.departure,
-  //     arrival: addressState.arrival,
-  //   }));
-  // }, [addressState.departure, addressState.arrival]);
 
   // 주문 정보 불러오기
   useEffect(() => {
-    if (nadeuliDeliveryId) {
-      get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+    if (location.state && location.state.nadeuliDeliveryDTO) {
+      const data = location.state.nadeuliDeliveryDTO;
+      setOrderData(data);
+      const determinedProductType = data.productNum ? "new" : "used";
+      setProductType(determinedProductType);
+    } else if (nadeuliDeliveryId) {
+      // URL 파라미터를 통해 데이터를 가져오는 로직
+      get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
         .then((response) => {
           console.log("주문 정보 호출 완료!", response);
-          // productType 설정: productNum 필드가 있으면 'new', 없으면 'used'
           const determinedProductType = response.productNum ? "new" : "used";
           setProductType(determinedProductType);
-
-          setOrderData({
-            // 필요한 정보를 추출하여 상태에 설정
-            nadeuliDeliveryId: response.nadeuliDeliveryId,
-            title: response.title,
-            content: response.content,
-            productName: response.productName,
-            productPrice: response.productPrice,
-            productNum: response.productNum || "",
-            deliveryFee: response.deliveryFee,
-            deposit: response.deposit,
-            departure: response.departure,
-            arrival: response.arrival,
-            buyerTag: response.buyer.tag,
-            buyerNickname: response.buyer.nickname,
-            // 나머지 필드들도 이와 같은 방식으로 설정
-          });
+          setOrderData(response);
         })
         .catch((error) => {
           console.error("주문 정보 불러오기 실패:", error);
         });
     }
-  }, [nadeuliDeliveryId]);
+  }, [nadeuliDeliveryId, location.state]);
 
   const handleChange = (e) => {
     setOrderData((prev) => ({
@@ -163,7 +124,7 @@ const UpdateDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeulidelivery/updateDeliveryOrder", formData)
+    postMultipart("/nadeuli/nadeulidelivery/updateDeliveryOrder", formData)
       .then((response) => {
         console.log("주문 수정 완료!", response);
         alert("주문 수정 완료!!");
@@ -172,28 +133,15 @@ const UpdateDeliveryOrder = () => {
       .catch((error) => console.log("주문 수정 실패", error));
   };
 
-  // useEffect(() => {
-  //   if (productType === 'used') {
-  //     // memberDTO의 tag를 사용하여 거래 옵션 가져오기
-  //     axios.post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${memberDTO.tag}`, { currentPage: 0 })
-  //         .then(response => {
-  //           setTradingOptions(response.data.map(item => ({
-  //             ...item,
-  //             productId: item.product.productId
-  //           })));
-  //         })
-  //         .catch(error => {
-  //           console.error("Error fetching trading options", error);
-  //         });
-  //   }
-  // }, [productType, memberDTO.tag]);
-
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
-        currentPage: 0,
-      })
+      post(
+        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
+        {
+          currentPage: 0,
+        }
+      )
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
@@ -272,7 +220,7 @@ const UpdateDeliveryOrder = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>배달 주문 등록</OrderTitle>
+          <OrderTitle>배달 주문 수정</OrderTitle>
         </Box>
         <Box style={{ marginLeft: "20px" }}></Box>
       </HeaderContainer>

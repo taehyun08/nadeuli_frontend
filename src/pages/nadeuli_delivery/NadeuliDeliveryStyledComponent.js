@@ -48,8 +48,6 @@ export const OrderTitle = styled.span`
   display: flex;
   font-weight: bold;
   text-align: center;
-  margin-left: auto; // 왼쪽으로부터 자동 여백을 적용
-  margin-right: auto; // 오른쪽으로부터 자동 여백을 적용
 `;
 
 export const HeaderContainer = styled.div`

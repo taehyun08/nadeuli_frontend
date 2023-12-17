@@ -30,14 +30,18 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       },
     };
 
-    post("/nadeulidelivery/getMyAcceptedDeliveryHistoryList", requestData, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      params: {
-        currentPage: 0,
-      },
-    })
+    post(
+      "/nadeuli/nadeulidelivery/getMyAcceptedDeliveryHistoryList",
+      requestData,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          currentPage: 0,
+        },
+      }
+    )
       .then((response) => {
         console.log("getMyAcceptedDeliveryHistoryList 호출 완료!", response);
         setResponseDTOList(response);
@@ -45,13 +49,13 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       .catch((error) => {
         console.log("getMyAcceptedDeliveryHistoryList 호출 에러!", error);
       });
-  }, []);
+  }, [memberTag]);
 
   const handleNavigateToOrder = (nadeuliDeliveryId) => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 15;
+  const maxLength = 10;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -67,7 +71,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
   };
 
   return (
-    <>
+    <div className="Wrap">
       <HeaderContainer>
         <HeaderBack />
         <Box>
@@ -81,6 +85,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       )}
       {responseDTOList.map((responseDTO, index) => (
         <CardBox
+          className="card"
           key={index}
           onClick={() => handleNavigateToOrder(responseDTO.nadeuliDeliveryId)}
         >
@@ -88,7 +93,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
             <DetailColumn>
               <OrderImage src={responseDTO.images[0]} alt="이미지" />
             </DetailColumn>
-            <DetailColumn style={{ marginRight: "30px" }}>
+            <DetailColumn>
               <DetailLabel style={{ fontWeight: "bold" }}>
                 {truncateTitle(responseDTO.title)}
               </DetailLabel>
@@ -126,7 +131,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
         </CardBox>
       ))}
       <OrderButton>최단경로 계산하기</OrderButton>
-    </>
+    </div>
   );
 };
 

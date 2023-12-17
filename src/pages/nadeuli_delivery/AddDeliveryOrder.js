@@ -34,35 +34,6 @@ const AddDeliveryOrder = () => {
   const [previewImage, setPreviewImage] = useState(null);
   const member = useSelector((state) => state.member);
   const navigate = useNavigate();
-  // const tag = "WVU3";
-  // const memberTag = useSelector((state) => state.member.tag);
-  // const addressState = useSelector((state) => state.address); // Redux 스토어에서 주소 상태 가져오기
-  // const reduxProductType = useSelector((state) => state.productType.value);
-  // const dispatch = useDispatch();
-
-  // // Redux 상태 업데이트 함수
-  // const handleSelectProductType = (type) => {
-  //   dispatch(setProductType(type));
-  // };
-
-  // // 출발지 주소 설정 함수
-  // const handleSetDeparture = (newAddress) => {
-  //   dispatch(setDeparture(newAddress));
-  // };
-
-  // // 도착지 주소 설정 함수
-  // const handleSetArrival = (newAddress) => {
-  //   dispatch(setArrival(newAddress));
-  // };
-
-  // // 주소 상태 업데이트
-  // useEffect(() => {
-  //   setOrderData((prevData) => ({
-  //     ...prevData,
-  //     departure: addressState.departure,
-  //     arrival: addressState.arrival,
-  //   }));
-  // }, [addressState.departure, addressState.arrival]);
 
   const handleChange = (e) => {
     setOrderData((prev) => ({
@@ -143,7 +114,7 @@ const AddDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeulidelivery/addDeliveryOrder", formData)
+    postMultipart("/nadeuli/nadeulidelivery/addDeliveryOrder", formData)
       .then((response) => {
         console.log("배달 주문 완료!", response);
         alert("배달 주문 완료!!");
@@ -171,9 +142,12 @@ const AddDeliveryOrder = () => {
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
-        currentPage: 0,
-      })
+      post(
+        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
+        {
+          currentPage: 0,
+        }
+      )
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
