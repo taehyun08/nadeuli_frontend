@@ -36,6 +36,8 @@ import GetMyAcceptedDeliveryHistoryList from "./pages/nadeuli_delivery/GetMyAcce
 import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
+import Report from "./pages/member/Report";
+
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -76,6 +78,7 @@ function Router() {
         <Route path="/getOtherProfile" element={<GetOtherProfile />} />
         <Route path="/getMemberList" element={<GetMemberList />} />
         <Route path="/updateMember" element={<UpdateMember />} />
+        <Route path="/report" element={<Report />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid/:trade" element={<Detail />} />
         <Route path="/chatting/:postid/:trade" element={<Chatting />} />
