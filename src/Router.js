@@ -52,7 +52,7 @@ function Router() {
           path="/nadeuliPay/NadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
-        {/* <Route path="/addTradeReview" element={<AddTradeReview />} /> */}
+        <Route path="/trade/addTradeReview/:productId" element={<AddTradeReview />} />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
