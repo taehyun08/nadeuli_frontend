@@ -1,41 +1,66 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { getSocialMember } from '../../shared/axios';
+import { getCurrentPosition } from '../../util/Location';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom'; // useHistory 추가
-import { kakaoLogin } from '../../shared/axios';
-import { saveToken } from '../../shared/localStorage';
+import { setMember } from '../../redux/modules/member';
 
-const OAuth2RedirectHandler = (props) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+const OAuth2RedirectHandler = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [accessToken, setAccessToken] = useState('');
 
-  // 인가코드
-  let code = new URL(window.location.href).searchParams.get('code');
-  console.log(code);
+    // 쿠키에서 이름이 'Authorization'인 쿠키의 값을 가져오는 함수
+    async function getCookieValue(cookieName) {
+        const cookies = document.cookie.split(';');
+        for (const cookie of cookies) {
+            const [name, value] = cookie.trim().split('=');
+            if (name === cookieName) {
+                return decodeURIComponent(value);
+            }
+        }
+        return null;
+    }
 
-//   useEffect(() => {
-//     const handleOAuthLogin = async () => {
-//       try {
-//         const res = await kakaoLogin(code);
-//         // console.log(res); // 토큰이 넘어올 것임
+    useEffect(() => {
+        const fetchCookieValue = async () => {
+            const value = await getCookieValue('Authorization');
+            setAccessToken(value);
+        };
 
-//         // const ACCESS_TOKEN = res.data.accessToken;
+        fetchCookieValue();
+    }, []);
 
-//         // saveToken(ACCESS_TOKEN); // 예시로 로컬에 저장함
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const tokenDTO = {
+                    accessToken: accessToken,
+                };
 
-//         navigate('/main'); // 토큰 받았았고 로그인됐으니 화면 전환시켜줌(메인으로)
-//       } catch (err) {
-//         console.log('소셜로그인 에러', err);
-//         window.alert('로그인에 실패하였습니다.');
-//         // navigate('/login'); // 로그인 실패하면 로그인 화면으로 돌려보냄
-//       }
-//     };
+                const response = await getSocialMember(tokenDTO);
+                console.log(response.data)
+                if (!response.data.nickname) {
+                    // nickname이 없는 경우 oauth2Register로 라우팅
+                    navigate('/oauth2Register');
+                } else {
+                    // nickname이 있는 경우 main으로 라우팅
+                    dispatch(setMember(response.data));
+                    navigate('/main');
+                }
+            } catch (err) {
+                console.error('소셜로그인 에러', err);
+                window.alert('로그인에 실패하였습니다.');
+                navigate('/');
+            }
+        };
 
-//     if (code) {
-//       handleOAuthLogin();
-//     }
-//   }, [code]);
+        if (accessToken) {
+            fetchData();
+        }
+    }, [accessToken, navigate]);
 
-  return <>sdfsdf</>;
+    return <>sdfsdf</>;
 };
 
 export default OAuth2RedirectHandler;
