@@ -16,8 +16,18 @@ function Promotion({searchQuery}) {
   // 데이터 구조 변경에 따라 필드 수정
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
-  // dongNePost.video가 null이 아닌 항목만 필터링한 배열을 만듭니다.
-  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video !== null && dongNePost.gu === location);
+  // 이미지 확장자가 .mp4인 경우 필터링한 배열을 만듭니다.
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => {
+    if (dongNePost.images && dongNePost.images.length > 0) {
+      // 이미지 URL에서 확장자 추출
+      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
+      
+      // 이미지 확장자가 .mp4인 경우 필터링
+      return extension === 'mp4' && dongNePost.gu === location;
+    }
+    
+    return false; // 이미지가 없는 경우도 필터링에서 제외
+  });
 
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
@@ -26,18 +36,20 @@ function Promotion({searchQuery}) {
   return (
     <div className="promotion-container">
       {filteredDongNePostList.map((dongNePost) => (
-      <div className="promotion-scroll">
-          <div className="video-card" key={dongNePost.postId} style={{ display: "flex" }}
-                onClick={() => {
-                  navigate("/getDongNePost/" + dongNePost.postId);
-                }}>
-            <video src={dongNePost.video} controls autoPlay muted/>
-            <div className="video-overlay">
-              <h3>{dongNePost.title}</h3>
-            </div>
-          </div>
+
+  <div className="promotion-scroll" key={dongNePost.postId}> {/* key prop 추가 */}
+    <div className="video-card" style={{ display: "flex" }}
+      onClick={() => {
+        navigate("/getDongNePost/" + dongNePost.postId);
+      }}>
+      <video src={dongNePost.images} controls autoPlay muted/>
+      <div className="video-overlay">
+        <h3>{dongNePost.title}</h3>
       </div>
-      ))}
+    </div>
+  </div>
+))}
+
     </div>
   );
 }

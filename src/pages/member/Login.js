@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
 import { login, getAuthNumCellphone, checkAuthNum } from '../../shared/axios';
-import { saveToken } from '../../shared/localStorage';
-import { getMember } from '../../redux/modules/member';
+import { removeToken, saveToken } from '../../shared/localStorage';
+import { getMember, setMember } from '../../redux/modules/member';
 
 function Login() {
     const navigate = useNavigate();
@@ -65,6 +65,7 @@ function Login() {
     };
 
     const handleLoginBtnClick = (e) => {
+        removeToken()
         e.preventDefault();
         const memberDTO = {
             cellphone: to,
@@ -83,7 +84,7 @@ function Login() {
                         saveToken(token);
                     }
                     alert('로그인이 완료되었습니다.');
-                    dispatch(getMember(response.data));
+                    dispatch(setMember(response.data));
                     navigate('/main');
                 }
             })
@@ -163,7 +164,7 @@ function Login() {
                     </p>
                     <p>
                         <span>
-                            <Link to="/mypage">마이페이지</Link>
+                            <Link to="/getMyProfile">마이페이지</Link>
                         </span>
                     </p>
                     <p>
@@ -174,6 +175,11 @@ function Login() {
                     <p>
                         <span>
                             <Link to="/main">메인</Link>
+                        </span>
+                    </p>
+                    <p>
+                        <span>
+                            <Link to="/test">테스트</Link>
                         </span>
                     </p>
                 </Form>

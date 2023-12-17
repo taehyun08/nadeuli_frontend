@@ -73,10 +73,6 @@ function MyPage() {
                     )}
                 </TMenuBar>
             </div>
-            <div
-                className="topView"
-                style={{ padding: '0' }}
-            >
                 <div className="ContentsBox">
                     <MyInfoBox>
                         <div style={{ display: 'flex', alignItems: 'center', lineHeight: '1.5' }}>
@@ -163,7 +159,6 @@ function MyPage() {
                     </MyMenuMiddle>
                 </div>
             </div>
-        </div>
     );
 }
 
@@ -202,18 +197,7 @@ const Circle = styled.div`
     align-items: center;
     justify-content: center;
 `;
-const SmallMenu = styled.div`
-    position: absolute;
-    top: 105%;
-    right: 1%;
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 10px;
-    z-index: 1;
-    p {
-        margin-bottom: 10px; // 간격 조정
-    }
-`;
+
 
 const Button = styled.button`
     margin-top: 20px;

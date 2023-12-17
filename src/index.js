@@ -8,6 +8,9 @@ import store from './redux/configStore';
 //redux의 state 영속성관리
 import { persistStore } from 'redux-persist';	// 추가
 import { PersistGate } from 'redux-persist/integration/react';
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 
 const persistor = persistStore(store)	// 추가
 const root = ReactDOM.createRoot(document.getElementById('root'));

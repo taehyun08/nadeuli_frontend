@@ -5,6 +5,7 @@ import '../style/css/postInfo.css';
 import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import Promotion from './promotion';
 
 function DongNePostList({searchQuery}) {
   const location = useSelector((state) => state.member.gu);
@@ -12,19 +13,30 @@ function DongNePostList({searchQuery}) {
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
 
+
   // 데이터 구조 변경에 따라 필드 수정
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
-  // dongNePost.video가 null인 항목만 필터링한 배열을 만듭니다.
-  const filteredDongNePostList = dongNePostList.filter(dongNePost => dongNePost.video === null && dongNePost.gu === location);
-
+  // 이미지 확장자 필터링을 적용한 배열 생성
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => {
+    if (dongNePost.images && dongNePost.images.length > 0) {
+      // 이미지 URL에서 확장자 추출
+      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
+      
+      // 이미지 확장자가 .mp4인 경우 필터링
+      return extension !== 'mp4' && dongNePost.gu === location;
+    }
+    
+    return dongNePost.gu === location;
+  });
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
-  // console.log("filteredDongNePostList:", filteredDongNePostList);
 
   return (
+    <div>
+    <Promotion/>
     <div className="MainListBox">
       {filteredDongNePostList.map((dongNePost) => (
           <div key={dongNePost.postId}>
@@ -100,6 +112,7 @@ function DongNePostList({searchQuery}) {
         </FixedButton2>
       </div>
     
+    </div>
     </div>
   );
 }
