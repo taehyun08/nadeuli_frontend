@@ -40,42 +40,48 @@ instance.interceptors.request.use(
 // 사용자 로그인 요청을 처리하는 함수
 export const login = async (memberDTO) => {
     console.log(memberDTO)
-    return await instance.post('/nadeuli/login', { memberDTO });
+    return await instance.post('/nadeuli/nadeuli/login', { memberDTO });
+};
+
+//사용자 로그아웃
+export const logout = async (memberDTO) => {
+    console.log(memberDTO)
+    return await instance.post('/nadeuli/nadeuli/login', { memberDTO });
 };
 
 // 사용자 회원가입 요청을 처리하는 함수
 export const addMember = async (memberDTO, gpsDTO) => {
-    return await instance.post('/nadeuli/addMember', { memberDTO, gpsDTO});
-};
-
-// 사용자 프로필 편집 요청을 처리하는 함수
-export const editProfile = async (userImg, nickname, userLocation) => {
-    return await instance.put('/api/user/edit', { userImg, nickname, userLocation });
+    return await instance.post('/nadeuli/nadeuli/addMember', { memberDTO, gpsDTO});
 };
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
 export const getMember = async (tag) => {
-    return await instance.get(`/member/getMember/${tag}`);
+    return await instance.get(`/nadeuli/member/getMember/${tag}`);
+};
+
+// 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
+export const getOtherMember = async (tag) => {
+    return await instance.get(`/nadeuli/member/getOtherMember/${tag}`);
 };
 
 // 휴대폰 번호로 인증번호를 요청하는 함수
 export const getAuthNumCellphone = async (to) => {
-    return await instance.post(`/auth/sendSms`, { to });
+    return await instance.post(`/nadeuli/auth/sendSms`, { to });
 };
 
 // 이메일로 인증번호를 요청하는 함수
 export const getAuthNumEmail = async (to) => {
-    return await instance.post(`/auth/sendMail`, { to });
+    return await instance.post(`/nadeuli/auth/sendMail`, { to });
 };
 
 // 인증번호를 확인하는 함수
 export const checkAuthNum = async (data) => {
-    return await instance.post(`/auth/verifyNum`, data);
+    return await instance.post(`/nadeuli/auth/verifyNum`, data);
 };
 
 // 사용자 정보를 업데이트하는 함수
 export const updateMember = async (memberDTO) => {
-    return await instance.post(`/member/updateMember`, memberDTO);
+    return await instance.post(`/nadeuli/member/updateMember`, memberDTO);
 };
 
 // 회원의 이메일을 체크하는 함수
@@ -88,12 +94,22 @@ export const updateCellphone = async (memberDTO) => {
     return await instance.post("/nadeuli/updateCellphone", memberDTO);
 };
 
-//카카오 로그인 요청 함수
-export const kakaoLogin = async (code) => {
-    return await instance.get(`/nadeuli/kakao`)
-}
-
 //동네 수정 함수
 export const updateDongNe = async (memberDTO, gpsDTO) => {
-    return await instance.post(`/member/updateDongNe`,{memberDTO, gpsDTO})
+    return await instance.post(`/nadeuli/member/updateDongNe`,{memberDTO, gpsDTO})
 }
+
+//소셜로그인 닉네임 등록 함수
+export const addNickname = async (tokenDTO, gpsDTO,memberDTO) => {
+    return await instance.post(`/nadeuli/member/addNickname`,{tokenDTO, gpsDTO,memberDTO})
+}
+
+//소셜로그인 회원 정보를 가져오는 함수
+export const getSocialMember = async (tokenDTO) => {
+    return await instance.post(`/nadeuli/member/getSocialMember`,{tokenDTO})
+}
+
+// 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
+export const getMemberList = async (searchDTO) => {
+    return await instance.post(`/nadeuli/member/getMemberList`,{searchDTO});
+};

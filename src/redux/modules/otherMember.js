@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMyProfile, loadProfile } from '../../shared/axios';
 
 // 회원의 상태를 관리하는 reducer
 // 각 컴포넌트에서 reducer에 정의 된 함수를 호출하면된다.
@@ -9,47 +8,37 @@ const dispatch = useDispatch()
 <button onClick()={()=>{dispatch({type: 타입명})}}</button>
 */
 
-export const setMember = (data) => {
+// 새로운 액션 및 리듀서 함수 추가
+export const setOtherMember = (data) => {
     return async function (dispatch, getState) {
         try {
             console.log('data는', data);
-            dispatch(setMemberState(data));
+            dispatch(setOtherMemberState(data));
             const currentState = getState();
-            console.log('get이후 Current state:', currentState);
+            console.log('get 이후 Current state:', currentState);
         } catch (err) {
             console.log(err);
         }
     };
 };
 
-export const memberLogout = () => {
-  return async function (dispatch,getState) {
-      try {
-          dispatch(logout());
-          const currentState = getState();
-          console.log('get이후 Current state:', currentState);
-      } catch (err) {
-          console.log(err);
-      }
-  };
-};
 
 //Reducer
 //createSlice는 리듀서 함수와 액션 생성자를 함께 생성하는 유틸리티 함수
-const memberSlice = createSlice({
+const otherMemberSlice = createSlice({
     // createSlice 함수에서 name 속성은 리듀서의 이름을 지정
     // createSlice로 생성된 객체는 리듀서와 액션을 모두 포함하며 그 객체를 슬라이스 라고한다.
     // 슬라이스는 일종의 모듈화된 Redux 리듀서와 액션을 담고 있는 단위
     // 각각의 리듀서 함수는 reducers 객체 내에 정의된다
 
     //1. 슬라이스의 이름을 정의한다.
-    name: 'member',
+    name: 'otherMember',
     //2. 초기상태를 정의함으로써 현재상태를 set
     initialState: {
         tag: 'Bss2',
         cellphone: '010-1111-1111',
         nickname: '독감환자',
-        affinity: null,
+        affinity: '0',
         email: 'guest@gmail.com',
         dongNe: '서울특별시 강서구 공항동',
         picture: 'https://kr.object.ncloudstorage.com/nadeuli/image/a20231212100248393.png',
@@ -68,7 +57,7 @@ const memberSlice = createSlice({
     //3. 리듀서 함수의 첫 번째 매개변수 state는 현재의 상태를 나타내며,
     //   두 번째 매개변수 action은 디스패치된 액션 객체
     reducers: {
-        setMemberState: (state, action) => {
+        setOtherMemberState: (state, action) => {
             const {
                 nickname,
                 tag,
@@ -109,31 +98,8 @@ const memberSlice = createSlice({
             state.blockDay = blockDay;
             state.socialId = socialId;
         },
-        logout: () => {
-            // 로그아웃 시 초기화할 상태를 정의
-            return {
-                tag: null,
-                cellphone: null,
-                nickname: null,
-                affinity: null,
-                email: null,
-                dongNe: null,
-                picture: null,
-                nadeuliPayBalance: null,
-                isActivate: false,
-                isNadeuliDelivery: false,
-                role: null,
-                gu: null,
-                bankName: null,
-                bankAccountNum: null,
-                blockReason: null,
-                blockEnd: null,
-                blockDay: null,
-                socialId: null,
-            };
-        },
     },
 });
 
-const { setMemberState,logout } = memberSlice.actions;
-export default memberSlice.reducer;
+const { setOtherMemberState, } = otherMemberSlice.actions;
+export default otherMemberSlice.reducer;

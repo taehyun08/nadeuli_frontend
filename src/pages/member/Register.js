@@ -32,7 +32,7 @@ function Register() {
             setLongitude(longitude);
         } catch (error) {
             if (error.code === 1) {
-                console.error('사용자가 위치 정보를 거부했습니다.');
+                console.error('위치정보 수집을 허용해주세요.');
                 navigate('/');
             } else {
                 console.error('위치 정보를 가져오는 중 오류가 발생했습니다:', error);

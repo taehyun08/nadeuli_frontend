@@ -33,7 +33,7 @@ function TopDropdownMenu({dropdownMenus }) {
 
   return (
     // zIndex:999는 태그 선택 시 최상위로 올려서 선택가능하게함
-    <div className="dropdown-menu" style={{zIndex:999}}>
+    <div className="dropdown-menu" style={{ zIndex: 999, display: "flex", top: "0", background: "none", minWidth: "0", boxShadow: "none", position:"inherit"}}>
       <div className="icons">
         <div className="divider" />
         <SlOptionsVertical size="30" onClick={toggleDropdown} />

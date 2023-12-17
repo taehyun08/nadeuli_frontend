@@ -48,11 +48,11 @@ const BottomBar = () => {
       </MenuBox>
 
       <MenuBox
-        onClick={() => handleMenuClick('mypage')}
-        selected={selectedMenu === 'mypage'}
+        onClick={() => handleMenuClick('getMyProfile')}
+        selected={selectedMenu === 'getMyProfile'}
       >
-        <BiUser size="30px" color={selectedMenu === 'mypage' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'mypage' ? '#e78111' : 'black', fontSize: '12px' }}>내 나드리</p>
+        <BiUser size="30px" color={selectedMenu === 'getMyProfile' ? '#e78111' : 'black'} />
+        <p style={{ color: selectedMenu === 'getMyProfile' ? '#e78111' : 'black', fontSize: '12px' }}>내 나드리</p>
       </MenuBox>
     </BottomBarContainer>
   );

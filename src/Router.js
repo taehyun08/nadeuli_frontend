@@ -21,7 +21,7 @@ import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
 import AddTradeReview from "./pages/trade/AddTradeReview";
-import Test from "./pages/member/test";
+import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
@@ -33,6 +33,9 @@ import GetMyOrderHistoryList from "./pages/nadeuli_delivery/GetMyOrderHistoryLis
 import SearchLocation from "./pages/nadeuli_delivery/SearchLocation";
 import GetMyDeliveryHistoryList from "./pages/nadeuli_delivery/GetMyDeliveryHistoryList";
 import GetMyAcceptedDeliveryHistoryList from "./pages/nadeuli_delivery/GetMyAcceptedDeliveryHistoryList";
+import Oauth2Register from "./pages/member/Oauth2Register";
+import GetOtherProfile from "./pages/member/GetOtherProfile";
+import GetMemberList from "./pages/member/GetMemberList";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -60,12 +63,18 @@ function Router() {
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
         <Route
-          path="/login/oauth2/code/kakao"
+          path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}
+        />
+        <Route
+          path="/oauth2Register"
+          element={<Oauth2Register />}
         />
         <Route path="/add" element={<Add />} />
         <Route path="/test" element={<Test />} />
         <Route path="/getMyProfile" element={<GetMyProfile />} />
+        <Route path="/getOtherProfile" element={<GetOtherProfile />} />
+        <Route path="/getMemberList" element={<GetMemberList />} />
         <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid/:trade" element={<Detail />} />

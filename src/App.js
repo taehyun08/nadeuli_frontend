@@ -6,9 +6,11 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 // import { carrotLoginStatus, getCarrotUserInfo } from "./redux/modules/user";
 import { getToken } from "./shared/localStorage";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 function App() {
   const dispatch = useDispatch();
+  const queryClient = new QueryClient();
 
   // useEffect(() => {
   //   const token = getToken();
@@ -22,10 +24,12 @@ function App() {
   // }, [dispatch]);
 
   return (
+    <QueryClientProvider client={queryClient}>
     <ThemeProvider theme={defaultTheme}>
       <GlobalStyle />
       <Router />
     </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
