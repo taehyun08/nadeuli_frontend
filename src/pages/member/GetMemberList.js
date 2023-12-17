@@ -86,17 +86,23 @@ export default function GetMemberList() {
                                     src={item.picture}
                                     alt={`Profile ${index}`}
                                     style={{ width: '45px', height: '45px' }}
-                                    className="rounded-circle"
+                                    className="rounded-circle ms-3"
                                 />
                                 <div className="ms-3">
-                                    <p className="fw-bold mb-0">{item.nickname}</p>
+                                    <p className="fw-bold mb-0">{item.nickname}<i>#{item.tag}</i></p>
                                     <p className="text-muted mb-0">{item.email}</p>
                                     <p className="text-muted mb-0">친화력 {item.affinity}점</p>
                                     <p className="text-muted mb-0">정지일수 {item.blockDay}일</p>
                                     <p className="text-muted mb-0">정지기간 {item.blockEnd}</p>
                                     <p className="text-muted mb-0">정지사유 {item.blockReason}</p>
                                 </div>
-                                <MDBBtn className="position-absolute top-50 end-0 translate-middle-y">충전</MDBBtn>
+                                <MDBBtn
+                                    className={`position-absolute top-50 end-0 translate-middle-y me-3 ${
+                                        item.blockDay !== 0 && item.blockDay ? 'btn-danger' : ''
+                                    }`}
+                                >
+                                    {item.blockDay === 0 || !item.blockDay ? '회원 정지' : '회원 정지 해제'}
+                                </MDBBtn>
                             </div>
                         </MDBListGroupItem>
                     </div>
