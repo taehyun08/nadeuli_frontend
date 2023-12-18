@@ -20,6 +20,7 @@ import Modal from '../components/Modal';
 import { addFavorite } from '../shared/axios';
 
 function Detail() {
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [heart, setHeart] = useState(false); // 찜하기
@@ -114,7 +115,6 @@ function Detail() {
                     </Modal>
                 </div>
             </Header>
-
             <div>
                 {postDetail && (
                     <img

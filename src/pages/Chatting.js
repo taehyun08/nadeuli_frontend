@@ -2,68 +2,68 @@
 // import styled from "styled-components";
 
 // import React, { useState, useEffect, useRef } from "react";
-// // import { changeTradeStateDB } from "../redux/modules/post";
+// // // import { changeTradeStateDB } from "../redux/modules/post";
 
-// import { useSelector, useDispatch } from "react-redux";
-// import { useNavigate, useParams } from "react-router-dom";
+// // import { useSelector, useDispatch } from "react-redux";
+// // import { useNavigate, useParams } from "react-router-dom";
 
-// import { AiOutlineArrowLeft } from "react-icons/ai";
-// import {AiOutlineCaretRight} from "react-icons/ai";
-
-
-// // import io from 'socket.io-client';
-
-// // const socket = io.connect('http://54.180.121.151');
-
-// //const socket = io.connect('http://localhost:4000');
-
-// function Chatting(){
-//   const dispatch = useDispatch();
-//   const user = useSelector((state) => state.user); // 유저 정보
-//   const navigate = useNavigate();
-//   const nickname = user.nickname;
-//   const userImg = user.userImg;
-//   const messageRef = useRef();
-//   const scrollRef = useRef();
-//   const params = useParams();
-//   const state = params.trade;
-//   const [sellState,setSellState] =useState(state)
-
-// //   const [chat,setChat] =useState([])  // 데이터가 실시간으로 쌓여서 출력하는 스테이트 받아서 뿌리는 건 쳇이야 
-// //   const sellPInfo = useSelector((state) => state.post.post);
+// // import { AiOutlineArrowLeft } from "react-icons/ai";
+// // import {AiOutlineCaretRight} from "react-icons/ai";
 
 
-// //   useEffect(()=>{    //데이터 실시간으로 받는 곳 
-// //     socket.on('chatting',({nickname, userImg, msg, time})=>{
-// //       const addChat = {
-// //         nickname : nickname,
-// //         msg : msg,
-// //         userImg: userImg,
-// //         time : time
-// //       }
-// //       setChat((chat)=> chat.concat(addChat));  
-// //     })
-// //   },[])
+// // // import io from 'socket.io-client';
 
-// //   useEffect(()=>{
-// //     scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight); 
-// //   },[chat]);
+// // // const socket = io.connect('http://54.180.121.151');
 
+// // //const socket = io.connect('http://localhost:4000');
 
-// //   const cleanInput = () => {let input = document.getElementById('inputBox'); input.value="";}
-// //   const handleOnKeyPress = e => {
-// //     if (e.key === 'Enter') {
-// //       handleOnClick();
-// //       cleanInput();
-// //     }
-// //   };
+// // function Chatting(){
+// //   const dispatch = useDispatch();
+// //   const user = useSelector((state) => state.user); // 유저 정보
+// //   const navigate = useNavigate();
+// //   const nickname = user.nickname;
+// //   const userImg = user.userImg;
+// //   const messageRef = useRef();
+// //   const scrollRef = useRef();
+// //   const params = useParams();
+// //   const state = params.trade;
+// //   const [sellState,setSellState] =useState(state)
+
+// // //   const [chat,setChat] =useState([])  // 데이터가 실시간으로 쌓여서 출력하는 스테이트 받아서 뿌리는 건 쳇이야 
+// // //   const sellPInfo = useSelector((state) => state.post.post);
 
 
-// //   const handleOnClick = () =>{
-// //     const msg =  messageRef.current.value;
-// //     socket.emit('chatting', {nickname, userImg, msg});
-// //     cleanInput();
-// //  }
+// // //   useEffect(()=>{    //데이터 실시간으로 받는 곳 
+// // //     socket.on('chatting',({nickname, userImg, msg, time})=>{
+// // //       const addChat = {
+// // //         nickname : nickname,
+// // //         msg : msg,
+// // //         userImg: userImg,
+// // //         time : time
+// // //       }
+// // //       setChat((chat)=> chat.concat(addChat));  
+// // //     })
+// // //   },[])
+
+// // //   useEffect(()=>{
+// // //     scrollRef.current.scrollTo(0, scrollRef.current.scrollHeight); 
+// // //   },[chat]);
+
+
+// // //   const cleanInput = () => {let input = document.getElementById('inputBox'); input.value="";}
+// // //   const handleOnKeyPress = e => {
+// // //     if (e.key === 'Enter') {
+// // //       handleOnClick();
+// // //       cleanInput();
+// // //     }
+// // //   };
+
+
+// // //   const handleOnClick = () =>{
+// // //     const msg =  messageRef.current.value;
+// // //     socket.emit('chatting', {nickname, userImg, msg});
+// // //     cleanInput();
+// // //  }
 
 // return (
 //     <div className="wrapper">
@@ -140,7 +140,7 @@
 
 //   );
 
-// }
+// // }
 
 // const SoldOut = styled.div`
   
