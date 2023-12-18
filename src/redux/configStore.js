@@ -5,6 +5,7 @@ import post from "./modules/post";
 import member from "./modules/member";
 import dongNePost from "./modules/dongNePost";
 import orikkiri from "./modules/orikkiri";
+import otherMember from "./modules/otherMember";
 
 /*
 Redux는 상태 관리 라이브러리로, 
@@ -21,7 +22,7 @@ Reducer 함수는 '현재 상태'와 '액션'을 전달받아서 새로운 상�
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["member","dongNePost","post", "orikkiri"]//******추가할 리듀서들을 옆에 나열******
+  whitelist: ["member","dongNePost","post", "orikkiri","otherMember"]//******추가할 리듀서들을 옆에 나열******
 };
 
 // 리듀서들을 바로 configureStore에서 합치기
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   member,
   post,
   dongNePost,
-  orikkiri,//******추가할 리듀서들을 밑에 나열******
+  orikkiri,
+  otherMember,//******추가할 리듀서들을 밑에 나열******
 });
 
 //Redux 스토어 
