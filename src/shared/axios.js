@@ -15,13 +15,13 @@ instance.interceptors.request.use(
     (config) => {
         // 토큰을 가져옵니다.
         const token = localStorage.getItem('token');
-        console.log("로컬스토리지에서 토큰을 가져옵니다",token)
+        console.log('로컬스토리지에서 토큰을 가져옵니다', token);
 
         // 토큰이 존재하면 요청 헤더에 Authorization 헤더를 추가하여 토큰을 전송합니다.
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
-            console.log("react에서 spring으로 토큰을 헤더에 담아서 보냈습니다.")
-            console.log(config)
+            console.log('react에서 spring으로 토큰을 헤더에 담아서 보냈습니다.');
+            console.log(config);
         }
 
         // 처리된 config를 반환합니다.
@@ -39,19 +39,19 @@ instance.interceptors.request.use(
 
 // 사용자 로그인 요청을 처리하는 함수
 export const login = async (memberDTO) => {
-    console.log(memberDTO)
+    console.log(memberDTO);
     return await instance.post('/nadeuli/nadeuli/login', { memberDTO });
 };
 
 //사용자 로그아웃
 export const logout = async (memberDTO) => {
-    console.log(memberDTO)
+    console.log(memberDTO);
     return await instance.post('/nadeuli/nadeuli/login', { memberDTO });
 };
 
 // 사용자 회원가입 요청을 처리하는 함수
 export const addMember = async (memberDTO, gpsDTO) => {
-    return await instance.post('/nadeuli/nadeuli/addMember', { memberDTO, gpsDTO});
+    return await instance.post('/nadeuli/nadeuli/addMember', { memberDTO, gpsDTO });
 };
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
@@ -86,30 +86,55 @@ export const updateMember = async (memberDTO) => {
 
 // 회원의 이메일을 체크하는 함수
 export const findAccount = async (memberDTO) => {
-    return await instance.post("/nadeuli/findAccount", memberDTO);
+    return await instance.post('/nadeuli/findAccount', memberDTO);
 };
 
 // 계정찾기에서 휴대폰번호를 변경하는 함수
 export const updateCellphone = async (memberDTO) => {
-    return await instance.post("/nadeuli/updateCellphone", memberDTO);
+    return await instance.post('/nadeuli/updateCellphone', memberDTO);
 };
 
 //동네 수정 함수
 export const updateDongNe = async (memberDTO, gpsDTO) => {
-    return await instance.post(`/nadeuli/member/updateDongNe`,{memberDTO, gpsDTO})
-}
+    return await instance.post(`/nadeuli/member/updateDongNe`, { memberDTO, gpsDTO });
+};
 
 //소셜로그인 닉네임 등록 함수
-export const addNickname = async (tokenDTO, gpsDTO,memberDTO) => {
-    return await instance.post(`/nadeuli/member/addNickname`,{tokenDTO, gpsDTO,memberDTO})
-}
+export const addNickname = async (tokenDTO, gpsDTO, memberDTO) => {
+    return await instance.post(`/nadeuli/member/addNickname`, { tokenDTO, gpsDTO, memberDTO });
+};
 
 //소셜로그인 회원 정보를 가져오는 함수
 export const getSocialMember = async (tokenDTO) => {
-    return await instance.post(`/nadeuli/member/getSocialMember`,{tokenDTO})
-}
+    return await instance.post(`/nadeuli/member/getSocialMember`, { tokenDTO });
+};
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
 export const getMemberList = async (searchDTO) => {
-    return await instance.post(`/nadeuli/member/getMemberList`,{searchDTO});
+    return await instance.post(`/nadeuli/member/getMemberList`, { searchDTO });
+};
+
+// 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
+export const addFavorite = async (tag, prodId) => {
+    return await instance.get(`/nadeuli/member/addFavorite/${prodId}/${tag}`);
+};
+
+// 현재 로그인한 사용자의 즐겨찾기 정보를 불러오는 함수
+export const getMemberFavoriteList = async (memberDTO, searchDTO) => {
+    return await instance.post(`/nadeuli/member/getFavoriteList`, { memberDTO, searchDTO });
+};
+
+// 회원 비활성화/활성화 함수
+export const handleMemberActivate = async (tag) => {
+    return await instance.get(`/nadeuli/member/handleMemberActivate/${tag}`);
+};
+
+// 회원 정지 함수
+export const addBlockMember = async (memberDTO, blockDTO) => {
+    return await instance.post(`/nadeuli/member/addBlockMember`,{memberDTO, blockDTO});
+};
+
+// 회원 정지해제 함수
+export const deleteBlockMember = async (tag) => {
+    return await instance.get(`/nadeuli/member/deleteBlockMember/${tag}`);
 };
