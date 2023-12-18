@@ -149,7 +149,7 @@ export default function GetMyProfile() {
             formData.append('picture', member.picture);
 
             // axios를 사용하여 이미지 업데이트 요청
-            const response = await axios.post(`${BASE_URL}/nadeuli/member/updateProfile`, formData, {
+            const response = await axios.post(`${BASE_URL}/member/updateProfile`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
