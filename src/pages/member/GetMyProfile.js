@@ -297,7 +297,7 @@ export default function GetMyProfile() {
             cellphoneToggleOpen(); // 모달 닫기
         } catch (error) {
             // 회원 정보 업데이트에 실패한 경우
-            alert('휴대폰 번호 수정에 실패했습니다.');
+            alert('이미 존재하는 휴대폰 번호입니다.');
         }
     };
 
@@ -323,7 +323,7 @@ export default function GetMyProfile() {
             emailToggleOpen(); // 모달 닫기
         } catch (error) {
             // 회원 정보 업데이트에 실패한 경우
-            alert('이메일 수정에 실패했습니다.');
+            alert('이미 존재하는 이메일입니다.');
         }
     };
 

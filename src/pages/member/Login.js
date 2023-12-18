@@ -103,6 +103,12 @@ function Login() {
                 }
             }
 
+            if (response.data.blockEnd) {
+                // 정지된 계정인 경우 메시지 표시
+                alert(`정지된 계정입니다. 정지기간은 ${formatDate(response.data.blockEnd)} 입니다.`);
+                return;
+            }
+
             if (response.data) {
                 const receivedToken = response.headers.get('Authorization');
                 if (receivedToken) {
@@ -124,6 +130,16 @@ function Login() {
 
         setTo(updatedTo);
         setAuthNum(updatedAuthNum);
+    };
+
+    //정지기간 파싱
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}년 ${month}월 ${day}일 까지`;
     };
 
     return (

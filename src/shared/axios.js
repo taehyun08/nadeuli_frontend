@@ -136,5 +136,5 @@ export const addBlockMember = async (memberDTO, blockDTO) => {
 
 // 회원 정지해제 함수
 export const deleteBlockMember = async (tag) => {
-    return await instance.get(`/nadeuli/member/deleteBlockMember/${tag}`);
+    return await instance.get(`/member/deleteBlockMember/${tag}`);
 };
