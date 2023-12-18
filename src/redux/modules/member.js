@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { getMyProfile, loadProfile } from '../../shared/axios';
+import { removeToken } from '../../shared/localStorage';
 
 // 회원의 상태를 관리하는 reducer
 // 각 컴포넌트에서 reducer에 정의 된 함수를 호출하면된다.
@@ -23,15 +24,19 @@ export const setMember = (data) => {
 };
 
 export const memberLogout = () => {
-  return async function (dispatch,getState) {
-      try {
-          dispatch(logout());
-          const currentState = getState();
-          console.log('get이후 Current state:', currentState);
-      } catch (err) {
-          console.log(err);
-      }
-  };
+    return async function (dispatch, getState) {
+        try {
+            dispatch(logout());
+            removeToken();
+            ['Authorization', 'Refresh-Token', 'JSESSIONID'].forEach((token) => {
+                document.cookie = `${token}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+            });
+            const currentState = getState();
+            console.log('get이후 Current state:', currentState);
+        } catch (err) {
+            console.log(err);
+        }
+    };
 };
 
 //Reducer
@@ -112,28 +117,28 @@ const memberSlice = createSlice({
         logout: () => {
             // 로그아웃 시 초기화할 상태를 정의
             return {
-                tag: null,
-                cellphone: null,
-                nickname: null,
+                tag: 'Bss2',
+                cellphone: '010-1111-1111',
+                nickname: '독감환자',
                 affinity: null,
-                email: null,
-                dongNe: null,
-                picture: null,
-                nadeuliPayBalance: null,
+                email: 'guest@gmail.com',
+                dongNe: '서울특별시 강서구 공항동',
+                picture: 'https://kr.object.ncloudstorage.com/nadeuli/image/a20231212100248393.png',
+                nadeuliPayBalance: 100,
                 isActivate: false,
                 isNadeuliDelivery: false,
                 role: null,
-                gu: null,
-                bankName: null,
-                bankAccountNum: null,
-                blockReason: null,
+                gu: '강서구',
+                bankName: '국민은행',
+                bankAccountNum: '41191025584607',
+                blockReason: '',
                 blockEnd: null,
                 blockDay: null,
-                socialId: null,
+                socialId: '',
             };
         },
     },
 });
 
-const { setMemberState,logout } = memberSlice.actions;
+const { setMemberState, logout } = memberSlice.actions;
 export default memberSlice.reducer;

@@ -31,10 +31,20 @@ import HeaderBack from '../../components/HeaderBack';
 import styled from 'styled-components';
 import TopDropdownMenu from '../../components/TopDropdownMenu';
 import { FaLocationDot } from 'react-icons/fa6';
-import { checkAuthNum, getAuthNumCellphone, getAuthNumEmail, logout, updateDongNe, updateMember } from '../../shared/axios';
+import {
+    checkAuthNum,
+    getAuthNumCellphone,
+    getAuthNumEmail,
+    getMemberFavoriteList,
+    handleMemberActivate,
+    logout,
+    updateDongNe,
+    updateMember,
+} from '../../shared/axios';
 import { memberLogout, setMember } from '../../redux/modules/member';
 import { removeToken } from '../../shared/localStorage';
 import axios from 'axios';
+import { BsHeart } from 'react-icons/bs';
 
 export default function GetMyProfile() {
     //hooks
@@ -56,6 +66,7 @@ export default function GetMyProfile() {
     const [isEmailAuthNumReceived, setIsEmailAuthNumReceived] = useState(false);
     const [isEmailAuthNumCheck, setIsEmailAuthNumCheck] = useState(false);
     const [imageSrc, setImageSrc] = useState(null);
+    const [favoriteList, setFavoriteList] = useState([]);
     const imageInput = useRef();
 
     //모달
@@ -369,18 +380,33 @@ export default function GetMyProfile() {
 
     //로그아웃
     const handleLogout = () => {
-        // Redux의 member와 localStorage의 token을 초기화
-        dispatch(memberLogout()); // 로그아웃 액션을 디스패치하여 Redux 상태 업데이트
+        // 확인 창 띄우기
+        const confirmResult = window.confirm('로그아웃하시겠습니까?');
 
-        // localStorage의 token을 초기화 (실제 코드에 따라 다를 수 있음)
-        removeToken();
+        // 확인을 눌렀을 경우에만 로그아웃 처리
+        if (confirmResult) {
+            // Redux의 member와 localStorage의 token을 초기화
+            dispatch(memberLogout()); // 로그아웃 액션을 디스패치하여 Redux 상태 업데이트
+            // 로그아웃 후 필요한 추가 작업 수행
+            navigate('/');
+        }
+    };
 
-        // 쿠키에서 access-token과 refresh-token을 제거
-        ['Authorization', 'Refresh-Token', 'JSESSIONID'].forEach((token) => {
-            document.cookie = `${token}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-        });
-        // 로그아웃 후 필요한 추가 작업 수행
-        navigate('/');
+    const handleMemberActivateClick = async () => {
+        const tag = member.tag;
+        try {
+            const confirmResult = window.confirm('계정을 비활성화하시겠습니까?');
+
+            if (confirmResult) {
+                await handleMemberActivate(tag);
+                alert('계정이 비활성화 되었습니다.');
+                dispatch(memberLogout()); // 로그아웃 액션을 디스패치하여 Redux 상태 업데이트
+                navigate('/');
+            }
+        } catch (error) {
+            console.error('회원 상태 변경에 실패하였습니다.', error);
+            alert('회원 상태 변경에 실패하였습니다.');
+        }
     };
 
     //회원목록조회
@@ -388,15 +414,39 @@ export default function GetMyProfile() {
         // 로그아웃 후 필요한 추가 작업 수행
         navigate('/getMemberList');
     };
-
+    console.log(member.tag);
     const dropdownMenus = [
         { label: '회원 목록 조회', onClick: handleGetMemberList },
         { label: '주문 내역 목록', onClick: '' },
         { label: '배달 내역 목록', onClick: '' },
-        { label: '비활성화', onClick: '' },
+        { label: '비활성화', onClick: handleMemberActivateClick },
         { label: '로그아웃', onClick: handleLogout },
         // 원하는 만큼 추가
     ];
+
+    // 즐겨찾기 목록 조회
+    useEffect(() => {
+        // 현재 로그인한 사용자의 즐겨찾기 정보를 불러오는 함수 호출
+        // 적절한 파라미터를 전달해야 합니다. 예를 들어, 로그인한 사용자의 tag 등
+
+        const memberDTO = {
+            tag: member.tag,
+        };
+        const searchDTO = {
+            searchKeyword: '',
+            currentPage: 0,
+        };
+
+        getMemberFavoriteList(memberDTO, searchDTO)
+            .then((response) => {
+                console.log(response.data);
+                setFavoriteList(response.data); // 가져온 데이터를 상태에 저장
+                console.log(favoriteList[0].product.images[0]);
+            })
+            .catch((error) => {
+                console.error('Error fetching favorite list:', error);
+            });
+    }, []); // []를 사용하여 최초 한 번만 실행되도록 설정
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer>
@@ -511,206 +561,97 @@ export default function GetMyProfile() {
                                     className="rounded-3"
                                 >
                                     <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon
-                                            fas
-                                            icon="envelope"
-                                        />
-                                        <MDBCardText>{member.email}</MDBCardText>
+                                        <b>&nbsp;즐겨찾기 목록</b>
                                     </MDBListGroupItem>
-                                    <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon
-                                            fab
-                                            icon="github fa-lg"
-                                            style={{ color: '#333333' }}
-                                        />
-                                        <MDBCardText>mdbootstrap</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon
-                                            fab
-                                            icon="twitter fa-lg"
-                                            style={{ color: '#55acee' }}
-                                        />
-                                        <MDBCardText>@mdbootstrap</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon
-                                            fab
-                                            icon="instagram fa-lg"
-                                            style={{ color: '#ac2bac' }}
-                                        />
-                                        <MDBCardText>mdbootstrap</MDBCardText>
-                                    </MDBListGroupItem>
-                                    <MDBListGroupItem className="d-flex justify-content-between align-items-center p-3">
-                                        <MDBIcon
-                                            fab
-                                            icon="facebook fa-lg"
-                                            style={{ color: '#3b5998' }}
-                                        />
-                                        <MDBCardText>mdbootstrap</MDBCardText>
-                                    </MDBListGroupItem>
+                                    {favoriteList.map((list, index) => (
+                                        <MDBListGroupItem
+                                            key={index}
+                                            className="d-flex justify-content-between align-items-center p-3 position-relative" // position-relative 추가
+                                        >
+                                            <div
+                                                style={{ display: 'flex' }}
+                                                onClick={() => {
+                                                    navigate('/detail/' + list.productId + '/' + list.tradeState);
+                                                }}
+                                            >
+                                                <Img src={list?.product?.images[0]} />
+                                                <TextArea>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '15px',
+                                                            padding: '0 5px',
+                                                            width: '200px',
+                                                            textOverflow: 'ellipsis',
+                                                            overflow: 'hidden',
+                                                            whiteSpace: 'nowrap',
+                                                        }}
+                                                    >
+                                                        {list?.product?.title}
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '13px',
+                                                            padding: '0 5px',
+                                                            fontWeight: 'bold',
+                                                        }}
+                                                    >
+                                                        {list?.product?.seller?.dongNe.split(' ')[2]} &nbsp;{list?.product?.timeAgo}
+                                                    </span>
+                                                    <TradeState>
+                                                        <span
+                                                            style={{
+                                                                fontSize: '13px',
+                                                                padding: '5px',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            {Number(list?.product?.price).toLocaleString('ko-KR')}원
+                                                        </span>
+                                                    </TradeState>
+                                                    {list?.product?.isBargain ? (
+                                                        <span style={{ color: 'blue', marginLeft: '5px' }}>가격 흥정 가능</span>
+                                                    ) : (
+                                                        <span style={{ color: 'gray', marginLeft: '5px' }}>가격 흥정 불가능</span>
+                                                    )}
+                                                    {/* 프리미엄 텍스트 추가 */}
+                                                    {list?.product?.isPremium && (
+                                                        <span
+                                                            style={{
+                                                                color: 'red',
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                right: 0,
+                                                                fontSize: '12px',
+                                                                padding: '5px',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            프리미엄
+                                                        </span>
+                                                    )}
+                                                </TextArea>
+                                            </div>
+                                            <div
+                                                style={{
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'space-between',
+                                                    flexDirection: 'column',
+                                                    textAlign: 'left',
+                                                    width: '50px',
+                                                    fontSize: '14px',
+                                                }}
+                                            >
+                                                <div>
+                                                    <BsHeart size="15" />
+                                                    &nbsp;{list?.product?.likeNum}
+                                                </div>
+                                            </div>
+                                        </MDBListGroupItem>
+                                    ))}
                                 </MDBListGroup>
                             </MDBCardBody>
                         </MDBCard>
-                        <MDBRow>
-                            <MDBCol md="6">
-                                <MDBCard className="mb-4 mb-md-0">
-                                    <MDBCardBody>
-                                        <MDBCardText className="mb-4">
-                                            <span className="text-primary font-italic me-1">assigment</span> Project Status
-                                        </MDBCardText>
-                                        <MDBCardText
-                                            className="mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Web Design
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={80}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Website Markup
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={72}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            One Page
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={89}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Mobile Template
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={55}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Backend API
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={66}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-
-                            <MDBCol md="6">
-                                <MDBCard className="mb-4 mb-md-0">
-                                    <MDBCardBody>
-                                        <MDBCardText className="mb-4">
-                                            <span className="text-primary font-italic me-1">assigment</span> Project Status
-                                        </MDBCardText>
-                                        <MDBCardText
-                                            className="mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Web Design
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={80}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Website Markup
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={72}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            One Page
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={89}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Mobile Template
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={55}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-
-                                        <MDBCardText
-                                            className="mt-4 mb-1"
-                                            style={{ fontSize: '.77rem' }}
-                                        >
-                                            Backend API
-                                        </MDBCardText>
-                                        <MDBProgress className="rounded">
-                                            <MDBProgressBar
-                                                width={66}
-                                                valuemin={0}
-                                                valuemax={100}
-                                            />
-                                        </MDBProgress>
-                                    </MDBCardBody>
-                                </MDBCard>
-                            </MDBCol>
-                        </MDBRow>
                     </MDBCol>
                 </MDBRow>
                 {/* 모달 모음 */}
@@ -972,4 +913,61 @@ const TMenuBar = styled.div`
         transform: translateX(-50%);
         margin: 0;
     }
+`;
+const CardBox = styled.div`
+    display: flex;
+    padding: 20px;
+    justify-content: space-between;
+    border-bottom: 1px solid #dddddd;
+`;
+
+const TextArea = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 180px;
+    padding: 10px;
+`;
+
+const FixedButton = styled.div`
+    display: flex;
+    position: fixed;
+    bottom: 120px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    font-size: 30px;
+    background-color: ${(props) => props.theme.color.orange};
+    color: ${(props) => props.theme.color.white};
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 6px 0 #999;
+`;
+
+const Img = styled.img`
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    object-fit: cover;
+`;
+
+const TradeState = styled.div`
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+`;
+
+const SoldOut = styled.div`
+    padding: 6px 5px;
+    width: 65px;
+    border-radius: 5px;
+    background-color: #565656;
+    color: white;
+    font-size: 12px;
+    text-align: center;
+`;
+
+const Book = styled(SoldOut)`
+    width: 55px;
+    background-color: #34bf9e;
 `;
