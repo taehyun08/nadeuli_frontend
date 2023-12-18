@@ -31,7 +31,7 @@ function MainItemList() {
                 <div
                   style={{ display: "flex" }}
                   onClick={() => {
-                    navigate("/detail/" + list.productId+"/"+list.tradeState);
+                    navigate("/detail/" + list.productId);
                   }}
                 >
                   <Img src={list?.images?.[0]} />

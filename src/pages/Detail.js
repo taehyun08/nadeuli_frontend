@@ -29,6 +29,7 @@ function Detail() {
   const state = params.trade;
   const user = useSelector((state) => state.gu); // 유저 정보
 
+  console.log(postId);
   // 모달.
   const [modalOpen, setModalOpen] = useState(false);
   const openModal = () => {

@@ -25,6 +25,7 @@ import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
+import GetChatRoomList from "./pages/chat/GetChatRoomList";
 import AddDeliveryOrder from "./pages/nadeuli_delivery/AddDeliveryOrder";
 import UpdateDeliveryOrder from "./pages/nadeuli_delivery/UpdateDeliveryOrder";
 import GetDeliveryOrder from "./pages/nadeuli_delivery/GetDeliveryOrder";
@@ -49,15 +50,17 @@ function Router() {
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
         <Route
-          path="/nadeuliPay/NadeuliPayCharge"
+          path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
         />
-        <Route path="/nadeuliPay/NadeuliPayPay" element={<NadeuliPayPay />} />
+        <Route path="/nadeuliPay/nadeuliPayPay" element={<NadeuliPayPay />} />
         <Route
-          path="/nadeuliPay/NadeuliPayWithdraw"
+          path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
         <Route path="/trade/addTradeReview/:productId" element={<AddTradeReview />} />
+
+        <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
@@ -80,7 +83,7 @@ function Router() {
         <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/report" element={<Report />} />
         <Route path="/modify/:postid" element={<Modify />} />
-        <Route path="/detail/:postid/:trade" element={<Detail />} />
+        <Route path="/detail/:postid" element={<Detail />} />
         <Route path="/chatting/:postid/:trade" element={<Chatting />} />
         <Route path="/profile/location" element={<ProfileLocation />} />
         <Route path="/profile" element={<Profile />} />
