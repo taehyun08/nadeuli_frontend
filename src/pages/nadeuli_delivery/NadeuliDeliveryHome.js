@@ -20,6 +20,11 @@ const NadeuliDeliveryHome = () => {
   const [responseDTOList, setResponseDTOList] = useState([]);
   const navigate = useNavigate();
   const memberGu = useSelector((state) => state.member.gu);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query); // 검색 쿼리 업데이트
+  };
 
   useEffect(() => {
     const requestData = {
@@ -72,7 +77,7 @@ const NadeuliDeliveryHome = () => {
 
   return (
     <div className="Wrap">
-      <NadeuliDeliveryHomeTopBar />
+      <NadeuliDeliveryHomeTopBar onSearch={handleSearch} />
       <Box></Box>
 
       {responseDTOList.map((responseDTO, index) => (
@@ -87,7 +92,10 @@ const NadeuliDeliveryHome = () => {
                 <OrderImage src={responseDTO.images[0]} alt="이미지" />
               </DetailColumn>
               <DetailColumn>
-                <DetailLabel style={{ fontWeight: "bold" }}>
+                <DetailLabel
+                  style={{ fontWeight: "bold" }}
+                  searchQuery={searchQuery}
+                >
                   {truncateTitle(responseDTO.title)}
                 </DetailLabel>
                 <OrderInfo>

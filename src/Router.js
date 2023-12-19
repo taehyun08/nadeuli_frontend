@@ -38,7 +38,7 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
-
+import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -58,7 +58,10 @@ function Router() {
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
-        <Route path="/trade/addTradeReview/:productId" element={<AddTradeReview />} />
+        <Route
+          path="/trade/addTradeReview/:productId"
+          element={<AddTradeReview />}
+        />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
 
@@ -71,10 +74,7 @@ function Router() {
           path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}
         />
-        <Route
-          path="/oauth2Register"
-          element={<Oauth2Register />}
-        />
+        <Route path="/oauth2Register" element={<Oauth2Register />} />
         <Route path="/add" element={<Add />} />
         <Route path="/test" element={<Test />} />
         <Route path="/getMyProfile" element={<GetMyProfile />} />
@@ -111,6 +111,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
+        <Route path="/getShortestWay" element={<GetShortestWay />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,11 +1,12 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { persistReducer } from 'redux-persist';	// 추가
-import storage from 'redux-persist/lib/storage';	// 추가
+import { persistReducer } from "redux-persist"; // 추가
+import storage from "redux-persist/lib/storage"; // 추가
 import post from "./modules/post";
 import member from "./modules/member";
 import dongNePost from "./modules/dongNePost";
 import orikkiri from "./modules/orikkiri";
 import otherMember from "./modules/otherMember";
+import nadeuliDelivery from "./modules/nadeuliDelivery";
 
 /*
 Redux는 상태 관리 라이브러리로, 
@@ -17,12 +18,17 @@ Reducer 함수는 '현재 상태'와 '액션'을 전달받아서 새로운 상�
 
 */
 
-
-
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["member","dongNePost","post", "orikkiri","otherMember"]//******추가할 리듀서들을 옆에 나열******
+  whitelist: [
+    "member",
+    "dongNePost",
+    "post",
+    "orikkiri",
+    "otherMember",
+    "nadeuliDelivery",
+  ], //******추가할 리듀서들을 옆에 나열******
 };
 
 // 리듀서들을 바로 configureStore에서 합치기
@@ -31,20 +37,21 @@ const rootReducer = combineReducers({
   post,
   dongNePost,
   orikkiri,
-  otherMember,//******추가할 리듀서들을 밑에 나열******
+  otherMember,
+  nadeuliDelivery, //******추가할 리듀서들을 밑에 나열******
 });
 
-//Redux 스토어 
+//Redux 스토어
 const store = configureStore({
   //Redux 스토어에 등록할 Reducer들을 지정한다.
-  //user와 post는 각각 다른 Reducer다. 
-  //Reducer는 상태 변화를 다루는 함수로, 
+  //user와 post는 각각 다른 Reducer다.
+  //Reducer는 상태 변화를 다루는 함수로,
   //여러 개의 Reducer를 합쳐 루트 Reducer를 만들 수 있다.
   reducer: persistReducer(persistConfig, rootReducer),
-  });
+});
 
-//반환된 스토어를 내보내어 다른 파일에서 사용할 수 있게 한다. 
-//이렇게 생성된 스토어는 Redux의 상태를 관리하고 
+//반환된 스토어를 내보내어 다른 파일에서 사용할 수 있게 한다.
+//이렇게 생성된 스토어는 Redux의 상태를 관리하고
 //액션을 처리하는 중앙 허브 역할을 한다.
 // 스토어 내보내기
 export default store;
