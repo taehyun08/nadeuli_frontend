@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { GetDongNePostList } from '../redux/modules/dongNePost';
+import { GetOrikkiriList } from '../redux/modules/orikkiri';
 import { FaRegComment } from "react-icons/fa";
 import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -8,18 +8,19 @@ import styled from 'styled-components';
 import "../style/css/orikkiriList.css"; // CSS 파일을 임포트합니다.
 import { FaUserGroup } from "react-icons/fa6";
 
-function OrikkiriList({searchQuery}) {
-  const location = useSelector((state) => state.member.gu);
+function OrikkiriList() {
+  const member = useSelector((state) => state.member);
+  const tag = useSelector((state) => state.member.tag);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
 
   // 데이터 구조 변경에 따라 필드 수정
-  const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
+  const orikkiriList = useSelector((state) => state.orikkiri.orikkiriList);
 
   useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, location, searchQuery));
-  }, [currentPage, location, searchQuery, dispatch]);
+    dispatch(GetOrikkiriList(tag, currentPage));
+  }, [tag, currentPage, dispatch]);
 
   // console.log("dongNePostList:", dongNePostList);
 
@@ -31,45 +32,18 @@ function OrikkiriList({searchQuery}) {
       </div>
       <div className="vertical-line"></div>
 
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 1</div>
+      {orikkiriList && orikkiriList.map((list, index) => (
+      <div key={index}>
+        <div onClick={() => {
+          navigate("/orikkiriHome/" + list.orikkiri.orikkiriId);
+        }}>
+          <div className="image-container">
+            <img className="circle-image" src={list?.orikkiri.orikkiriPicture } alt="orikkiri Image" />
+            <div className="orikkiri-text">{list.orikkiri.orikkiriName}</div>
+          </div>
+        </div>
       </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 2</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 3</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 4</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 1</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 2</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 3</div>
-      </div>
-
-      <div className="image-container">
-          <img className="circle-image" src="https://kr.object.ncloudstorage.com/nadeuli/image/%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%288%2920231213085749026.png" />
-          <div className="orikkiri-text">우리끼리 4</div>
-      </div>
+      ))}
     </div>
   );
 }

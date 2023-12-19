@@ -76,7 +76,8 @@ function AddDongNePost() {
       writer: { tag: getMember.tag }
     };
   
-    formData.append('postDTO', new Blob([JSON.stringify(postDTO)], { type: "application/json" }));
+    // formData.append('postDTO', new Blob([JSON.stringify(postDTO)], { type: "application/json" }));
+    formData.append('postDTO', postDTO);
   
     // 이미지 파일 추가
     if (imageInput.current && imageInput.current.files[0]) {

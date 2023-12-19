@@ -43,7 +43,7 @@ export const modifyOrikkiri = (formData, navigate) => {
 
 
 // 우리끼리 상세조회
-export const GetOrikkiriDetail = (orikkiriId) => {
+export const getOrikkiriDetail = (orikkiriId) => {
   return async function (dispatch, getState) {
     await get(`/orikkiriManage/getOrikkiri/${orikkiriId}`)
       .then((res) => {

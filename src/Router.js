@@ -20,6 +20,8 @@ import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
+import AddOrikkiri from "./pages/orikkiri/AddOrikkiri";
+import OrikkiriHome from "./pages/orikkiri/OrikkiriHome";
 import AddTradeReview from "./pages/trade/AddTradeReview";
 import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
@@ -47,8 +49,11 @@ function Router() {
       <Routes>
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
-        <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
+        <Route path="/addStreaming" element={<AddStreaming />} />
+        <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
+        <Route path="/addOkkiri" element={<AddOrikkiri />} />
+
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
