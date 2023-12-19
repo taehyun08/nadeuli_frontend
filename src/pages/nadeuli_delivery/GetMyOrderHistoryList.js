@@ -28,7 +28,7 @@ const GetMyOrderHistoryList = () => {
       },
     };
 
-    post("/nadeulidelivery/getMyOrderHistoryList", requestData, {
+    post("/nadeuli/nadeulidelivery/getMyOrderHistoryList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -43,13 +43,13 @@ const GetMyOrderHistoryList = () => {
       .catch((error) => {
         console.log("getOrderHistoryList 호출 에러!", error);
       });
-  }, []);
+  }, [memberTag]);
 
   const handleNavigateToOrder = (nadeuliDeliveryId) => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 15;
+  const maxLength = 10;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -71,7 +71,7 @@ const GetMyOrderHistoryList = () => {
         <Box>
           <OrderTitle>주문 내역 목록</OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "20px" }}></Box>
+        <Box style={{ marginLeft: "60px" }}></Box>
       </HeaderContainer>
       {responseDTOList.map((responseDTO, index) => (
         <CardBox

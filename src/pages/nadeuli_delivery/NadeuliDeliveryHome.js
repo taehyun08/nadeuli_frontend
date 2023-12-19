@@ -7,13 +7,10 @@ import {
   DetailLabel,
   DetailRow,
   GetMyAcceptedDeliveryHistoryListButton,
-  HeaderContainer,
   OrderButton,
   OrderImage,
   OrderInfo,
-  OrderTitle,
 } from "./NadeuliDeliveryStyledComponent";
-import { IoIosNotifications } from "react-icons/io";
 import BottomBar from "../../components/BottonBar";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -23,13 +20,18 @@ const NadeuliDeliveryHome = () => {
   const [responseDTOList, setResponseDTOList] = useState([]);
   const navigate = useNavigate();
   const memberGu = useSelector((state) => state.member.gu);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearch = (query) => {
+    setSearchQuery(query); // 검색 쿼리 업데이트
+  };
 
   useEffect(() => {
     const requestData = {
       gu: memberGu,
     };
 
-    post("/nadeulidelivery/getDeliveryOrderList", requestData, {
+    post("/nadeuli/nadeulidelivery/getDeliveryOrderList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -58,7 +60,7 @@ const NadeuliDeliveryHome = () => {
     navigate("/getMyAcceptedDeliveryHistoryList");
   };
 
-  const maxLength = 9;
+  const maxLength = 10;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -74,46 +76,47 @@ const NadeuliDeliveryHome = () => {
   };
 
   return (
-    <>
-      <HeaderContainer>
-        <NadeuliDeliveryHomeTopBar />
-        <Box>
-          <OrderTitle>배달 주문 목록</OrderTitle>
-          <IoIosNotifications style={{ fontSize: "24px" }} />
-        </Box>
-      </HeaderContainer>
+    <div className="Wrap">
+      <NadeuliDeliveryHomeTopBar onSearch={handleSearch} />
+      <Box></Box>
+
       {responseDTOList.map((responseDTO, index) => (
-        <CardBox
-          className="card"
-          key={index}
-          onClick={() => handleNavigateToOrder(responseDTO.nadeuliDeliveryId)}
-        >
-          <DetailRow>
-            <DetailColumn>
-              <OrderImage src={responseDTO.images[0]} alt="이미지" />
-            </DetailColumn>
-            <DetailColumn style={{ marginRight: "30px" }}>
-              <DetailLabel style={{ fontWeight: "bold" }}>
-                {truncateTitle(responseDTO.title)}
-              </DetailLabel>
-              <OrderInfo>
-                구매금액 {formatCurrency(responseDTO.productPrice)}원
-              </OrderInfo>
-              <OrderInfo>
-                부름비 {formatCurrency(responseDTO.deliveryFee)}원
-              </OrderInfo>
-              <OrderInfo>
-                보증금 {formatCurrency(responseDTO.deposit)}원
-              </OrderInfo>
-            </DetailColumn>
-            <DetailColumn>
-              <DetailLabel>주문 등록</DetailLabel>
-              <DetailLabel style={{ marginLeft: "10px" }}>
-                {responseDTO.timeAgo}
-              </DetailLabel>
-            </DetailColumn>
-          </DetailRow>
-        </CardBox>
+        <div className="MainListBox">
+          <CardBox
+            className="card"
+            key={index}
+            onClick={() => handleNavigateToOrder(responseDTO.nadeuliDeliveryId)}
+          >
+            <DetailRow>
+              <DetailColumn>
+                <OrderImage src={responseDTO.images[0]} alt="이미지" />
+              </DetailColumn>
+              <DetailColumn>
+                <DetailLabel
+                  style={{ fontWeight: "bold" }}
+                  searchQuery={searchQuery}
+                >
+                  {truncateTitle(responseDTO.title)}
+                </DetailLabel>
+                <OrderInfo>
+                  구매금액 {formatCurrency(responseDTO.productPrice)}원
+                </OrderInfo>
+                <OrderInfo>
+                  부름비 {formatCurrency(responseDTO.deliveryFee)}원
+                </OrderInfo>
+                <OrderInfo>
+                  보증금 {formatCurrency(responseDTO.deposit)}원
+                </OrderInfo>
+              </DetailColumn>
+              <DetailColumn>
+                <DetailLabel>주문 등록</DetailLabel>
+                <DetailLabel style={{ marginLeft: "10px" }}>
+                  {responseDTO.timeAgo}
+                </DetailLabel>
+              </DetailColumn>
+            </DetailRow>
+          </CardBox>
+        </div>
       ))}
       <GetMyAcceptedDeliveryHistoryListButton
         onClick={handleNavigateMyAcceptedDeliveryHistoryList}
@@ -122,7 +125,7 @@ const NadeuliDeliveryHome = () => {
       </GetMyAcceptedDeliveryHistoryListButton>
       <OrderButton onClick={handleAddDeliveryOrder}>배달 주문하기</OrderButton>
       <BottomBar />
-    </>
+    </div>
   );
 };
 

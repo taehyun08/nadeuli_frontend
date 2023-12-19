@@ -29,7 +29,7 @@ const GetDeliveryOrder = () => {
   const memberNickName = useSelector((state) => state.member.nickname);
 
   useEffect(() => {
-    get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         setNadeuliDeliveryDTO(response);
@@ -40,11 +40,11 @@ const GetDeliveryOrder = () => {
   }, [nadeuliDeliveryId]);
 
   const handleUpdateDeliveryOrder = () => {
-    navigate("/updateDeliveryOrder");
+    navigate("/updateDeliveryOrder", { state: { nadeuliDeliveryDTO } });
   };
 
   const handleCancelDeliveryOrder = () => {
-    get(`/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeuli/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -63,7 +63,7 @@ const GetDeliveryOrder = () => {
         nickname: memberNickName, // 전역 상태에서 가져온 nickname
       },
     };
-    post(`/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
+    post(`/nadeuli/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -74,7 +74,7 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCancelDelivery = () => {
-    get(`/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeuli/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -85,7 +85,7 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCompleteDelivery = () => {
-    get(`/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeuli/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
