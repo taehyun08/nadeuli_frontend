@@ -7,6 +7,8 @@ import dongNePost from "./modules/dongNePost";
 import orikkiri from "./modules/orikkiri";
 import otherMember from "./modules/otherMember";
 import nadeuliDelivery from "./modules/nadeuliDelivery";
+import comment from "./modules/Comment";
+import streaming from "./modules/streaming"
 
 /*
 Redux는 상태 관리 라이브러리로, 
@@ -29,6 +31,7 @@ const persistConfig = {
     "otherMember",
     "nadeuliDelivery",
   ], //******추가할 리듀서들을 옆에 나열******
+  whitelist: ["member","dongNePost" ,"comment", "streaming", "post", "orikkiri"]//******추가할 리듀서들을 옆에 나열******
 };
 
 // 리듀서들을 바로 configureStore에서 합치기
@@ -39,6 +42,9 @@ const rootReducer = combineReducers({
   orikkiri,
   otherMember,
   nadeuliDelivery, //******추가할 리듀서들을 밑에 나열******
+  comment,
+  streaming,
+  orikkiri,//******추가할 리듀서들을 밑에 나열******
 });
 
 //Redux 스토어
