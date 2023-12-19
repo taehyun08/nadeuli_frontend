@@ -51,7 +51,7 @@ const UpdateDeliveryOrder = () => {
       setProductType(determinedProductType);
     } else if (nadeuliDeliveryId) {
       // URL 파라미터를 통해 데이터를 가져오는 로직
-      get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+      get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
         .then((response) => {
           console.log("주문 정보 호출 완료!", response);
           const determinedProductType = response.productNum ? "new" : "used";
@@ -142,24 +142,21 @@ const UpdateDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeuli/nadeulidelivery/updateDeliveryOrder", formData)
+    postMultipart("/nadeulidelivery/updateDeliveryOrder", formData)
       .then((response) => {
         console.log("주문 수정 완료!", response);
-        alert(" 완료!!");
+        alert("주문 수정 완료!!");
         navigate("/nadeuliDeliveryHome");
       })
-      .catch((error) => console.log("주문 등록 실패", error));
+      .catch((error) => console.log("주문 수정 실패", error));
   };
 
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(
-        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
-        {
-          currentPage: 0,
-        }
-      )
+      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
+        currentPage: 0,
+      })
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
@@ -238,9 +235,8 @@ const UpdateDeliveryOrder = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>배달 주문 등록</OrderTitle>
+          <OrderTitle>배달 주문 수정</OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "20px" }}></Box>
       </HeaderContainer>
       <StyledContainer>
         <StyledForm onSubmit={handleSubmit}>

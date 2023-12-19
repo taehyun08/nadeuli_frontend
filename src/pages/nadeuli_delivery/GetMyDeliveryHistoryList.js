@@ -28,7 +28,7 @@ const GetMyDeliveryHistoryList = () => {
       },
     };
 
-    post("/nadeuli/nadeulidelivery/getMyDeliveryHistoryList", requestData, {
+    post("/nadeulidelivery/getMyDeliveryHistoryList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },

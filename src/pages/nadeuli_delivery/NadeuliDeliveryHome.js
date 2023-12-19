@@ -31,7 +31,7 @@ const NadeuliDeliveryHome = () => {
       gu: memberGu,
     };
 
-    post("/nadeuli/nadeulidelivery/getDeliveryOrderList", requestData, {
+    post("/nadeulidelivery/getDeliveryOrderList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },

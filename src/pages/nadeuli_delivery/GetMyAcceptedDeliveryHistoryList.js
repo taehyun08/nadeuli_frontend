@@ -30,18 +30,14 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       },
     };
 
-    post(
-      "/nadeuli/nadeulidelivery/getMyAcceptedDeliveryHistoryList",
-      requestData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        params: {
-          currentPage: 0,
-        },
-      }
-    )
+    post("/nadeulidelivery/getMyAcceptedDeliveryHistoryList", requestData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        currentPage: 0,
+      },
+    })
       .then((response) => {
         console.log("getMyAcceptedDeliveryHistoryList 호출 완료!", response);
         setResponseDTOList(response);

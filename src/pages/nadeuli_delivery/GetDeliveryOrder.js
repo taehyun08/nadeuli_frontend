@@ -29,7 +29,7 @@ const GetDeliveryOrder = () => {
   const memberNickName = useSelector((state) => state.member.nickname);
 
   useEffect(() => {
-    get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         setNadeuliDeliveryDTO(response);
@@ -44,7 +44,7 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCancelDeliveryOrder = () => {
-    get(`/nadeuli/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -63,7 +63,7 @@ const GetDeliveryOrder = () => {
         nickname: memberNickName, // 전역 상태에서 가져온 nickname
       },
     };
-    post(`/nadeuli/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
+    post(`/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -74,7 +74,7 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCancelDelivery = () => {
-    get(`/nadeuli/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
@@ -85,7 +85,7 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCompleteDelivery = () => {
-    get(`/nadeuli/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;

@@ -146,7 +146,7 @@ const AddDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeuli/nadeulidelivery/addDeliveryOrder", formData)
+    postMultipart("/nadeulidelivery/addDeliveryOrder", formData)
       .then((response) => {
         console.log("배달 주문 완료!", response);
         alert("배달 주문 완료!!");
@@ -158,12 +158,9 @@ const AddDeliveryOrder = () => {
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(
-        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
-        {
-          currentPage: 0,
-        }
-      )
+      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
+        currentPage: 0,
+      })
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
