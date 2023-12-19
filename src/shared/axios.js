@@ -56,7 +56,7 @@ export const addMember = async (memberDTO, gpsDTO) => {
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
 export const getMember = async (tag) => {
-    return await instance.get(`/nadeuli/member/getMember/${tag}`);
+    return await instance.get(`/member/getMember/${tag}`);
 };
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수

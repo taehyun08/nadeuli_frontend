@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Modal from '../../components/Modal';
 import { CreateliveChannel, GetChannelDetail } from '../../redux/modules/streaming';
-import { getMember } from '../../redux/modules/member';
+// import { getMember } from '../../redux/modules/member';
 import { getOrikkiriList } from '../../redux/modules/orikkiri';
-import { }
+// import { }
 import { dongNePost } from "../../redux/modules/dongNePost";
 import { MdOutlineIosShare } from "react-icons/md";
 import { FiMoreVertical } from "react-icons/fi";
@@ -36,7 +36,7 @@ function AddStreaming() {
   };
 
   useEffect(() => {
-    dispatch(GetOrikkiriList(tag));
+    dispatch(getOrikkiriList(tag));
   }, [tag, dispatch]);
   
   const handleAddStreamingClick = () => {
@@ -81,8 +81,8 @@ function AddStreaming() {
       title: title_ref.current.value,
       postCategory: "3",
       gu: location,
-      dongNe: getMember.dongNe,
-      writer: { tag: getMember.tag }
+      dongNe: member.dongNe,
+      writer: { tag: member.tag }
     };
     dispatch(dongNePost(postDTO, navigate));
   };

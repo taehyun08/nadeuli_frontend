@@ -40,7 +40,7 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
-import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
+// import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -116,7 +116,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
-        <Route path="/getShortestWay" element={<GetShortestWay />} />
+        {/* <Route path="/getShortestWay" element={<GetShortestWay />} /> */}
       </Routes>
     </BrowserRouter>
   );

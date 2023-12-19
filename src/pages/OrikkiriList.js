@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { GetOrikkiriList } from '../redux/modules/orikkiri';
+import { getOrikkiriList } from '../redux/modules/orikkiri';
 import { FaRegComment } from "react-icons/fa";
 import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,7 @@ function OrikkiriList() {
   const orikkiriList = useSelector((state) => state.orikkiri.orikkiriList);
 
   useEffect(() => {
-    dispatch(GetOrikkiriList(tag, currentPage));
+    dispatch(getOrikkiriList(tag, currentPage));
   }, [tag, currentPage, dispatch]);
 
   // console.log("dongNePostList:", dongNePostList);
