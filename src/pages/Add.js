@@ -20,8 +20,8 @@ function Add() {
   const premium_ref = useRef();
   const premiumTime_ref = useRef();
   const isBargain_ref = useRef();
-  const {isBargain, setBargain} = useState();
-  const [isPremium, setPremium] = useState();
+  const [isBargain, setBargain] = useState(false);
+  const [isPremium, setPremium] = useState(false);
   const [premiumTime, setPremiumTime] = useState();
   const [selectedImages, setSelectedImages] = useState([]);
   const [previewImages, setPreviewImages] = useState([]);
@@ -315,9 +315,6 @@ const Price = styled(Title)`
   align-items: center;
   justify-content: space-between;
 
-  input[type="checkbox"] {
-    accent-color: #ff7e36;
-  }
   input[type="text"] {
     width: 61%;
   }

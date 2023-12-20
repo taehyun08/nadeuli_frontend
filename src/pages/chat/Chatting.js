@@ -30,8 +30,23 @@ function Chatting(){
   const [price,setPrice] =useState('');
   const [picture,setPicture] =useState('');
   const [isSold,setIsSolde] =useState('');
+  const [productId,setProductId] =useState('');
 
 
+  // const handleButtonClick = () => {
+  //   // 클릭 시 네비게이션 처리
+  //   navigate(`/nadeuliPay/nadeuliPayPay/${productId}`); // 원하는 경로로 수정
+  // };
+
+  const handleTradeButtonClick = () => {
+    // 클릭 시 네비게이션 처리
+    // navigate(`/trade/addTradeSchedule`); // 원하는 경로로 수정
+  };
+
+  const handlePayButtonClick = () => {
+    // 클릭 시 네비게이션 처리
+    // navigate(`/nadeuliPay/nadeuliPayPay/${productId}`); // 원하는 경로로 수정
+  };
 
   useEffect(()=>{    //데이터 실시간으로 받는 곳 
     socket.on('sendMessage', async ({sender, message, createdAt})=>{
@@ -62,6 +77,7 @@ function Chatting(){
             setPrice(res.price);
             setPicture(res.images);
             setIsSolde(res.isSold);
+            setProductId(res.productId);
             console.log(res);
           } else{
             const res = await get(`/orikkiriManage/getOrikkiri/${params.id}`);
@@ -126,16 +142,18 @@ return (
           
           <p>{title}</p>
           <p>{Number(price).toLocaleString("ko-KR")}원</p>
-          <span> {!isSold ? ( <Book>판매중</Book>) : isSold ? ( <SoldOut>판매완료</SoldOut> ) 
-                                : ( "" )} </span>
+          <ButtonContainer>
+            <button onClick={handleTradeButtonClick}>
+              <SoldOut>거래일정</SoldOut>
+            </button>
+            <button onClick={handlePayButtonClick}>
+              <Book>결제하기</Book>
+            </button>
+          </ButtonContainer>
+          {/* <button onClick={handleButtonClick}>
+            {!isSold ? <Book>판매중</Book> : isSold ? <SoldOut>판매완료</SoldOut> : ''}
+          </button> */}
         </span>
-        {/* {sellState === "1" ? (  <button disabled >예약중</button>) : sellState === "2" ? ( <button disabled>거래완료</button> ) 
-         : sellState === "0" ? ( <button style={{background : '#FF7E36', color:'white'}} onClick={()=>{
-          dispatch(changeTradeStateDB(sellPInfo.postId, "1"))
-          alert("예약이 완료되었습니다. ")
-          setSellState("1");}}>예약하기</button>) : ""} */}
-  
-        
       </div>
 )}
     
@@ -159,7 +177,7 @@ return (
             <div className="chattingList">
 
               <span className="profile">
-                <span className="user">{list.sender.nickname}</span>
+                <span className="user">{list.sender.name}</span>
                 <img className="img" src={list.picture} style={list.style} />
               </span>
 
@@ -202,6 +220,16 @@ const SoldOut = styled.div`
 const Book = styled(SoldOut)`
   width: 55px;
   background-color: #34bf9e;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: flex-center;
+  button {
+    border: none;
+    background-color: transparent;
+  }
 `;
 
 

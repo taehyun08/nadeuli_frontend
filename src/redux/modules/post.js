@@ -34,7 +34,8 @@ import axios from 'axios';
 export const carrotPost = (formData, navigate) => {
   return async function (dispatch) {
     try {
-      const res = await axios.post('http://localhost:8080/product/addProduct', formData, {
+      const apiUrl = process.env.REACT_APP_BASE_URL
+      const res = await axios.post(`${apiUrl}/product/addProduct`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -52,7 +53,8 @@ export const carrotPost = (formData, navigate) => {
 export const modifyPost = (formData, navigate) => {
   return async function (dispatch) {
     try {
-      const res = await axios.post('http://localhost:8080/product/updateProduct', formData, {
+      const apiUrl = process.env.REACT_APP_BASE_URL
+      const res = await axios.post(`${apiUrl}/product/updateProduct`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
