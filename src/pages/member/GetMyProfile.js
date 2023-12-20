@@ -40,7 +40,7 @@ import {
     logout,
     updateDongNe,
     updateMember,
-} from '../../shared/axios';
+} from '../../util/memberAxios';
 import { memberLogout, setMember } from '../../redux/modules/member';
 import { removeToken } from '../../shared/localStorage';
 import axios from 'axios';

@@ -19,7 +19,7 @@ import {
 } from 'mdb-react-ui-kit';
 import TopArrowLeft from '../../components/TopArrowLeft';
 import HeaderBack from '../../components/HeaderBack';
-import { addBlockMember, deleteBlockMember, getMemberList } from '../../shared/axios';
+import { addBlockMember, deleteBlockMember, getMemberList } from '../../util/memberAxios';
 import { useInView } from 'react-intersection-observer';
 
 export default function GetMemberList() {

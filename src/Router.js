@@ -5,7 +5,6 @@ import Register from "./pages/member/Register";
 import Login from "./pages/member/Login";
 import Main from "./pages/Main";
 import GetMyProfile from "./pages/member/GetMyProfile";
-import UpdateMember from "./pages/member/UpdateMember";
 import Add from "./pages/Add";
 import Detail from "./pages/Detail";
 import NotFound from "./pages/NotFound";
@@ -85,7 +84,6 @@ function Router() {
         <Route path="/getMyProfile" element={<GetMyProfile />} />
         <Route path="/getOtherProfile" element={<GetOtherProfile />} />
         <Route path="/getMemberList" element={<GetMemberList />} />
-        <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/report" element={<Report />} />
         <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />

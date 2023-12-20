@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getMyProfile, loadProfile } from '../../shared/axios';
+import { getMyProfile, loadProfile } from '../../util/memberAxios';
 import { removeToken } from '../../shared/localStorage';
 
 // 회원의 상태를 관리하는 reducer
