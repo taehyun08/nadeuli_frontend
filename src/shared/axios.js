@@ -40,18 +40,18 @@ instance.interceptors.request.use(
 // 사용자 로그인 요청을 처리하는 함수
 export const login = async (memberDTO) => {
     console.log(memberDTO);
-    return await instance.post('/nadeuli/login', { memberDTO });
+    return await instance.post('/login', { memberDTO });
 };
 
 //사용자 로그아웃
 export const logout = async (memberDTO) => {
     console.log(memberDTO);
-    return await instance.post('/nadeuli/login', { memberDTO });
+    return await instance.post('/logout', { memberDTO });
 };
 
 // 사용자 회원가입 요청을 처리하는 함수
 export const addMember = async (memberDTO, gpsDTO) => {
-    return await instance.post('/nadeuli/addMember', { memberDTO, gpsDTO });
+    return await instance.post('/addMember', { memberDTO, gpsDTO });
 };
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수

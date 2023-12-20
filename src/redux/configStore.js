@@ -54,7 +54,10 @@ const store = configureStore({
   //Reducer는 상태 변화를 다루는 함수로,
   //여러 개의 Reducer를 합쳐 루트 Reducer를 만들 수 있다.
   reducer: persistReducer(persistConfig, rootReducer),
-});
+
+  middleware:getDefaultMiddleware => getDefaultMiddleware({serializableCheck:false})
+  });
+
 
 //반환된 스토어를 내보내어 다른 파일에서 사용할 수 있게 한다.
 //이렇게 생성된 스토어는 Redux의 상태를 관리하고

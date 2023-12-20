@@ -87,6 +87,7 @@ function Router() {
         <Route path="/getMemberList" element={<GetMemberList />} />
         <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/report" element={<Report />} />
+        <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid" element={<Detail />} />
         <Route path="/chatting/:postid/:trade" element={<Chatting />} />
