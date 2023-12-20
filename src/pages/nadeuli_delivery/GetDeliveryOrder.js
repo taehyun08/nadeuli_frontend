@@ -29,7 +29,7 @@ const GetDeliveryOrder = () => {
   const memberNickName = useSelector((state) => state.member.nickname);
 
   useEffect(() => {
-    get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
         setNadeuliDeliveryDTO(response);
@@ -44,10 +44,11 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCancelDeliveryOrder = () => {
-    get(`/nadeuli/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
-        window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
+        alert("주문 취소 완료!");
+        navigate("/getMyOrderHistoryList");
       })
       .catch((error) => {
         console.error("주문 취소 처리 에러", error);
@@ -63,10 +64,11 @@ const GetDeliveryOrder = () => {
         nickname: memberNickName, // 전역 상태에서 가져온 nickname
       },
     };
-    post(`/nadeuli/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
+    post(`/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
       .then((response) => {
         console.log(response);
-        window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
+        alert("주문 수락 완료!");
+        navigate("/nadeuliDeliveryHome");
       })
       .catch((error) => {
         console.error("주문 수락 처리 에러", error);
@@ -74,10 +76,11 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCancelDelivery = () => {
-    get(`/nadeuli/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/cancelDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
-        window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
+        alert("배달 취소 완료!");
+        navigate("/nadeuliDeliveryHome");
       })
       .catch((error) => {
         console.error("배달 취소 처리 에러", error);
@@ -85,22 +88,16 @@ const GetDeliveryOrder = () => {
   };
 
   const handleCompleteDelivery = () => {
-    get(`/nadeuli/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
+    get(`/nadeulidelivery/completeDelivery/${nadeuliDeliveryId}`)
       .then((response) => {
         console.log(response);
-        window.location.href = `/getDeliveryOrder/${nadeuliDeliveryId}`;
+        alert("배달 완료!");
+        navigate("/nadeuliDeliveryHome");
       })
       .catch((error) => {
         console.error("배달 완료 처리 에러", error);
       });
   };
-
-  // const truncateTitle = (title) => {
-  //   if (title.length > 15) {
-  //     return `${title.substring(0, 15)}...`; // 길이가 maxLength보다 길면 잘라내고 "..." 추가
-  //   }
-  //   return title;
-  // };
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("ko-KR", {
