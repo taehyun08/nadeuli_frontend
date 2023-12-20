@@ -9,8 +9,8 @@ function UpdateCellphone() {
     const [btnState, setBtnState] = useState(false);
     const [isToEditable, setIsToEditable] = useState(true);
     const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
-    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
-    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false);
+    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(true);
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(true);
     const [to, setTo] = useState('');
     const [authNum, setAuthNum] = useState('');
 
@@ -18,9 +18,10 @@ function UpdateCellphone() {
 
     const location = useLocation();
     const data = location.state?.data;
-    console.log(data)
+    console.log(data);
 
     const handleGetAuthNumBtnClick = (e) => {
+        console.log(to)
         e.preventDefault();
         if (/[^0-9]/g.test(to) || to.length < 8) {
             alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
@@ -30,9 +31,12 @@ function UpdateCellphone() {
             .then((response) => {
                 alert('인증번호가 발송되었습니다.');
                 setIsAuthNumBtnDisabled(true);
+                setIsToEditable(false);
+                setIsCheckAuthNumBtnDisabled(false);
+                setIsCheckAuthNumInputDisabled(false)
             })
             .catch((err) => {
-                alert('이미 존재하거나 올바르지 않은 이메일입니다.');
+                alert('이미 존재하거나 올바르지 않은 휴대폰 번호입니다.');
             });
     };
 
@@ -64,36 +68,40 @@ function UpdateCellphone() {
 
     const handleUpdateCellphone = () => {
         const memberDTO = {
-            // data 객체에서 email 값을 가져와 설정
-            email: data?.email, 
+            email: data?.email,
             cellphone: to,
         };
 
         updateCellphone(memberDTO)
             .then((response) => {
-                alert('휴대폰 번호 변경 완료!');
-                navigate('/login');
+                if (response.data === 'true') {
+                    alert('휴대폰 번호 변경 완료!');
+                    navigate('/login');
+                } else {
+                    alert('이미 등록된 휴대폰 번호입니다.');
+                    setIsAuthNumBtnDisabled(false)
+                    setIsToEditable(true)
+                    setTo('')
+                    setAuthNum('')
+                    
+                }
             })
             .catch((err) => {
-                alert('휴대폰 번호 변경 실패!');
+                alert('서버에서 에러가 발생하였습니다. 잠시 후에 시도해주세요');
+                navigate('/login');
             });
     };
-
-    const onChange = (e) => {
-        const updatedTo = e.target.name === 'to' ? e.target.value : to;
-        const updatedAuthNum = e.target.name === 'authNum' ? e.target.value : authNum;
-
-        setTo(updatedTo);
-        setAuthNum(updatedAuthNum);
-    };
-
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        // 나머지 제출 로직을 이곳에 추가
+      };
     return (
         <Box>
             <HeaderBack />
             <Content>
                 <em>휴대폰 번호를 입력해주세요</em>
                 <p>휴대폰 번호 변경 후 다시 로그인 하셔야 합니다.</p>
-                <Form>
+                <Form onSubmit={handleFormSubmit}>
                     <div>
                         <input
                             className="to"
@@ -101,8 +109,12 @@ function UpdateCellphone() {
                             disabled={!isToEditable}
                             placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
                             required
+                            value={to}
                             maxLength={11}
-                            onChange={onChange}
+                            onChange={(e) => {
+                                const updatedTo = e.target.value;
+                                setTo(updatedTo);
+                            }}
                             name="to"
                         />
                         <Button
@@ -120,10 +132,15 @@ function UpdateCellphone() {
                             placeholder="인증번호"
                             maxLength={5}
                             required
-                            onChange={onChange}
+                            value={authNum}
+                            onChange={(e) => {
+                                const updatedAuthNum = e.target.value;
+                                setAuthNum(updatedAuthNum);
+                            }}
                             name="authNum"
                             disabled={isCheckAuthNumInputDisabled}
                         />
+
                         <Button
                             className="authNumberBtn"
                             onClick={handleCheckAuthNumBtnClick}
@@ -133,10 +150,11 @@ function UpdateCellphone() {
                         </Button>
                     </div>
                     <Button
-                        isActive={!btnState}
+                        // $isActive={btnState}
                         onClick={handleUpdateCellphone}
+                        disabled={btnState}
                     >
-                        <Link to="/login">휴대폰 번호 변경</Link>
+                        휴대폰 번호 변경
                     </Button>
                 </Form>
             </Content>
@@ -211,17 +229,7 @@ const Button = styled.button`
     color: #fff;
     transition: background 0.3s;
     cursor: pointer;
-    ${(props) =>
-        props.isActive
-            ? css`
-                  background-color: ${(props) => props.theme.color.orange};
-                  &:hover {
-                      background-color: ${(props) => props.theme.hoverColor.orange};
-                  }
-              `
-            : css`
-                  background-color: #ddd;
-              `}
+
 `;
 
 export default UpdateCellphone;

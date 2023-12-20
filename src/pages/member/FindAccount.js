@@ -18,17 +18,24 @@ function FindAccount() {
     const [to, setTo] = useState(''); // 이메일 상태
     const [authNum, setAuthNum] = useState(''); // 인증번호 상태
     const handleGetAuthNumBtnClick = (e) => {
-        e.preventDefault();
+        // e.preventDefault();
 
+        if (to.length < 5) {
+            alert('값을 입력해주세요');
+            return;
+        }
         if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(to)) {
             alert('올바른 이메일 형식이 아닙니다.');
             return;
         }
 
+
+
         const memberDTO = {
             email: to,
         };
         console.log(memberDTO);
+
         // findAccount 호출 후에 getAuthNumEmail을 실행하거나 알림을 표시
         findAccount({ memberDTO })
             .then((response) => {
@@ -51,7 +58,7 @@ function FindAccount() {
             });
     };
     const handleCheckAuthNumBtnClick = (e) => {
-        e.preventDefault(); // 폼의 기본 동작을 막음
+        // e.preventDefault(); // 폼의 기본 동작을 막음
         if (!/^[a-zA-Z0-9!@#$%^*+=-]{5}$/.test(authNum)) {
             // 안에 소문자,대문자,숫자, 특수문자 '!' ~ '+' (괄호 제외)를 제외한 값이 있을 경우
             alert('인증번호는 숫자 5자리로 입력해야 합니다.');
@@ -89,7 +96,10 @@ function FindAccount() {
         console.log(to);
         navigate('/updateCellphone', { state: { data: { email: to } } });
     };
-
+    const handleFormSubmit = (e) => {
+        e.preventDefault();
+        // 나머지 제출 로직을 이곳에 추가
+      };
     return (
         <Box>
             <HeaderBack />
@@ -97,7 +107,7 @@ function FindAccount() {
                 <em>이메일을 입력 해주세요.</em>
                 <p>등록된 이메일이 아닐경우 계정을 찾을 수 없습니다.</p>
                 <p>이메일 인증 완료 후 휴대폰 번호를 변경해서 로그인을 진행하셔야합니다.</p>
-                <Form>
+                <Form onSubmit={handleFormSubmit}>
                     <div>
                         <input
                             className="to"
@@ -136,7 +146,7 @@ function FindAccount() {
                         </Button>
                     </div>
                     <Button
-                        isActive={btnState}
+                        $isActive={btnState}
                         onClick={() => handleNavigation(to)}
                     >
                         이메일로 계정 찾기
@@ -215,7 +225,7 @@ const Button = styled.button`
     transition: background 0.3s;
     cursor: pointer;
     ${(props) =>
-        props.isActive
+        props.$isActive
             ? css`
                   background-color: ${(props) => props.theme.color.orange};
                   &:hover {
