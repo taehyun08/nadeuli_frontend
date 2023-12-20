@@ -39,6 +39,7 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
+import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay copy";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -68,7 +69,10 @@ function Router() {
         />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
-        <Route path="/chat/chatting/:chatRoomId/:id/:isProduct" element={<Chatting />} />
+        <Route
+          path="/chat/chatting/:chatRoomId/:id/:isProduct"
+          element={<Chatting />}
+        />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
@@ -115,7 +119,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
-        {/* <Route path="/getShortestWay" element={<GetShortestWay />} /> */}
+        <Route path="/getShortestWay" element={<GetShortestWay />} />
       </Routes>
     </BrowserRouter>
   );
