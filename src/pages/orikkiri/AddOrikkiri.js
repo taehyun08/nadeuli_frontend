@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import HeaderBack from '../../components/HeaderBack';
 import styled from 'styled-components';
 import {
@@ -17,12 +17,23 @@ import {
     MDBIcon,
     MDBBtn,
 } from 'mdb-react-ui-kit';
+import { useSelector } from 'react-redux';
+import { addAnsQuestion, addOrikkiri } from '../../util/orikkiriManageAxios';
+import axios from 'axios';
 
 const AddOrikkiri = () => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
+
+    const [orikkiriName, setOrikkiriName] = useState('');
+    const [orikkiriIntroduction, setOrikkiriIntroduction] = useState('');
+    const imageInput = useRef();
+    const member = useSelector((state) => state.member);
+    //이미지 추가
     const [imageSrc, setImageSrc] = useState(
         'https://kr.object.ncloudstorage.com/nadeuli/image/%EB%B3%84%EC%9E%90%EB%A6%AC%20%EB%AA%A8%EC%9E%8420231213095749026.png'
     );
 
+    //질문 추가
     const [questions, setQuestions] = useState([
         {
             id: 1,
@@ -56,6 +67,75 @@ const AddOrikkiri = () => {
         }
     };
 
+    // 입력 필드에 대한 onChange 이벤트 핸들러
+    const handleOrikkiriNameChange = (e) => {
+        setOrikkiriName(e.target.value);
+    };
+
+    const handleOrikkiriIntroductionChange = (e) => {
+        setOrikkiriIntroduction(e.target.value);
+    };
+
+    // 이미지 추가
+    const selectFile = (e) => {
+        const file = e.target.files[0];
+        const fileType = file.type.split('/')[0];
+
+        if (fileType === 'image') {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setImageSrc(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('.jpg와 .png 파일만 업로드 가능합니다.');
+            e.target.value = null;
+        }
+    };
+
+    const handleCreateOrikkiri = async () => {
+        try {
+            const formData = new FormData();
+
+            formData.append('image', imageInput.current.files[0]);
+
+            formData.append('dongNe', member.dongNe);
+            formData.append('masterTag', member.tag);
+            formData.append('orikkiriName', orikkiriName);
+            formData.append('orikkiriIntroduction', orikkiriIntroduction);
+
+            const response = await axios.post(`${BASE_URL}/orikkiriManage/addOrikkiri`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+
+            // createdOrikkiri에서 orikkiriId 추출
+            const orikkiriId = response.data.orikkiriId;
+            console.log('orikkiriId :' + orikkiriId);
+
+            // 각각의 질문에 대한 처리
+            for (const question of questions) {
+                // question의 입력값을 가져와서 addAnsQuestionDTO 구성
+                const inputValue = document.getElementById(`question-${question.id}`).value; // 사용자 입력 값 가져오기
+                console.log('inputValue :' + inputValue);
+                const formData = new FormData();
+
+                formData.append('orikkiriId', orikkiriId);
+                formData.append('content', inputValue);
+
+                await axios.post(`${BASE_URL}/orikkiriManage/addAnsQuestion`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data', // 변경된 부분
+                    },
+                });
+            }
+
+            // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
+        } catch (error) {
+            console.error('Error creating orikkiri:', error);
+        }
+    };
 
     return (
         <section style={{ backgroundColor: '#eee' }}>
@@ -82,20 +162,22 @@ const AddOrikkiri = () => {
                                     className="mb-5"
                                     style={{ width: '150px', height: '150px', cursor: 'pointer', borderRadius: '8px' }}
                                     fluid
-                                    // onClick={() => imageInput.current.click()} // 클릭 시 input 엘리먼트 클릭 이벤트 호출
+                                    onClick={() => imageInput.current.click()} // 클릭 시 input 엘리먼트 클릭 이벤트 호출
                                 />
                                 {/* 사진 업로드 */}
                                 <input
                                     type="file"
                                     id="image-file"
-                                    // ref={imageInput}
-                                    // onChange={selectFile}
+                                    ref={imageInput}
+                                    onChange={selectFile}
                                     accept="image/*"
                                     style={{ display: 'none' }} // 화면에 보이지 않도록 스타일 설정
                                 />
                                 <MDBInput
                                     label="우리끼리 이름"
-                                    id="nickname"
+                                    id="orikkiriName"
+                                    value={orikkiriName} // 현재 상태값 적용
+                                    onChange={handleOrikkiriNameChange} // onChange 이벤트 핸들러 적용
                                     type="text"
                                     maxLength={12}
                                     minLength={6}
@@ -104,8 +186,10 @@ const AddOrikkiri = () => {
                                 ></MDBInput>
                                 <MDBTextArea
                                     label="우리끼리 소개"
-                                    id="nickname"
+                                    id="orikkiriIntroduction"
                                     type="text"
+                                    value={orikkiriIntroduction} // 현재 상태값 적용
+                                    onChange={handleOrikkiriIntroductionChange} // onChange 이벤트 핸들러 적용
                                     maxLength={12}
                                     minLength={6}
                                     style={{ position: 'relative' }}
@@ -161,8 +245,13 @@ const AddOrikkiri = () => {
                                         onClick={addQuestion}
                                     />
                                 )}
-                                <br/>
-                                <MDBBtn className='mt-5'>우리끼리 생성</MDBBtn>
+                                <br />
+                                <MDBBtn
+                                    className="mt-5"
+                                    onClick={handleCreateOrikkiri}
+                                >
+                                    우리끼리 생성
+                                </MDBBtn>
                             </MDBCardBody>
                         </MDBCard>
                     </MDBCol>

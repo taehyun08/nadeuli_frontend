@@ -17,7 +17,7 @@ import { carrotGetPost, deletePost } from '../redux/modules/post';
 // } from "../redux/modules/post";
 
 import Modal from '../components/Modal';
-import { addFavorite } from '../shared/axios';
+import { addFavorite } from '../util/memberAxios';
 
 function Detail() {
 

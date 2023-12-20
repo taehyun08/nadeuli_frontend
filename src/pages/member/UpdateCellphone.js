@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { checkAuthNum, getAuthNumCellphone, login, updateCellphone, updateMember } from '../../shared/axios';
+import { checkAuthNum, getAuthNumCellphone, login, updateCellphone, updateMember } from '../../util/memberAxios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function UpdateCellphone() {

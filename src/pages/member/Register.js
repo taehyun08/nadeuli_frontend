@@ -2,7 +2,7 @@ import HeaderBack from '../../components/HeaderBack';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { addMember, checkAuthNum, getAuthNumCellphone} from '../../shared/axios';
+import { addMember, checkAuthNum, getAuthNumCellphone} from '../../util/memberAxios';
 import { css } from 'styled-components';
 import { getCurrentPosition } from '../../util/Location';
 import { saveToken } from '../../shared/localStorage';

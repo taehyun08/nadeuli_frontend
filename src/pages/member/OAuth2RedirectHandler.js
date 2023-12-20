@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getSocialMember } from '../../shared/axios';
+import { getSocialMember } from '../../util/memberAxios';
 import { getCurrentPosition } from '../../util/Location';
 import { useDispatch } from 'react-redux';
 import { setMember } from '../../redux/modules/member';
