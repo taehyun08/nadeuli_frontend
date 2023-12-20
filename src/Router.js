@@ -58,7 +58,7 @@ function Router() {
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
         />
-        <Route path="/nadeuliPay/nadeuliPayPay" element={<NadeuliPayPay />} />
+        <Route path="/nadeuliPay/nadeuliPayPay/:productId" element={<NadeuliPayPay />} />
         <Route
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
