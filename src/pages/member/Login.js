@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { login, getAuthNumCellphone, checkAuthNum } from '../../shared/axios';
-import { removeToken, saveToken } from '../../shared/localStorage';
+import { login, getAuthNumCellphone, checkAuthNum, handleMemberActivate } from '../../shared/axios';
+import { getToken, removeToken, saveToken } from '../../shared/localStorage';
 import { getMember, setMember } from '../../redux/modules/member';
 
 function Login() {
@@ -19,6 +19,18 @@ function Login() {
 
     const [to, setTo] = useState('');
     const [authNum, setAuthNum] = useState('');
+
+    //로그인 체크
+    // useEffect를 활용하여 컴포넌트가 마운트될 때 실행될 코드를 작성합니다.
+    useEffect(() => {
+        // getToken 함수를 통해 토큰을 가져옵니다.
+        const token = getToken();
+
+        // 토큰이 있으면 '/main'으로 navigate합니다.
+        if (token) {
+            navigate('/main');
+        }
+    }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 설정합니다.
 
     const handleGetAuthNumBtnClick = (e) => {
         e.preventDefault(); // 폼의 기본 동작을 막음
@@ -64,33 +76,51 @@ function Login() {
             });
     };
 
-    const handleLoginBtnClick = (e) => {
-        removeToken()
+    const handleLoginBtnClick = async (e) => {
+        removeToken();
         e.preventDefault();
         const memberDTO = {
             cellphone: to,
         };
-        console.log(memberDTO)
-        login(memberDTO)
-            .then((response) => {
-                if (response.data) {
-                    alert('로그인 성공!');
-                    // 헤더에서 Authorization 헤더를 찾아 토큰을 추출
-                    const receivedToken = response.headers.get('Authorization');
-                    console.log('receivedToken:', receivedToken);
-                    // 추출한 토큰을 저장 등의 작업 수행
-                    if (receivedToken) {
-                        const token = receivedToken.replace('Bearer ', ''); // 'Bearer ' 부분을 제거
-                        saveToken(token);
-                    }
-                    alert('로그인이 완료되었습니다.');
-                    dispatch(setMember(response.data));
-                    navigate('/main');
+
+        try {
+            const response = await login(memberDTO);
+
+            // 확인 알림 창 띄우고, 비활성화 여부 확인
+            const shouldDeactivate = response.data.activate;
+
+            if (shouldDeactivate) {
+                const confirmResult = window.confirm('계정이 비활성화 상태입니다. 활성화하시겠습니까?');
+
+                if (confirmResult) {
+                    // 비활성화가 해제되었다는 메시지를 띄우고 API 호출
+                    await handleMemberActivate(response.data.tag);
+                    alert('비활성화가 해제되었습니다.');
+                } else {
+                    // 사용자가 취소한 경우 로그인 불가능
+                    alert('비활성 회원은 로그인할 수 없습니다.');
+                    return;
                 }
-            })
-            .catch((err) => {
-                alert('로그인에 실패하였습니다. 다시 시도 해주세요');
-            });
+            }
+
+            if (response.data.blockEnd) {
+                // 정지된 계정인 경우 메시지 표시
+                alert(`정지된 계정입니다. 정지기간은 ${formatDate(response.data.blockEnd)} 입니다.`);
+                return;
+            }
+
+            if (response.data) {
+                const receivedToken = response.headers.get('Authorization');
+                if (receivedToken) {
+                    const token = receivedToken.replace('Bearer ', '');
+                    saveToken(token);
+                }
+                dispatch(setMember(response.data));
+                navigate('/main');
+            }
+        } catch (err) {
+            alert('로그인에 실패하였습니다. 다시 시도 해주세요.');
+        }
     };
 
     const onChange = (e) => {
@@ -100,6 +130,16 @@ function Login() {
 
         setTo(updatedTo);
         setAuthNum(updatedAuthNum);
+    };
+
+    //정지기간 파싱
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+
+        return `${year}년 ${month}월 ${day}일 까지`;
     };
 
     return (
@@ -133,7 +173,7 @@ function Login() {
                         </Button>
                     </div>
                     <div>
-                    <input
+                        <input
                             className="authNum"
                             type="text"
                             placeholder="인증번호"
@@ -160,26 +200,6 @@ function Login() {
                     <p>
                         <span>
                             <Link to="/findAccount">이메일로 계정 찾기</Link>
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            <Link to="/getMyProfile">마이페이지</Link>
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            <Link to="/profile">프로필</Link>
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            <Link to="/main">메인</Link>
-                        </span>
-                    </p>
-                    <p>
-                        <span>
-                            <Link to="/test">테스트</Link>
                         </span>
                     </p>
                 </Form>

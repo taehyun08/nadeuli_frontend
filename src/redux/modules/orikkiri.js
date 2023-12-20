@@ -43,7 +43,7 @@ export const modifyOrikkiri = (formData, navigate) => {
 
 
 // 우리끼리 상세조회
-export const GetOrikkiriDetail = (orikkiriId) => {
+export const getOrikkiriDetail = (orikkiriId) => {
   return async function (dispatch, getState) {
     await get(`/orikkiriManage/getOrikkiri/${orikkiriId}`)
       .then((res) => {
@@ -60,7 +60,7 @@ export const GetOrikkiriDetail = (orikkiriId) => {
 
 
 // 동네나드리 홈 우리끼리 목록 조회
-export const GetOrikkiriList= (tag, currentPage) => {
+export const getOrikkiriList= (tag, currentPage) => {
     return async function (dispatch, getState) {
       await get(`/orikkiri/getMyOrikkiriList/${tag}/0`)
         .then((res) => {

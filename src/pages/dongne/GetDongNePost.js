@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
@@ -6,7 +6,8 @@ import TopDropdownMenu from '../../components/TopDropdownMenu';
 import TopArrowLeft from '../../components/TopArrowLeft';
 import PostInfo from "../../components/PostInfo";
 import { GetDongNePostDetail, deleteDongNePost } from '../../redux/modules/dongNePost';
-
+import Comment from "../Comment";
+import Hls from 'hls.js';
 
 function GetDongNePost() {
   const navigate = useNavigate();
@@ -14,15 +15,28 @@ function GetDongNePost() {
   const getDongNePost = useSelector((state) => state.dongNePost.dongNePost);
   const params = useParams();
   const postId = params.postId;
+  const videoRef = useRef([]);
 
   useEffect(() => {
-      dispatch(GetDongNePostDetail(postId));
+    dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
 
-  const handleBackClick = () => {
-    navigate('/dongNeHome');
-  };
-  
+  useEffect(() => {
+    if (getDongNePost.streaming) {
+      const videoElement = videoRef.current[0];
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(getDongNePost.streaming);
+        hls.attachMedia(videoElement);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          videoElement.play();
+        });
+      } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+        videoElement.src = getDongNePost.streaming;
+      }
+    }
+  }, [getDongNePost.streaming]);
+
   const handleEditClick = () => {
     navigate('/addDongNePost');
   };
@@ -31,56 +45,63 @@ function GetDongNePost() {
     deleteDongNePost();
   };
 
+  return (
+    <Wrap>
+      <Header>
+        <TopArrowLeft/>
+        <TopDropdownMenu onEditClick={handleEditClick} onDeleteClick={handleDeleteClick}/>
+      </Header>
 
-return (
-  <Wrap>
-    <Header>
-      <TopArrowLeft onBackClick={handleBackClick}/>
-      <TopDropdownMenu onEditClick={handleEditClick} onDeleteClick={handleDeleteClick}/>
-    </Header>
+      <Container>
+        <div>
+          <PostInfo
+            text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
+            writerImg={getDongNePost.writer.picture}
+            writerNickName={getDongNePost.writer.nickname}
+            writerDongNe={getDongNePost.writer.dongNe}
+            timeAgo={getDongNePost.timeAgo}
+          />
+        </div>
+        <div>
+          <Title>
+            <p>{getDongNePost.title}</p>
+          </Title>
 
-    <Container>
-      <div>
-        <PostInfo
-          text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
-          writerImg={getDongNePost.writerPicture}
-          writerNickName={getDongNePost.writerNickname}
-          writerDongNe={getDongNePost.writerDongNe}
-          timeAgo={getDongNePost.timeAgo}
-        />
-      </div>
-      <div>
-        <Title>
-          <p>{getDongNePost.title}</p>
-        </Title>
+          <File>
+            {/* HLS 스트리밍 비디오 처리 */}
+            {getDongNePost.streaming && (
+              <video ref={(el) => (videoRef.current[0] = el)} src={getDongNePost.streaming} controls autoPlay />
+            )}
 
-        <File>
-          {getDongNePost && getDongNePost.images && getDongNePost.images.map((image, index) => {
-            const extension = image.split('.').pop().toLowerCase();
-            if (extension === 'mp4') {
-              return (
-                <video key={index} src={image} controls autoPlay />
-              );
-            } else {
-              return (
-                <img key={index} src={image} alt={`Image ${index}`} />
-              );
-            }
-          })}
-        </File>
+            {/* .mp4 이미지 비디오 처리 */}
+            {getDongNePost.images && getDongNePost.images.map((image, index) => {
+              if (image.endsWith('.mp4')) {
+                return (
+                  <video key={index} ref={(el) => (videoRef.current[index] = el)} src={image} controls autoPlay />
+                );
+              } else {
+                return (
+                  <img key={index} src={image} alt={`Image ${index}`} />
+                );
+              }
+            })}
+          </File>
 
-        <Content>
-          <p>{getDongNePost.content}</p>
-        </Content>
-      </div>
-      
-      <Comment>
-      <p>댓글 위치</p>
-      </Comment>
-    </Container>
-  </Wrap>
-);
+
+          <Content>
+            <p>{getDongNePost.content}</p>
+          </Content>
+        </div>
+        
+        <Comment postId={getDongNePost.postId}>
+          <p>댓글 위치</p>
+        </Comment>
+      </Container>
+    </Wrap>
+  );
 }
+
+
 const Wrap = styled.div`
 box-sizing: border-box;
 font-size: 18px;
@@ -199,18 +220,6 @@ const Img = styled.img`
     height: 100px;
 `;
 
-const Comment = styled.div`
-padding: 25px 0px;
-display: flex;
-justify-content: space-between;
-
-select {
-  width: 100%;
-  border: none;
-  outline: none;
-  font-size: 20px;
-}
-`;
 
 
 export default GetDongNePost;

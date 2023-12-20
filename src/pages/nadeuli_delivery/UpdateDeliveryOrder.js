@@ -22,80 +22,47 @@ import { get, post } from "../../util/axios";
 import HeaderBack from "../../components/HeaderBack";
 import { useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const UpdateDeliveryOrder = () => {
   const [orderData, setOrderData] = useState({});
   const [productType, setProductType] = useState(null);
-  const [files, setFiles] = useState([]);
   const [tradingOptions, setTradingOptions] = useState([]);
   const [productDetails, setProductDetails] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
-  const member = useSelector((state) => state.member);
+  const [files, setFiles] = useState([]);
   const { nadeuliDeliveryId } = useParams();
+  const member = useSelector((state) => state.member);
   const navigate = useNavigate();
-  // const tag = "WVU3";
-  // const memberTag = useSelector((state) => state.member.tag);
-  // const addressState = useSelector((state) => state.address); // Redux 스토어에서 주소 상태 가져오기
-  // const reduxProductType = useSelector((state) => state.productType.value);
-  // const dispatch = useDispatch();
+  const location = useLocation();
 
-  // // Redux 상태 업데이트 함수
-  // const handleSelectProductType = (type) => {
-  //   dispatch(setProductType(type));
-  // };
-
-  // // 출발지 주소 설정 함수
-  // const handleSetDeparture = (newAddress) => {
-  //   dispatch(setDeparture(newAddress));
-  // };
-
-  // // 도착지 주소 설정 함수
-  // const handleSetArrival = (newAddress) => {
-  //   dispatch(setArrival(newAddress));
-  // };
-
-  // // 주소 상태 업데이트
-  // useEffect(() => {
-  //   setOrderData((prevData) => ({
-  //     ...prevData,
-  //     departure: addressState.departure,
-  //     arrival: addressState.arrival,
-  //   }));
-  // }, [addressState.departure, addressState.arrival]);
+  // 출발지 설정 함수
+  const handleSetLocation = () => {
+    // orderData를 상태로 전달하며 목적지 설정 페이지로 이동
+    navigate("/searchLocation", { state: { orderData: orderData } });
+  };
 
   // 주문 정보 불러오기
   useEffect(() => {
-    if (nadeuliDeliveryId) {
-      get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
+    if (location.state && location.state.nadeuliDeliveryDTO) {
+      const data = location.state.nadeuliDeliveryDTO;
+      setOrderData(data);
+      const determinedProductType = data.productNum ? "new" : "used";
+      setProductType(determinedProductType);
+    } else if (nadeuliDeliveryId) {
+      // URL 파라미터를 통해 데이터를 가져오는 로직
+      get(`/nadeuli/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
         .then((response) => {
           console.log("주문 정보 호출 완료!", response);
-          // productType 설정: productNum 필드가 있으면 'new', 없으면 'used'
           const determinedProductType = response.productNum ? "new" : "used";
           setProductType(determinedProductType);
-
-          setOrderData({
-            // 필요한 정보를 추출하여 상태에 설정
-            nadeuliDeliveryId: response.nadeuliDeliveryId,
-            title: response.title,
-            content: response.content,
-            productName: response.productName,
-            productPrice: response.productPrice,
-            productNum: response.productNum || "",
-            deliveryFee: response.deliveryFee,
-            deposit: response.deposit,
-            departure: response.departure,
-            arrival: response.arrival,
-            buyerTag: response.buyer.tag,
-            buyerNickname: response.buyer.nickname,
-            // 나머지 필드들도 이와 같은 방식으로 설정
-          });
+          setOrderData(response);
         })
         .catch((error) => {
           console.error("주문 정보 불러오기 실패:", error);
         });
     }
-  }, [nadeuliDeliveryId]);
+  }, [nadeuliDeliveryId, location.state]);
 
   const handleChange = (e) => {
     setOrderData((prev) => ({
@@ -128,6 +95,18 @@ const UpdateDeliveryOrder = () => {
       })
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
+
+  // useEffect(() => {
+  //   if (selectedFiles && selectedFiles.length > 0) {
+  //     const newPreviewImages = selectedFiles.map((file) =>
+  //       URL.createObjectURL(file)
+  //     );
+  //     setPreviewImage(newPreviewImages);
+  //   } else {
+  //     // selectedFiles가 비어있는 경우, 미리보기 이미지 상태를 초기화
+  //     setPreviewImage([]);
+  //   }
+  // }, [selectedFiles]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -163,37 +142,24 @@ const UpdateDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeulidelivery/updateDeliveryOrder", formData)
+    postMultipart("/nadeuli/nadeulidelivery/updateDeliveryOrder", formData)
       .then((response) => {
         console.log("주문 수정 완료!", response);
-        alert("주문 수정 완료!!");
+        alert(" 완료!!");
         navigate("/nadeuliDeliveryHome");
       })
-      .catch((error) => console.log("주문 수정 실패", error));
+      .catch((error) => console.log("주문 등록 실패", error));
   };
-
-  // useEffect(() => {
-  //   if (productType === 'used') {
-  //     // memberDTO의 tag를 사용하여 거래 옵션 가져오기
-  //     axios.post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${memberDTO.tag}`, { currentPage: 0 })
-  //         .then(response => {
-  //           setTradingOptions(response.data.map(item => ({
-  //             ...item,
-  //             productId: item.product.productId
-  //           })));
-  //         })
-  //         .catch(error => {
-  //           console.error("Error fetching trading options", error);
-  //         });
-  //   }
-  // }, [productType, memberDTO.tag]);
 
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
-        currentPage: 0,
-      })
+      post(
+        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
+        {
+          currentPage: 0,
+        }
+      )
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
@@ -208,7 +174,7 @@ const UpdateDeliveryOrder = () => {
     }
   }, [productType, member.tag]);
 
-  const maxLength = 10; // 최대 표시 길이
+  const maxLength = 15; // 최대 표시 길이
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -325,50 +291,7 @@ const UpdateDeliveryOrder = () => {
                   </StyledSelect>
                 </FormRow>
               )}
-              {productType === "used" && productDetails ? (
-                <>
-                  <SliderWrapper>
-                    {previewImage && previewImage.length > 0 ? (
-                      <ImageSlider images={previewImage} />
-                    ) : productDetails && productDetails.images ? (
-                      <ImageSlider images={productDetails.images} />
-                    ) : null}
-                  </SliderWrapper>
-                  <FormRow>
-                    <HiddenInput
-                      type="file"
-                      id="images"
-                      name="images"
-                      multiple
-                      onChange={handleFileChange}
-                    />
-                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
-                  </FormRow>
-                </>
-              ) : (
-                <>
-                  {(previewImage && previewImage.length > 0) ||
-                  (productDetails && productDetails.images) ? (
-                    <SliderWrapper>
-                      {previewImage && previewImage.length > 0 ? (
-                        <ImageSlider images={previewImage} />
-                      ) : productDetails && productDetails.images ? (
-                        <ImageSlider images={productDetails.images} />
-                      ) : null}
-                    </SliderWrapper>
-                  ) : null}
-                  <FormRow>
-                    <HiddenInput
-                      type="file"
-                      id="images"
-                      name="images"
-                      multiple
-                      onChange={handleFileChange}
-                    />
-                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
-                  </FormRow>
-                </>
-              )}
+
               <FormRow>
                 <StyledLabel htmlFor="content">내용</StyledLabel>
               </FormRow>
@@ -560,17 +483,15 @@ const UpdateDeliveryOrder = () => {
                 />
               </FormRow>
               <FormRow>
-                {/* onClick={handleSetDeparture} */}
-                <StyledButton type="button">출발지 설정</StyledButton>
-                {/* onClick={handleSetArrival} */}
-                <StyledButton type="button">도착지 설정</StyledButton>
+                <StyledButton type="button" onClick={handleSetLocation}>
+                  목적지 설정
+                </StyledButton>
               </FormRow>
               <FormRow>
                 <StyledLabel htmlFor="departure">출발지</StyledLabel>
               </FormRow>
               {/* id="departure" name="departure" */}
               <FormRow>
-                {/* {orderData.departure} */}
                 <StyledInput
                   type="text"
                   id="departure"
@@ -593,8 +514,48 @@ const UpdateDeliveryOrder = () => {
                   placeholder="도착지 주소를 입력해 주세요."
                   onChange={handleChange}
                 />
-                {/* {orderData.arrival} */}
               </FormRow>
+              {productType === "used" && productDetails ? (
+                <>
+                  <SliderWrapper>
+                    {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
+                    {previewImage && previewImage.length > 0 ? (
+                      <ImageSlider images={previewImage} />
+                    ) : productDetails && productDetails.images ? (
+                      <ImageSlider images={productDetails.images} />
+                    ) : null}
+                  </SliderWrapper>
+                  <FormRow>
+                    <HiddenInput
+                      type="file"
+                      id="images"
+                      name="images"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
+                  </FormRow>
+                </>
+              ) : (
+                <>
+                  {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
+                  {previewImage && previewImage.length > 0 ? (
+                    <SliderWrapper>
+                      <ImageSlider images={previewImage} />
+                    </SliderWrapper>
+                  ) : null}
+                  <FormRow>
+                    <HiddenInput
+                      type="file"
+                      id="images"
+                      name="images"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
+                  </FormRow>
+                </>
+              )}
               <FormRow>
                 <StyledButton type="submit">작성 완료</StyledButton>
               </FormRow>

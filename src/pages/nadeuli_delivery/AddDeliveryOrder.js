@@ -22,47 +22,51 @@ import { post } from "../../util/axios";
 import HeaderBack from "../../components/HeaderBack";
 import { useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const AddDeliveryOrder = () => {
-  // const { memberDTO } = useContext(null); // 이후 memberDTO 로 받은 값을 여기에 저장
   const [orderData, setOrderData] = useState({});
   const [productType, setProductType] = useState(null);
-  const [files, setFiles] = useState([]);
   const [tradingOptions, setTradingOptions] = useState([]);
   const [productDetails, setProductDetails] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [files, setFiles] = useState([]);
   const member = useSelector((state) => state.member);
   const navigate = useNavigate();
-  // const tag = "WVU3";
-  // const memberTag = useSelector((state) => state.member.tag);
-  // const addressState = useSelector((state) => state.address); // Redux 스토어에서 주소 상태 가져오기
-  // const reduxProductType = useSelector((state) => state.productType.value);
-  // const dispatch = useDispatch();
+  const location = useLocation();
 
-  // // Redux 상태 업데이트 함수
-  // const handleSelectProductType = (type) => {
-  //   dispatch(setProductType(type));
-  // };
+  // 출발지 설정 함수
+  const handleSetLocation = () => {
+    // orderData를 상태로 전달하며 목적지 설정 페이지로 이동
+    navigate("/searchLocation", { state: { orderData: orderData } });
+  };
 
-  // // 출발지 주소 설정 함수
-  // const handleSetDeparture = (newAddress) => {
-  //   dispatch(setDeparture(newAddress));
-  // };
+  useEffect(() => {
+    console.log("Location State:", location.state);
 
-  // // 도착지 주소 설정 함수
-  // const handleSetArrival = (newAddress) => {
-  //   dispatch(setArrival(newAddress));
-  // };
+    // 주문 정보와 목적지 정보 불러오기
+    if (location.state) {
+      const { orderData, departure, arrival } = location.state;
 
-  // // 주소 상태 업데이트
-  // useEffect(() => {
-  //   setOrderData((prevData) => ({
-  //     ...prevData,
-  //     departure: addressState.departure,
-  //     arrival: addressState.arrival,
-  //   }));
-  // }, [addressState.departure, addressState.arrival]);
+      // 상품 수량이 있는 경우 'new', 없는 경우 'used'로 productType 결정
+      const determinedProductType = orderData.productNum ? "new" : "used";
+
+      // 출발지와 도착지 정보가 존재하는 경우, orderData 상태 업데이트
+      if (departure && arrival) {
+        setOrderData({
+          ...orderData,
+          departure: departure,
+          arrival: arrival,
+        });
+      } else {
+        // 출발지와 도착지 정보가 없는 경우, 기존 orderData 상태 유지
+        setOrderData(orderData);
+      }
+
+      // productType 설정
+      setProductType(determinedProductType);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     setOrderData((prev) => ({
@@ -73,19 +77,6 @@ const AddDeliveryOrder = () => {
 
   const handleProductTypeClick = (type) => {
     setProductType(type);
-
-    if (type === "new") {
-      // "일반상품" 선택 시 구매 금액, 상품 수량, 부름비 초기화
-      setOrderData((prev) => ({
-        ...prev,
-        productPrice: "", // 구매 금액 초기화
-        productNum: "", // 상품 수량 초기화
-        deliveryFee: "", // 부름비 초기화
-      }));
-    } else if (type === "used") {
-      // "중고상품" 선택 시 productDetails 초기화
-      setProductDetails(null);
-    }
   };
 
   const handleFileChange = (e) => {
@@ -108,6 +99,18 @@ const AddDeliveryOrder = () => {
       })
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
+
+  // useEffect(() => {
+  //   if (selectedFiles && selectedFiles.length > 0) {
+  //     const newPreviewImages = selectedFiles.map((file) =>
+  //       URL.createObjectURL(file)
+  //     );
+  //     setPreviewImage(newPreviewImages);
+  //   } else {
+  //     // selectedFiles가 비어있는 경우, 미리보기 이미지 상태를 초기화
+  //     setPreviewImage([]);
+  //   }
+  // }, [selectedFiles]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -143,7 +146,7 @@ const AddDeliveryOrder = () => {
     }
 
     // axios를 사용하여 데이터 전송
-    postMultipart("/nadeulidelivery/addDeliveryOrder", formData)
+    postMultipart("/nadeuli/nadeulidelivery/addDeliveryOrder", formData)
       .then((response) => {
         console.log("배달 주문 완료!", response);
         alert("배달 주문 완료!!");
@@ -152,28 +155,15 @@ const AddDeliveryOrder = () => {
       .catch((error) => console.log("주문 등록 실패", error));
   };
 
-  // useEffect(() => {
-  //   if (productType === 'used') {
-  //     // memberDTO의 tag를 사용하여 거래 옵션 가져오기
-  //     axios.post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${memberDTO.tag}`, { currentPage: 0 })
-  //         .then(response => {
-  //           setTradingOptions(response.data.map(item => ({
-  //             ...item,
-  //             productId: item.product.productId
-  //           })));
-  //         })
-  //         .catch(error => {
-  //           console.error("Error fetching trading options", error);
-  //         });
-  //   }
-  // }, [productType, memberDTO.tag]);
-
   useEffect(() => {
     if (productType === "used") {
       // member 의 tag를 사용하여 거래 옵션 가져오기
-      post(`/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`, {
-        currentPage: 0,
-      })
+      post(
+        `/nadeuli/nadeulidelivery/getAddOrUpdateUsedDeliveryOrder/${member.tag}`,
+        {
+          currentPage: 0,
+        }
+      )
         .then((response) => {
           setTradingOptions(
             response.map((item) => ({
@@ -266,6 +256,7 @@ const AddDeliveryOrder = () => {
               type="text"
               id="title"
               name="title"
+              value={orderData.title || ""}
               placeholder="제목을 작성해 주세요."
               onChange={handleChange}
             />
@@ -304,50 +295,7 @@ const AddDeliveryOrder = () => {
                   </StyledSelect>
                 </FormRow>
               )}
-              {productType === "used" && productDetails ? (
-                <>
-                  <SliderWrapper>
-                    {previewImage && previewImage.length > 0 ? (
-                      <ImageSlider images={previewImage} />
-                    ) : productDetails && productDetails.images ? (
-                      <ImageSlider images={productDetails.images} />
-                    ) : null}
-                  </SliderWrapper>
-                  <FormRow>
-                    <HiddenInput
-                      type="file"
-                      id="images"
-                      name="images"
-                      multiple
-                      onChange={handleFileChange}
-                    />
-                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
-                  </FormRow>
-                </>
-              ) : (
-                <>
-                  {(previewImage && previewImage.length > 0) ||
-                  (productDetails && productDetails.images) ? (
-                    <SliderWrapper>
-                      {previewImage && previewImage.length > 0 ? (
-                        <ImageSlider images={previewImage} />
-                      ) : productDetails && productDetails.images ? (
-                        <ImageSlider images={productDetails.images} />
-                      ) : null}
-                    </SliderWrapper>
-                  ) : null}
-                  <FormRow>
-                    <HiddenInput
-                      type="file"
-                      id="images"
-                      name="images"
-                      multiple
-                      onChange={handleFileChange}
-                    />
-                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
-                  </FormRow>
-                </>
-              )}
+
               <FormRow>
                 <StyledLabel htmlFor="content">내용</StyledLabel>
               </FormRow>
@@ -356,6 +304,7 @@ const AddDeliveryOrder = () => {
                   type="text"
                   id="content"
                   name="content"
+                  value={orderData.content || ""}
                   placeholder="게시물 내용을 작성해 주세요."
                   rows={6}
                   onChange={handleChange}
@@ -403,6 +352,7 @@ const AddDeliveryOrder = () => {
                       type="text"
                       id="productName"
                       name="productName"
+                      value={orderData.productName || ""}
                       placeholder="상품 이름"
                       onChange={handleChange}
                     />
@@ -458,6 +408,7 @@ const AddDeliveryOrder = () => {
                       type="number"
                       id="productPrice"
                       name="productPrice"
+                      value={orderData.productPrice || ""}
                       placeholder="구매 금액"
                       onChange={handleChange}
                     />
@@ -486,6 +437,7 @@ const AddDeliveryOrder = () => {
                       type="number"
                       id="productNum"
                       name="productNum"
+                      value={orderData.productNum || ""}
                       placeholder="상품 수량"
                       onChange={handleChange}
                     />
@@ -512,6 +464,7 @@ const AddDeliveryOrder = () => {
                   type="number"
                   id="deliveryFee"
                   name="deliveryFee"
+                  value={orderData.deliveryFee || ""}
                   placeholder="부름비를 입력해 주세요."
                   onChange={handleChange}
                   style={{ marginRight: "10px" }}
@@ -534,21 +487,23 @@ const AddDeliveryOrder = () => {
                 />
               </FormRow>
               <FormRow>
-                {/* onClick={handleSetDeparture} */}
-                <StyledButton type="button">출발지 설정</StyledButton>
-                {/* onClick={handleSetArrival} */}
-                <StyledButton type="button">도착지 설정</StyledButton>
+                <StyledButton type="button" onClick={handleSetLocation}>
+                  목적지 설정
+                </StyledButton>
+                {/* <StyledButton type="button" onClick={handleSetArrival}>
+                  도착지 설정
+                </StyledButton> */}
               </FormRow>
               <FormRow>
                 <StyledLabel htmlFor="departure">출발지</StyledLabel>
               </FormRow>
               {/* id="departure" name="departure" */}
               <FormRow>
-                {/* {orderData.departure} */}
                 <StyledInput
                   type="text"
                   id="departure"
                   name="departure"
+                  value={orderData.departure || ""}
                   placeholder="출발지 주소를 입력해 주세요."
                   onChange={handleChange}
                 />
@@ -562,11 +517,52 @@ const AddDeliveryOrder = () => {
                   type="text"
                   id="arrival"
                   name="arrival"
+                  value={orderData.arrival || ""}
                   placeholder="도착지 주소를 입력해 주세요."
                   onChange={handleChange}
                 />
-                {/* {orderData.arrival} */}
               </FormRow>
+              {productType === "used" && productDetails ? (
+                <>
+                  <SliderWrapper>
+                    {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
+                    {previewImage && previewImage.length > 0 ? (
+                      <ImageSlider images={previewImage} />
+                    ) : productDetails && productDetails.images ? (
+                      <ImageSlider images={productDetails.images} />
+                    ) : null}
+                  </SliderWrapper>
+                  <FormRow>
+                    <HiddenInput
+                      type="file"
+                      id="images"
+                      name="images"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
+                  </FormRow>
+                </>
+              ) : (
+                <>
+                  {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
+                  {previewImage && previewImage.length > 0 ? (
+                    <SliderWrapper>
+                      <ImageSlider images={previewImage} />
+                    </SliderWrapper>
+                  ) : null}
+                  <FormRow>
+                    <HiddenInput
+                      type="file"
+                      id="images"
+                      name="images"
+                      multiple
+                      onChange={handleFileChange}
+                    />
+                    <UploadButton htmlFor="images">사진 업로드</UploadButton>
+                  </FormRow>
+                </>
+              )}
               <FormRow>
                 <StyledButton type="submit">작성 완료</StyledButton>
               </FormRow>

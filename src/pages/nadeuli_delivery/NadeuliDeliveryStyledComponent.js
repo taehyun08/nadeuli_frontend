@@ -48,8 +48,6 @@ export const OrderTitle = styled.span`
   display: flex;
   font-weight: bold;
   text-align: center;
-  margin-left: auto; // 왼쪽으로부터 자동 여백을 적용
-  margin-right: auto; // 오른쪽으로부터 자동 여백을 적용
 `;
 
 export const HeaderContainer = styled.div`
@@ -184,7 +182,7 @@ export const UploadButton = styled.label`
 
 export const OrderButton = styled.button`
   position: fixed; // 고정 위치
-  bottom: 80px; // 하단에서 20px 떨어진 위치
+  bottom: 100px; // 하단에서 20px 떨어진 위치
   right: 20px; // 우측에서 20px 떨어진 위치
   padding: 10px 15px; // 패딩
   background-color: #e78111; // 배경색
@@ -202,7 +200,7 @@ export const OrderButton = styled.button`
 
 export const GetMyAcceptedDeliveryHistoryListButton = styled.button`
   position: fixed; // 고정 위치
-  bottom: 130px; // 하단에서 떨어진 위치
+  bottom: 150px; // 하단에서 떨어진 위치
   right: 20px; // 우측에서 떨어진 위치
   padding: 10px 15px; // 패딩
   background-color: #e78111; // 배경색
@@ -220,7 +218,7 @@ export const GetMyAcceptedDeliveryHistoryListButton = styled.button`
 
 export const StyledButton = styled.button`
   display: flex;
-  flex-basis: 100%;
+  width: 100%;
   color: #fff;
   background-color: #e78111;
   border-color: #e78111;
@@ -260,12 +258,9 @@ export const SliderContainer = styled.div`
 
 export const ImageSliderComponent = styled.div`
   display: flex;
+  transform: ${(props) => `translateX(-${props.slideIndex * 100}%)`};
   transition: transform 0.5s ease;
-  flex-direction: row;
-  align-items: center;
-  transform: translateX(
-    ${(props) => -props.slideIndex * 300}px
-  ); // 각 이미지의 너비에 따라 조정
+  // 기타 스타일
 `;
 
 export const SliderWrapper = styled.div`

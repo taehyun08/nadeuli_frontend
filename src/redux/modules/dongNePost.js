@@ -9,23 +9,11 @@ export const dongNePost = (formData, navigate) => {
   return async function (dispatch) {
     try {
       const res = await axios.post(`${BASE_URL}/dongNe/addPost`, formData); // 헤더 제거
-
       console.log(res); 
       dispatch(addDongNePost(formData));
       navigate('/dongNeHome');
-    } catch (error) {
-      if (error.response) {
-        // 요청이 이루어졌으나 서버가 2xx 이외의 상태 코드로 응답
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // 요청이 이루어졌으나 응답을 받지 못함
-        console.log(error.request);
-      } else {
-        // 요청을 만드는 중에 문제가 발생
-        console.log('Error', error.message);
-      }
+    } catch (err) {
+      console.log(err);
     }
   };
 };
@@ -76,20 +64,34 @@ export const modifyDongNePost = (formData, navigate) => {
   };
 };
 
-// 게시물 댓글 리드
-export const GetPostCommentList= (postId) => {
+// 동네 게시물 삭제
+export const removeDongNePost = (postId, navigate) => {
   return async function (dispatch) {
-    try {
-      const res = await axiosInstance.get(`/dongNe/getCommentList/${postId}`);
-      dispatch(loadDongNePosts(res.data));
-      console.log(res.data);
-      console.log("getCommentList:" + postId)
-    } catch (error) {
-      console.log(error);
-    }
+    console.log('동네 게시물 삭제 실행 중');
+    await axios.get(`${BASE_URL}/dongNe/deletePost/${postId}`)
+      .then((res) => {
+        dispatch(deleteDongNePost(res.data));
+        navigate("/dongNeHome");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 
+// // 스트리밍 등록
+// export const dongNeStreaming = (formData, navigate) => {
+//   return async function (dispatch) {
+//     try {
+//       const res = await axios.post(`${BASE_URL}/dongNe/addStreaming`, formData); // 헤더 제거
+//       console.log(res); 
+//       dispatch(addDongNePost(formData));
+//       navigate('/dongNeHome');
+//     } catch (err) {
+//       console.log(err);
+//     }
+//   };
+// };
 
 // 리덕스슬라이스
 const dongNePostSlice = createSlice({
@@ -108,46 +110,49 @@ const dongNePostSlice = createSlice({
       state.dongNePostList = action.payload;
     },
     getLoadDongNePost: (state, action) => {
-      const {
-      postId,
-      title,
-      content,
-      video,
-      streaming,
-      orikkiriId,
-      orikkiriName,
-      orikkiriPicture,
-      postCategory,
-      gu,
-      dongNe,
-      timeAgo,
-      writer:{
-        tag,
-        picture,
-        nickname,
-        // dongNe: writerDongNe
-      },
-      images
-      } = action.payload;
-
-      state.dongNePost.postId = postId;
-      state.dongNePost.title = title;
-      state.dongNePost.content = content;
-      state.dongNePost.video = video;
-      state.dongNePost.streaming = streaming;
-      state.dongNePost.orikkiriId = orikkiriId;
-      state.dongNePost.orikkiriName = orikkiriName;
-      state.dongNePost.orikkiriPicture = orikkiriPicture;
-      state.dongNePost.postCategory = postCategory;
-      state.dongNePost.gu = gu;
-      state.dongNePost.dongNe = dongNe;
-      state.dongNePost.timeAgo = timeAgo;
-      state.dongNePost.writerTag = tag;
-      state.dongNePost.writerPicture = picture;
-      state.dongNePost.writerNickname = nickname;
-      // state.dongNePost.writerDongNe = writerDongNe;
-      state.dongNePost.images = images;
+      state.dongNePost = action.payload;
     },
+    // getLoadDongNePost: (state, action) => {
+    //   const {
+    //   postId,
+    //   title,
+    //   content,
+    //   video,
+    //   streaming,
+    //   orikkiriId,
+    //   orikkiriName,
+    //   orikkiriPicture,
+    //   postCategory,
+    //   gu,
+    //   dongNe,
+    //   timeAgo,
+    //   writer:{
+    //     tag,
+    //     picture,
+    //     nickname,
+    //     // dongNe: writerDongNe
+    //   },
+    //   images
+    //   } = action.payload;
+
+    //   state.dongNePost.postId = postId;
+    //   state.dongNePost.title = title;
+    //   state.dongNePost.content = content;
+    //   state.dongNePost.video = video;
+    //   state.dongNePost.streaming = streaming;
+    //   state.dongNePost.orikkiriId = orikkiriId;
+    //   state.dongNePost.orikkiriName = orikkiriName;
+    //   state.dongNePost.orikkiriPicture = orikkiriPicture;
+    //   state.dongNePost.postCategory = postCategory;
+    //   state.dongNePost.gu = gu;
+    //   state.dongNePost.dongNe = dongNe;
+    //   state.dongNePost.timeAgo = timeAgo;
+    //   state.dongNePost.writerTag = tag;
+    //   state.dongNePost.writerPicture = picture;
+    //   state.dongNePost.writerNickname = nickname;
+    //   // state.dongNePost.writerDongNe = writerDongNe;
+    //   state.dongNePost.images = images;
+    // },
     updateDongNePost: (state, action) => {
       state.dongNePost = action.payload;
     },

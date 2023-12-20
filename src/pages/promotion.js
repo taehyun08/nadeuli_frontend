@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDongNePostList } from '../redux/modules/dongNePost';
 import '../style/css/postInfo.css';
@@ -6,50 +6,82 @@ import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import '../style/css/promotion.css';
+import Hls from 'hls.js';
 
 function Promotion({searchQuery}) {
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
-
-  // 데이터 구조 변경에 따라 필드 수정
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
+  const videoRefs = useRef({});
 
-  // 이미지 확장자가 .mp4인 경우 필터링한 배열을 만듭니다.
-  const filteredDongNePostList = dongNePostList.filter(dongNePost => {
-    if (dongNePost.images && dongNePost.images.length > 0) {
-      // 이미지 URL에서 확장자 추출
-      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
-      
-      // 이미지 확장자가 .mp4인 경우 필터링
-      return extension === 'mp4' && dongNePost.gu === location;
-    }
-    
-    return false; // 이미지가 없는 경우도 필터링에서 제외
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const headings = document.querySelectorAll('.video-card h3');
+  
+    headings.forEach(heading => {
+      if (heading.scrollWidth > heading.offsetWidth) {
+        heading.classList.add('marquee');
+      }
+    });
   });
-
+  
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
+  useEffect(() => {
+    dongNePostList.forEach((dongNePost, index) => {
+      const videoElement = videoRefs.current[index];
+
+      if (dongNePost.streaming && videoElement) {
+        if (Hls.isSupported()) {
+          const hls = new Hls();
+          hls.loadSource(dongNePost.streaming);
+          hls.attachMedia(videoElement);
+        } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
+          videoElement.src = dongNePost.streaming;
+        }
+      }
+    });
+  }, [dongNePostList]);
+
   return (
     <div className="promotion-container">
-      {filteredDongNePostList.map((dongNePost) => (
+      {dongNePostList.map((dongNePost, index) => {
+        let videoSource = '';
 
-  <div className="promotion-scroll" key={dongNePost.postId}> {/* key prop 추가 */}
-    <div className="video-card" style={{ display: "flex" }}
-      onClick={() => {
-        navigate("/getDongNePost/" + dongNePost.postId);
-      }}>
-      <video src={dongNePost.images} controls autoPlay muted/>
-      <div className="video-overlay">
-        <h3>{dongNePost.title}</h3>
-      </div>
-    </div>
-  </div>
-))}
+        // dongNePost.streaming 값이 있으면 그것을 사용
+        if (dongNePost.streaming) {
+          videoSource = dongNePost.streaming;
+        } else if (dongNePost.images && dongNePost.images.length > 0) {
+          // dongNePost.images 중 확장자가 .mp4인 것만 필터링
+          const mp4Image = dongNePost.images.find(image => image.endsWith('.mp4'));
+          if (mp4Image) {
+            videoSource = mp4Image;
+          }
+        }
 
+        if (videoSource && dongNePost.gu === location) {
+          return (
+            <div className="promotion-scroll" key={dongNePost.postId}>
+              <div className="video-card" onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
+                <video 
+                  ref={(el) => videoRefs.current[index] = el}
+                  src={videoSource} 
+                  controls autoPlay muted 
+                />
+                <div className="video-overlay">
+                  <h3>{dongNePost.title}</h3>
+                </div>
+              </div>
+            </div>
+          );
+        }
+
+        return null;
+      })}
     </div>
   );
 }

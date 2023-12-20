@@ -19,6 +19,8 @@ import DongNeHome from "./pages/dongne/DongNeHome";
 import AddDongNePost from "./pages/dongne/AddDongNePost";
 import AddStreaming from "./pages/dongne/AddStreaming";
 import GetDongNePost from "./pages/dongne/GetDongNePost";
+import AddOrikkiri from "./pages/orikkiri/AddOrikkiri";
+import OrikkiriHome from "./pages/orikkiri/OrikkiriHome";
 import AddTradeReview from "./pages/trade/AddTradeReview";
 import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
@@ -38,7 +40,7 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
-
+// import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
 function Router() {
@@ -47,8 +49,11 @@ function Router() {
       <Routes>
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
-        <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
+        <Route path="/addStreaming" element={<AddStreaming />} />
+        <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
+        <Route path="/addOkkiri" element={<AddOrikkiri />} />
+
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
@@ -58,7 +63,10 @@ function Router() {
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
-        <Route path="/trade/addTradeReview/:productId" element={<AddTradeReview />} />
+        <Route
+          path="/trade/addTradeReview/:productId"
+          element={<AddTradeReview />}
+        />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
         <Route path="/chat/chatting/:chatRoomId/:id/:isProduct" element={<Chatting />} />
@@ -72,10 +80,7 @@ function Router() {
           path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}
         />
-        <Route
-          path="/oauth2Register"
-          element={<Oauth2Register />}
-        />
+        <Route path="/oauth2Register" element={<Oauth2Register />} />
         <Route path="/add" element={<Add />} />
         <Route path="/test" element={<Test />} />
         <Route path="/getMyProfile" element={<GetMyProfile />} />
@@ -83,6 +88,7 @@ function Router() {
         <Route path="/getMemberList" element={<GetMemberList />} />
         <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/report" element={<Report />} />
+        <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid" element={<Detail />} />
         <Route path="/profile/location" element={<ProfileLocation />} />
@@ -111,6 +117,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
+        {/* <Route path="/getShortestWay" element={<GetShortestWay />} /> */}
       </Routes>
     </BrowserRouter>
   );

@@ -12,33 +12,44 @@ function DongNePostList({searchQuery}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
+  const [selectedCategory, setSelectedCategory] = useState(1);
 
+  const handleChitChatClick = () => {
+    setSelectedCategory(1);
+  };
 
-  // 데이터 구조 변경에 따라 필드 수정
+  const handlePromotionClick = () => {
+    setSelectedCategory(2);
+  };
+
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
-  // 이미지 확장자 필터링을 적용한 배열 생성
   const filteredDongNePostList = dongNePostList.filter(dongNePost => {
-    if (dongNePost.images && dongNePost.images.length > 0) {
-      // 이미지 URL에서 확장자 추출
-      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
-      
-      // 이미지 확장자가 .mp4인 경우 필터링
-      return extension !== 'mp4' && dongNePost.gu === location;
+    if (selectedCategory !== null && dongNePost.postCategory !== selectedCategory) {
+      return false;
     }
-    
+    if (dongNePost.images && dongNePost.images.length > 0) {
+      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
+      if (extension === 'mp4') {
+        return false;
+      }
+    }
     return dongNePost.gu === location;
   });
+  
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
-
   return (
     <div>
-    <Promotion/>
-    <div className="MainListBox">
-      {filteredDongNePostList.map((dongNePost) => (
+      <Promotion/>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <FixedButton onClick={handleChitChatClick}>잡담</FixedButton>
+        <FixedButton onClick={handlePromotionClick}>홍보</FixedButton>
+      </div>
+      <div className="MainListBox">
+        {filteredDongNePostList.map((dongNePost) => (
           <div key={dongNePost.postId}>
             <CardBox className="card">
               <div
@@ -73,7 +84,6 @@ function DongNePostList({searchQuery}) {
                   >
                     {dongNePost.gu}
                   </span>
-                  
                 </TextArea>
               </div>
               <div
@@ -87,32 +97,23 @@ function DongNePostList({searchQuery}) {
               >
                 <FaRegComment size="20" />
                 {dongNePost.CommentNum}
-                3
               </div>
-              
             </CardBox>
           </div>
         ))}
-      <div>
-        <FixedButton1
-          onClick={() => {
-            navigate("/addDongNePost");
-          }}
-        >
-          + 우리끼리
-        </FixedButton1>
       </div>
-      <div>
-        <FixedButton2
-          onClick={() => {
-            navigate("/addDongNePost");
-          }}
-        >
-          + 글쓰기
-        </FixedButton2>
-      </div>
-    
-    </div>
+      {selectedCategory == 1 && (
+        <div>
+          <FixedButton1 onClick={() => navigate("/addOrikkiri")}>+ 우리끼리</FixedButton1>
+          <FixedButton2 onClick={() => navigate("/addDongNePost")}>+ 글쓰기</FixedButton2>
+        </div>
+      )}
+      {selectedCategory == 2 && (
+        <div>
+          <FixedButton2 onClick={() => navigate("/addStreaming")}>+ 스트리밍</FixedButton2>
+        </div>
+      )}
+
     </div>
   );
 }
@@ -131,10 +132,26 @@ const TextArea = styled.div`
   padding: 10px;
 `;
 
+const FixedButton = styled.div`
+  display: flex;
+  margin: 10px 0px; // 위 아래로 20px 여백 추가
+  margin-left: 30px; // 왼쪽 여백 추가
+  width: 100px;
+  height: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: ${(props) => props.theme.color.orange};
+  color: ${(props) => props.theme.color.white};
+  border-radius: 40px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 6px 0 #999;
+`;
+
 const FixedButton1 = styled.div`
   display: flex;
   position: fixed;
-  bottom: 140px;
+  bottom: 160px;
   right: 30px;
   width: 120px;
   height: 50px;
@@ -151,7 +168,7 @@ const FixedButton1 = styled.div`
 const FixedButton2 = styled.div`
   display: flex;
   position: fixed;
-  bottom: 80px;
+  bottom: 100px;
   right: 30px;
   width: 120px;
   height: 50px;
