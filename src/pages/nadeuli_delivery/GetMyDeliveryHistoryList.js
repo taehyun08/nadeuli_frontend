@@ -69,9 +69,10 @@ const GetMyDeliveryHistoryList = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>배달 내역 목록</OrderTitle>
+          <OrderTitle style={{ paddingLeft: "80px" }}>
+            배달 내역 목록
+          </OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "60px" }}></Box>
       </HeaderContainer>
       {responseDTOList.map((responseDTO, index) => (
         <CardBox

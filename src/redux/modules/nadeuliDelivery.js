@@ -12,17 +12,25 @@ const nadeuliDeliverySlice = createSlice({
   name: "nadeuliDelivery",
   //2. 초기상태를 정의함으로써 현재상태를 set
   initialState: {
+    nadeuliDeliveryList: [],
     files: [],
+    deliveryLocations: [], // departure와 arrival을 포함하는 객체들의 배열
   },
   //3. 리듀서 함수의 첫 번째 매개변수 state는 현재의 상태를 나타내며,
   //   두 번째 매개변수 action은 디스패치된 액션 객체
   reducers: {
+    setNadeuliDeliveryList: (state, action) => {
+      state.nadeuliDeliveryList = action.payload.nadeuliDeliveryList;
+    },
     setFiles: (state, action) => {
-      const files = action.payload;
-      state.files = files;
+      state.files = action.payload.files;
+    },
+    setDeliveryLocations: (state, action) => {
+      state.deliveryLocations = action.payload.deliveryLocations;
     },
   },
 });
 
-export const { setFiles } = nadeuliDeliverySlice.actions;
+export const { setFiles, setDeliveryLocations, setNadeuliDeliveryList } =
+  nadeuliDeliverySlice.actions;
 export default nadeuliDeliverySlice.reducer;

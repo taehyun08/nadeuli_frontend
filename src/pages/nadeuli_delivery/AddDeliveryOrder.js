@@ -239,9 +239,10 @@ const AddDeliveryOrder = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>배달 주문 등록</OrderTitle>
+          <OrderTitle style={{ paddingLeft: "80px" }}>
+            배달 주문 등록
+          </OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "20px" }}></Box>
       </HeaderContainer>
       <StyledContainer>
         <StyledForm onSubmit={handleSubmit}>

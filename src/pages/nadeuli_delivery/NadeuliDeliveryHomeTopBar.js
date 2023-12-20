@@ -106,6 +106,11 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
         // 성공적으로 알림이 삭제되었다면, UI를 업데이트 하거나 사용자에게 피드백 제공
         console.log(response);
         // 필요하다면 여기서 알림 목록을 업데이트하는 로직 추가
+        const updatedNotifications = notifications.filter(
+          (notification) =>
+            notification.deliveryNotificationId !== deliveryNotificationId
+        );
+        setNotifications(updatedNotifications);
       })
       .catch((error) => {
         // 에러 처리
@@ -195,7 +200,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
                     {notification.notificationContent}
                   </div>
                   <MdDelete
-                    style={{ fontSize: "30px" }}
+                    className="delete-icon"
                     onClick={(event) =>
                       handelDeleteNotification(
                         notification.deliveryNotificationId,

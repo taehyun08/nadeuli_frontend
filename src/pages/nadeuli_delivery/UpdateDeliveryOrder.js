@@ -235,7 +235,9 @@ const UpdateDeliveryOrder = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>배달 주문 수정</OrderTitle>
+          <OrderTitle style={{ paddingLeft: "80px" }}>
+            배달 주문 수정
+          </OrderTitle>
         </Box>
       </HeaderContainer>
       <StyledContainer>
