@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import ChatRoomItem from './ChatRoomItem'; // 각 채팅방을 표시하는 하위 컴포넌트
 
 const ChatRoomList = (probs) => {
@@ -20,10 +21,7 @@ const ChatRoomList = (probs) => {
                                         className="p-2 border-bottom"
                                         style={{ backgroundColor: '#eee' }}
                                     >
-                                        <a
-                                            href="#!"
-                                            className="d-flex justify-content-between"
-                                        >
+                                         <Link to={`/chat/chatting/${chatRoom._id}${chatRoom.orikkiriId !== 0 ? `/${chatRoom.orikkiriId}/0` : `/${chatRoom.productId}/1`}`} className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
                                                 <img
                                                     src={chatRoom.picture}
@@ -33,16 +31,16 @@ const ChatRoomList = (probs) => {
                                                 />
                                                 <div className="pt-1">
                                                     <p className="fw-bold mb-0">{chatRoom.roomName}</p>
-                                                    <p className="small text-muted">{chatRoom.message}</p>
+                                                    <p className="small text-muted">{chatRoom.lastMessage.message}</p>
                                                 </div>
                                             </div>
                                             <div className="pt-1">
-                                                <p className="small text-muted mb-1">{chatRoom.timestamp}</p>
+                                                <p className="small text-muted mb-1">{chatRoom.lastMessage.createdAt}</p>
                                                 {chatRoom.unreadCount > 0 && (
                                                     <span className="badge bg-danger float-end">{chatRoom.unreadCount}</span>
                                                 )}
                                             </div>
-                                        </a>
+                                        </Link>
                                     </li>
                                 ))}
                             </ul>

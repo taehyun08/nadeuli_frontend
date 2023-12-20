@@ -40,7 +40,7 @@ const BottomBar = () => {
         <p style={{ color: selectedMenu === 'nadeuliDeliveryHome' ? '#e78111' : 'black', fontSize: '12px' }}>나드리부름</p>
       </MenuBox>
       <MenuBox
-        onClick={() => handleMenuClick('chat')}
+        onClick={() => handleMenuClick('chat/getChatRoomList')}
         selected={selectedMenu === 'chat'}
       >
         <IoChatbubblesSharp size="30px" color={selectedMenu === 'chat' ? '#e78111' : 'black'} />
