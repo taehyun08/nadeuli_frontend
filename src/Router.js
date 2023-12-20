@@ -12,7 +12,6 @@ import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Modify from "./pages/Modify";
 import ProfileLocation from "./pages/ProfileLocation";
-import Chatting from "./pages/Chatting";
 import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
 import OAuth2RedirectHandler from "./pages/member/OAuth2RedirectHandler";
@@ -26,6 +25,7 @@ import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
 import GetChatRoomList from "./pages/chat/GetChatRoomList";
+import Chatting from "./pages/chat/Chatting";
 import AddDeliveryOrder from "./pages/nadeuli_delivery/AddDeliveryOrder";
 import UpdateDeliveryOrder from "./pages/nadeuli_delivery/UpdateDeliveryOrder";
 import GetDeliveryOrder from "./pages/nadeuli_delivery/GetDeliveryOrder";
@@ -61,6 +61,7 @@ function Router() {
         <Route path="/trade/addTradeReview/:productId" element={<AddTradeReview />} />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
+        <Route path="/chat/chatting/:chatRoomId/:id/:isProduct" element={<Chatting />} />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
@@ -84,7 +85,6 @@ function Router() {
         <Route path="/report" element={<Report />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid" element={<Detail />} />
-        <Route path="/chatting/:postid/:trade" element={<Chatting />} />
         <Route path="/profile/location" element={<ProfileLocation />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/main" element={<Main />} />
