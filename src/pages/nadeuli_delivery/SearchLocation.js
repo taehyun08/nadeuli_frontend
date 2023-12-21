@@ -1,11 +1,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
+  Box,
+  HeaderContainer,
+  OrderTitle,
   StyledButton,
   StyledContainer,
 } from "./NadeuliDeliveryStyledComponent";
 import { useDaumPostcodePopup } from "react-daum-postcode";
 import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
+import HeaderBack from "../../components/HeaderBack";
 
 const SearchLocation = () => {
   const navigate = useNavigate();
@@ -208,42 +212,49 @@ const SearchLocation = () => {
   };
 
   return (
-    // 지도 크기 설정
-    <StyledContainer style={{ justifyContent: "center" }}>
-      <div
-        id="map"
-        ref={mapContainer}
-        style={{ width: "100%", height: "400px" }}
-      ></div>
-      <br />
-      <p style={{ fontWeight: "bold" }}>선택된 주소 : {selectedAddress}</p>
-      <p style={{ fontWeight: "bold" }}>출발지 : {departureAddress}</p>
-      <p style={{ fontWeight: "bold" }}>도착지 : {arrivalAddress}</p>
-      <div style={{ textAlign: "center", justifyContent: "center" }}>
-        <StyledButton onClick={handleSetDeparture} style={{ width: "90%" }}>
-          출발지 설정하기
-        </StyledButton>
+    <>
+      <HeaderContainer>
+        <HeaderBack />
+        <Box style={{ paddingLeft: "80px" }}>
+          <OrderTitle>출발/도착지 설정</OrderTitle>
+        </Box>
+      </HeaderContainer>
+      <StyledContainer style={{ justifyContent: "center" }}>
+        <div
+          id="map"
+          ref={mapContainer}
+          style={{ width: "100%", height: "400px" }}
+        ></div>
+        <br />
+        <p style={{ fontWeight: "bold" }}>선택된 주소 : {selectedAddress}</p>
+        <p style={{ fontWeight: "bold" }}>출발지 : {departureAddress}</p>
+        <p style={{ fontWeight: "bold" }}>도착지 : {arrivalAddress}</p>
+        <div style={{ textAlign: "center", justifyContent: "center" }}>
+          <StyledButton onClick={handleSetDeparture} style={{ width: "90%" }}>
+            출발지 설정하기
+          </StyledButton>
 
-        <StyledButton onClick={handleSetArrival} style={{ width: "90%" }}>
-          도착지 설정하기
-        </StyledButton>
+          <StyledButton onClick={handleSetArrival} style={{ width: "90%" }}>
+            도착지 설정하기
+          </StyledButton>
 
-        <StyledButton
-          type="button"
-          onClick={handleClick}
-          style={{ width: "90%" }}
-        >
-          주소 검색
-        </StyledButton>
+          <StyledButton
+            type="button"
+            onClick={handleClick}
+            style={{ width: "90%" }}
+          >
+            주소 검색
+          </StyledButton>
 
-        <StyledButton
-          onClick={handleConfirmSettings}
-          style={{ width: "90%", fontWeight: "bold" }}
-        >
-          설정 확인
-        </StyledButton>
-      </div>
-    </StyledContainer>
+          <StyledButton
+            onClick={handleConfirmSettings}
+            style={{ width: "90%", fontWeight: "bold" }}
+          >
+            설정 확인
+          </StyledButton>
+        </div>
+      </StyledContainer>
+    </>
   );
 };
 
