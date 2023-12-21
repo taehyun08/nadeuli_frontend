@@ -83,6 +83,11 @@ export const updateMember = async (memberDTO) => {
     return await instance.post(`/member/updateMember`, memberDTO);
 };
 
+// 사용자 정보를 업데이트하는 함수
+export const updateTo = async (memberDTO) => {
+    return await instance.post(`/member/updateTo`, memberDTO);
+};
+
 // 회원의 이메일을 체크하는 함수
 export const findAccount = async (memberDTO) => {
     return await instance.post('/findAccount', memberDTO);

@@ -41,6 +41,7 @@ import {
     logout,
     updateDongNe,
     updateMember,
+    updateTo,
 } from '../../util/memberAxios';
 import { memberLogout, setMember } from '../../redux/modules/member';
 import { removeToken } from '../../shared/localStorage';
@@ -128,7 +129,7 @@ export default function GetMyProfile() {
     const rawPhoneNumber = member.cellphone;
 
     // 전화번호 형식으로 변환
-    const formattedPhoneNumber = `${rawPhoneNumber.slice(0, 3)}-${rawPhoneNumber.slice(3, 7)}-${rawPhoneNumber.slice(7)}`;
+    const formattedPhoneNumber = `${rawPhoneNumber?.slice(0, 3)}-${rawPhoneNumber?.slice(3, 7)}-${rawPhoneNumber?.slice(7)}`;
 
     //위치정보 얻는 함수
     const fetchLocation = async () => {
@@ -315,7 +316,7 @@ export default function GetMyProfile() {
             };
 
             // 실제로 회원 정보를 업데이트하는 API 호출
-            const updateResponse = await updateMember(memberDTO);
+            const updateResponse = await updateTo(memberDTO);
 
             // 회원 정보 업데이트 성공 시의 처리
             dispatch(setMember(updateResponse.data));
@@ -341,8 +342,8 @@ export default function GetMyProfile() {
             };
 
             // 실제로 회원 정보를 업데이트하는 API 호출
-            const updateResponse = await updateMember(memberDTO);
-
+            const updateResponse = await updateTo(memberDTO);
+            console.log(updateResponse)
             // 회원 정보 업데이트 성공 시의 처리
             dispatch(setMember(updateResponse.data));
             alert('이메일이 성공적으로 수정되었습니다.');
@@ -422,19 +423,33 @@ export default function GetMyProfile() {
         }
     };
 
-    const handleNadeuliPayWithdraw = () => {navigate('/nadeuliPay/nadeuliPayWithdraw')};
+    const handleNadeuliPayWithdraw = () => {
+        navigate('/nadeuliPay/nadeuliPayWithdraw');
+    };
 
-    const handleNadeuliPayCharge = () => {navigate('/nadeuliPay/nadeuliPayCharge')};
+    const handleNadeuliPayCharge = () => {
+        navigate('/nadeuliPay/nadeuliPayCharge');
+    };
 
-    const handleTradeHistory = () => {navigate('/product/getMyProductList')};
+    const handleTradeHistory = () => {
+        navigate('/product/getMyProductList');
+    };
 
-    const handlePayHistory = () => {navigate('/nadeuliPay/getNadeuliPayList')};
+    const handlePayHistory = () => {
+        navigate('/nadeuliPay/getNadeuliPayList');
+    };
 
-    const handleOrderHistoryList = () => {navigate('/getMyOrderHistoryList')};
+    const handleOrderHistoryList = () => {
+        navigate('/getMyOrderHistoryList');
+    };
 
-    const handleDeliveryHistoryList = () => {navigate('/getMyDeliveryHistoryList')};
+    const handleDeliveryHistoryList = () => {
+        navigate('/getMyDeliveryHistoryList');
+    };
 
-    const handleTradeReview = () => {navigate('/trade/getTradeReviewList')};
+    const handleTradeReview = () => {
+        navigate('/trade/getTradeReviewList');
+    };
 
     const handleMemberActivateClick = async () => {
         const tag = member.tag;
@@ -463,7 +478,8 @@ export default function GetMyProfile() {
         { label: '내 상품', onClick: handleTradeHistory },
         { label: '거래 후기', onClick: handleTradeReview },
         { label: '거래 내역', onClick: handlePayHistory },
-        { label: '회원 보기', onClick: handleGetMemberList },
+        // '회원 보기' 메뉴는 member.role이 'ADMIN'인 경우에만 추가
+        ...(member.role === 'ADMIN' ? [{ label: '회원 보기', onClick: handleGetMemberList }] : []),
         { label: '주문 보기', onClick: handleOrderHistoryList },
         { label: '배달 내역', onClick: handleDeliveryHistoryList },
         { label: '비활성화', onClick: handleMemberActivateClick },
@@ -753,7 +769,7 @@ export default function GetMyProfile() {
                                             <div
                                                 style={{ display: 'flex' }}
                                                 onClick={() => {
-                                                    navigate('/detail/' + list.productId + '/' + list.tradeState);
+                                                    navigate('/detail/' + list?.product?.productId);
                                                 }}
                                             >
                                                 <Img src={list?.product?.images[0]} />

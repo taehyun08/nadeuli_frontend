@@ -221,7 +221,7 @@ const AddOrikkiri = () => {
                                     value={orikkiriName} // 현재 상태값 적용
                                     onChange={handleOrikkiriNameChange} // onChange 이벤트 핸들러 적용
                                     type="text"
-                                    maxLength={12}
+                                    maxLength={20}
                                     minLength={6}
                                     style={{ position: 'relative' }}
                                     className="mb-5"
@@ -232,8 +232,6 @@ const AddOrikkiri = () => {
                                     type="text"
                                     value={orikkiriIntroduction} // 현재 상태값 적용
                                     onChange={handleOrikkiriIntroductionChange} // onChange 이벤트 핸들러 적용
-                                    maxLength={12}
-                                    minLength={6}
                                     style={{ position: 'relative' }}
                                     className="mb-4"
                                 ></MDBTextArea>
