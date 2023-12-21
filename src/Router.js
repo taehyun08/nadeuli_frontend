@@ -62,7 +62,7 @@ function Router() {
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
         <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
-        <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
+        <Route path="/addOrikkiriSignUp/:orikkiriId" element={<AddOrikkiriSignUp />} />
         <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
         <Route path="/addOrikkiriPost/:orikkiriId" element={<AddOrikkiriPost />} />
         <Route path="/addOrikkiriAlbum/:orikkiriId" element={<AddOrikkiriAlbum />} />
