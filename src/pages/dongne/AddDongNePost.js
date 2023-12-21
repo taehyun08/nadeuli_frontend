@@ -1,13 +1,10 @@
-import React, { useState, useRef } from "react";
+
+import React, { useState, useRef, useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { AiFillPicture } from "react-icons/ai";
-import { MdOutlineVideoLibrary } from "react-icons/md";
 import { dongNePost } from "../../redux/modules/dongNePost";
-import { getMember } from "../../redux/modules/member";
-import Modal from '../../components/Modal';
 
 function AddDongNePost() {
   const navigate = useNavigate();
@@ -15,156 +12,127 @@ function AddDongNePost() {
   const title_ref = useRef();
   const content_ref = useRef();
   const [category, setCategory] = useState();
-  const imageInput = useRef();
-  const videoInput = useRef();
-  const [imageSrc, setImageSrc] = useState(null);
-  const [videoSrc, setVideoSrc] = useState(null);
+  const fileInput = useRef(); // 하나의 file input으로 모든 파일 처리
+  const [previewImages, setPreviewImages] = useState([]);
   const getMember = useSelector((state) => state.member);
   const location = useSelector((state) => state.member.gu);
-  
+  const member = useSelector((state) => state.member);
 
-  // const location = useSelector((state) => state.user.userLocation);
-
+  useEffect(() => {
+    console.log(member);
+  }, [member]);
 
   const changeCategory = (e) => {
     setCategory(e.target.value);
   };
 
-  // 파일 업로드
+  // 파일 업로드 및 미리보기 생성
   const selectFile = (e) => {
-    const file = e.target.files[0];
-    const fileType = file.type.split("/")[0];
-
-    if (fileType === "image") {
-      if (e.target.files.length <= 10) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setImageSrc(reader.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert("사진은 최대 10장까지 업로드 가능합니다.");
-        e.target.value = null;
-      }
-    } else if (fileType === "video") {
-      if (e.target.files.length === 1) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setVideoSrc(reader.result);
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert("영상은 1개까지 업로드 가능합니다.");
-        e.target.value = null;
-      }
+    const files = e.target.files;
+    if (!files || files.length === 0) {
+      console.error('No files selected.');
+      return;
     }
-  }
+
+    // 파일 미리보기 생성
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreviewImages(prev => [...prev, reader.result]);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
   const addDongNePost = () => {
+    const writer = {tag: member.tag};
+    const title = title_ref.current.value;
+    const content = content_ref.current.value;
+    const postCategory = (category === "잡담" ? 1 : 2);
+
+    if (!title || !content) {
+      alert('모든 칸을 입력해주세요.');
+      return;
+    }
+
     if (!category || category === "none") {
       alert("게시물 카테고리를 선택해주세요!");
       return;
     }
-  
     const formData = new FormData();
-    const postDTO = {
-      title: title_ref.current.value,
-      content: content_ref.current.value,
-      postCategory: category === "잡담" ? "1" : "2",
+    const postDTOData = {
+      title,
+      content,
+      postCategory,
       gu: location,
       dongNe: getMember.dongNe,
-      writer: { tag: getMember.tag }
+      writer: writer
     };
-  
-    // formData.append('postDTO', new Blob([JSON.stringify(postDTO)], { type: "application/json" }));
-    formData.append('postDTO', postDTO);
-  
-    // 이미지 파일 추가
-    if (imageInput.current && imageInput.current.files[0]) {
-      for (const file of imageInput.current.files) {
-        formData.append('images', file);
-      }
+
+    formData.append('postDTO', new Blob([JSON.stringify(postDTOData)], { type: "application/json" }));
+
+    // 파일 추가
+    const files = fileInput.current.files;
+    for (let i = 0; i < files.length; i++) {
+      formData.append('images', files[i]);
     }
+    dispatch(dongNePost(formData, navigate));
+  };
 
-    // 비디오 파일 추가 (비디오 파일 필드가 별도로 존재한다면)
-    if (videoInput.current && videoInput.current.files[0]) {
-      formData.append('images', videoInput.current.files[0]);
-    }
+  return (
+    <Wrap>
+      <Header>
+        <IoIosClose
+          size="30"
+          onClick={() => navigate("/dongNeHome")}
+        />
+        <h4>동네나드리 글쓰기</h4>
+        <h5 onClick={addDongNePost}>완료</h5>
+      </Header>
 
-  dispatch(dongNePost(formData, navigate));
-};
+      <Container>
+        <div>
+          <Title>
+            <input placeholder="제목을 입력하세요" ref={title_ref} />
+          </Title>
 
+          <Categorie>
+            <select name="category" id="category" onChange={changeCategory}>
+              <option value="none">게시물 카테고리를 선택해주세요.</option>
+              <option value="잡담">잡담</option>
+              <option value="홍보">홍보</option>
+            </select>
+          </Categorie>
+        </div>
 
-return (
-  <Wrap>
-    <Header>
-      <IoIosClose
-        size="30"
-        onClick={() => {
-          navigate("/dongNeHome");
-        }}
-      />
-      <h4>동네나드리 글쓰기</h4>
-      <h5 onClick={addDongNePost}>완료</h5>
-    </Header>
+        <textarea
+          cols="40"
+          rows="5"
+          placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.`}
+          ref={content_ref}
+        />
 
-    <Container>
-      <div>
-        <Title>
-          <input placeholder="제목을 입력하세요" ref={title_ref} />
-        </Title>
-
-        <Categorie>
-          {/* <div>카테고리 선택</div> */}
-          <select name="category" id="category" onChange={changeCategory}>
-            <option value="none">게시물 카테고리를 선택해주세요.</option>
-            <option value="잡담">잡담</option>
-            <option value="홍보">홍보</option>
-          </select>
-        </Categorie>
-      </div>
-
-      <textarea
-        cols="40"
-        rows="5"
-        placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.\n
-        1. 사진은 최대 10장까지 가능합니다.\n
-        2. 영상은 1개까지 가능합니다.`}
-        ref={content_ref}
-      />
-
-       {/* 사진 업로드 */}
+        {/* 파일 업로드 */}
         <File>
-          <label htmlFor="image-file">
-            <AiFillPicture className="camera" />
+          <label htmlFor="file-input">
+            파일 선택
           </label>
-          <input
-            type="file"
-            id="image-file"
-            ref={imageInput}
-            onChange={selectFile}
-            accept="image/*"
-            multiple
-          />
-          {imageSrc && <img src={imageSrc} alt="preview-img" />}
-
-        {/* 비디오 업로드 */}
-          <label htmlFor="video-file">
-            <MdOutlineVideoLibrary className="video" />
-          </label>
-          <input
-            type="file"
-            id="video-file"
-            ref={videoInput}
-            onChange={selectFile}
-            accept="video/*"
-          />
-          {videoSrc && <video controls src={videoSrc} />}
-      </File>
-    </Container>
-  </Wrap>
-);
+          <input type="file" id="file-input" ref={fileInput} onChange={selectFile} multiple />
+          {previewImages.map((preview, index) => (
+            <img
+              key={index}
+              src={preview}
+              alt={`Preview ${index + 1}`}
+              style={{ maxWidth: '100px', maxHeight: '100px', margin: '5px' }}
+            />
+          ))}
+        </File>
+      </Container>
+    </Wrap>
+  );
 }
+
+
 const Wrap = styled.div`
 box-sizing: border-box;
 font-size: 18px;

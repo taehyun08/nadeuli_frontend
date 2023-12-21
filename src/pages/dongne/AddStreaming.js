@@ -4,244 +4,237 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import Modal from '../../components/Modal';
-import { CreateliveChannel, GetChannelDetail } from '../../redux/modules/streaming';
-// import { getMember } from '../../redux/modules/member';
+import { createliveChannel, getChannelDetail, getChannelUrl } from '../../redux/modules/streaming';
 import { getOrikkiriList } from '../../redux/modules/orikkiri';
-// import { }
 import { dongNePost } from "../../redux/modules/dongNePost";
-import { MdOutlineIosShare } from "react-icons/md";
-import { FiMoreVertical } from "react-icons/fi";
 
 function AddStreaming() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
-  const content_ref = useRef();
-  const location = useSelector((state) => state.member.gu);
-  const member = useSelector((state) => state.member);
-  const tag = useSelector((state) => state.member.tag);
-  const orikkiriList = useSelector((state) => state.orikkiri.orikkiriList);
-  const streaming = useSelector((state) => state.streaming.streamingList);
+  const [step, setStep] = useState(1);
   const [channelId, setChannelId] = useState('');
   const [streamKey, setStreamKey] = useState('');
+  const [streamingUrl, setStreamingUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [streamKeyModalOpen, setStreamKeyModalOpen] = useState(false); // 추가
-  
-  const openModal = () => {
-    setModalOpen(true);
-  };
-  const closeModal = () => {
-    setModalOpen(false);
-  };
+  const location = useSelector((state) => state.member.gu);
+  const member = useSelector((state) => state.member);
+  const [channelTitle, setChannelTitle] = useState('');
+
+  const streaming = useSelector((state) => state.streaming.channel);
+  const [justAdded, setJustAdded] = useState(false); // 추가한 채널 추적을 위한 새로운 상태 변수
 
   useEffect(() => {
-    dispatch(getOrikkiriList(tag));
-  }, [tag, dispatch]);
-  
-  const handleAddStreamingClick = () => {
-    if (!title_ref.current.value) {
-      alert('제목을 입력해주세요.');
-      return;
-    }
-    openModal();
-  };
-
-  const confirmAddStreaming = async () => {
-    setIsSubmitting(true);
-    try {
-      await addStreaming();
-      setModalOpen(false);
+    if (streaming && streaming.channelId) {
       setChannelId(streaming.channelId);
       setStreamKey(streaming.streamKey);
-      setStreamKeyModalOpen(true); // 추가: streamKey 모달 열기
-    } catch (error) {
-      console.error('Streaming 처리 중 에러 발생', error);
+      setStreamingUrl(streaming.url);
     }
-    setIsSubmitting(false);
-  };
+  
+    // addStreaming 함수가 실행된 직후에는 경고 메시지를 표시하지 않습니다.
+    if (streaming && streaming.channelStatus !== 'PUBLISHING' && step === 2 && !justAdded) {
+      alert("스트림키 값을 입력 후 방송을 시작해 주세요.");
+    }
+  
+    if (streaming && streaming.channelStatus === 'PUBLISHING' && step === 2) {
+      setStep(3);
+    }
 
-  const addStreaming = async () => {
-    const streamingDTO = {
-      channelName: title_ref.current.value,
-      // channelName: null,
-    };
-    await dispatch(CreateliveChannel(streamingDTO, navigate));
-  };
+  
+    // 상태 초기화
+    if (justAdded) {
+      setJustAdded(false);
+    }
+  }, [streaming, step, justAdded]);
+  
 
-  const getStreaming = async () => {
-    const streamingDTO = {
-      channelId: streaming.channelId,
-    };
-    await dispatch(GetChannelDetail(streamingDTO, navigate));
+  const handleNextStep = () => {
+    if (step === 1) {
+      addStreaming();
+    } else {
+      // 다음 단계로 진행할 추가 로직
+    }
   };
 
   const addDongNePost = () => {
-    const postDTO = {
-      title: title_ref.current.value,
-      postCategory: "3",
+    console.log(title_ref.current);
+    const writer = {tag: member.tag};
+    const title = channelTitle;
+    const postCategory = 3;
+
+    const formData = new FormData();
+    const postDTOData = {
+      title: title,
+      postCategory: postCategory,
       gu: location,
       dongNe: member.dongNe,
-      writer: { tag: member.tag }
+      writer: writer,
+      streaming : streamingUrl,
+      video : streamingUrl
     };
-    dispatch(dongNePost(postDTO, navigate));
+
+    formData.append('postDTO', new Blob([JSON.stringify(postDTOData)], { type: "application/json" }));
+
+    // 파일 추가
+    const files = streamingUrl;
+    for (let i = 0; i < files.length; i++) {
+      formData.append('images', files[i]);
+    }
+    dispatch(dongNePost(formData, navigate));
   };
 
+
+  const copyToClipboard = () => {
+    if (streaming?.streamKey) {
+      navigator.clipboard.writeText(streamKey)
+        .then(() => {
+          alert("스트림 키가 클립보드에 복사되었습니다.");
+        })
+        .catch(err => {
+          console.error("복사 실패:", err);
+        });
+    }
+  };
+
+  const addStreaming = async () => {
+    setIsSubmitting(true);
+    try {
+      const channelName = channelTitle.replace(/\s+/g, '_');
+      const formData = new FormData();
+      formData.append('channelName', channelName);
+      await dispatch(createliveChannel(formData, navigate));
+      setIsSubmitting(false);
+      setStep(2);
+      setJustAdded(true); // 채널 추가 후 상태 업데이트
+    } catch (error) {
+      console.error('Streaming 처리 중 에러 발생', error);
+      setIsSubmitting(false);
+    }
+  };
+
+  const checkStreaming = async () => {
+    setIsSubmitting(true);
+    try {
+      await dispatch(getChannelDetail(channelId));
+      // 상태 업데이트는 useEffect에서 처리합니다.
+    } catch (error) {
+      console.error('Streaming 처리 중 에러 발생', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderCreateChannel = () => (
+    <div>
+      <Title>
+      <input
+        placeholder="채널 제목을 입력해주세요."
+        value={channelTitle}
+        onChange={(e) => setChannelTitle(e.target.value)}
+      />
+      </Title>
+      <Button onClick={handleNextStep}>
+        {isSubmitting ? '처리 중...' : '다음'}
+      </Button>
+    </div>
+  );
+
+  const renderChannelDetails = () => (
+    <div>
+      <p>채널 ID: {streaming?.channelId}</p>
+      <p>스트림 키: {streaming?.streamKey}
+        <CopyButton onClick={copyToClipboard}>복사</CopyButton>
+      </p>
+      <Button onClick={checkStreaming}>다음</Button>
+    </div>
+  );
+
+  const renderAddStreamingPost = () => (
+    <div>
+      <p>채널 ID: {channelId}</p>
+      <p>스트림 키: {streamKey}</p>
+      <p>URL: {streamingUrl}</p>
+      <Button onClick={addDongNePost}>완료</Button>
+    </div>
+  );
 
   return (
     <Wrap>
       <Header>
         <IoIosClose size="30" onClick={() => navigate("/dongNeHome")} />
-        <h4>스트리밍 홍보</h4>
-        <h5 onClick={!isSubmitting ? addDongNePost : null}>
-          {isSubmitting ? '처리 중...' : '완료'}
-        </h5>
+        <h4>스트리밍 생성</h4>
       </Header>
 
       <Container>
-        <Title>
-          <input placeholder="제목을 입력해주세요." ref={title_ref} />
-        </Title>
-
-        {orikkiriList && orikkiriList.map((list, index) => (
-          <div key={index}>
-            <div onClick={() => {
-              // ... (리스트 클릭 시 로직)
-            }}>
-              <div className="image-container">
-                <img className="circle-image" src={list?.orikkiri.orikkiriPicture } alt="orikkiri Image" />
-                <div className="orikkiri-text">{list.orikkiri.orikkiriName}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-
-        <button onClick={handleAddStreamingClick}>스트리밍 시작</button>
-
-        <Modal open={modalOpen} close={closeModal}>
-          <p>스트리밍을 시작하시겠습니까?</p>
-          <button onClick={confirmAddStreaming}>확인</button>
-          <button onClick={closeModal}>취소</button>
-        </Modal>
-
-        {streaming.streamKey && (
-          <div style={{border: '1px solid #ccc', borderRadius: '5px', padding: '10px'}}>
-            Stream Key: {streaming.streamKey}
-          </div>
-        )}
+        {step === 1 && renderCreateChannel()}
+        {step === 2 && renderChannelDetails()}
+        {step === 3 && renderAddStreamingPost()}
       </Container>
-
-      {/* Stream Key 모달 */}
-      {streamKeyModalOpen && (
-        <Modal open={streamKeyModalOpen} close={() => setStreamKeyModalOpen(false)}>
-          <p>Stream Key: {streamKey}</p>
-          <button onClick={() => setStreamKeyModalOpen(false)}>확인</button>
-          <button onClick={() => setStreamKeyModalOpen(false)}>취소</button>
-        </Modal>
-      )}
     </Wrap>
   );
 }
 
-
+// Styled components
 const Wrap = styled.div`
-box-sizing: border-box;
-font-size: 18px;
-max-width: 100%; /* 최대 너비 설정 */
-
-input {
-  font-size: 13px;
-}
-
-textarea {
-  margin-top: 45px;
-  border: none;
-  outline: none;
-  resize: none;
-  font-size: 20px;
-  height: 400px; /* 높이 조절 */
-  width: 100%; /* 너비 100% 설정 */
-  padding: 10px; /* 내부 여백 추가 */
-}
-textarea::placeholder {
-  color: #dadada;
-  font-size: 20px;
-}
-`;
-const Header = styled.header`
-display: flex;
-justify-content: space-between;
-align-items: center;
-
-padding: 25px 25px;
-border-bottom: 1px solid #dadada;
-
-h4 {
-  font-weight: bold;
-  font-size: 20px; /* 원하는 크기로 수정 */
-}
-h5 {
-  color: #4da6ff;
+  box-sizing: border-box;
   font-size: 18px;
-}
+  max-width: 100%;
+`;
+
+const Header = styled.header`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 25px;
+  border-bottom: 1px solid #dadada;
+
+  h4 {
+    font-weight: bold;
+    font-size: 20px;
+  }
 `;
 
 const Container = styled.div`
-padding: 0 16px;
+  padding: 0 16px;
 `;
 
 const Title = styled.div`
-padding: 25px 0px;
-border-bottom: 1px solid #dadada;
+  padding: 25px 0px;
+  border-bottom: 1px solid #dadada;
 
-outline: none;
-input {
+  input {
+    border: none;
+    outline: none;
+    font-size: 25px;
+    width: 100%;
+    padding: 10px;
+
+    ::placeholder {
+      color: #dadada;
+      font-size: 25px;
+    }
+  }
+`;
+
+const Button = styled.button`
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
   border: none;
-  outline: none;
-  font-size: 25px;
-  width: 100%; /* 너비 100% 설정 */
-}
-
-input::placeholder {
-  color: #dadada;
-  font-size: 25px;
-}
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
-// 모달 css
-const ButtonWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+const CopyButton = styled.button`
+  margin-left: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 16px;
 `;
-
-const ButtonModify = styled.button`
-  width: 100%;
-  height: 50px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  background-color: whitesmoke;
-  color: #6bb7e0;
-  font-size: 13px;
-  border:0;
-  border-bottom:1px solid #dadada;
-`;
-
-const ButtonDelete = styled.button`
-  width: 100%;
-  height: 50px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  background-color: whitesmoke;
-  color: red;
-  font-size: 13px;
-  border:0;
-`;
-
-const Claim = styled(ButtonModify)`
-  border-radius: 15px;
-  color: red;
-`;
-
 
 export default AddStreaming;
