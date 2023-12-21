@@ -48,7 +48,6 @@ import axios from 'axios';
 import { BsHeart } from 'react-icons/bs';
 import { Alert, AlertTitle, Autocomplete, Backdrop, Box, Button, CircularProgress, Fade, Modal, TextField } from '@mui/material';
 import Bank from './Bank';
-import SearchLocation from '../nadeuli_delivery/SearchLocation';
 
 export default function GetMyProfile() {
     //hooks
@@ -606,7 +605,6 @@ export default function GetMyProfile() {
                                     >
                                         출금
                                     </MDBBtn>
-                                    <SearchLocation/>
                                 </div>
                             </MDBCardBody>
                         </MDBCard>
