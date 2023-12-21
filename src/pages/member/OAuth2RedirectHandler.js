@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { getSocialMember } from '../../util/memberAxios';
 import { getCurrentPosition } from '../../util/Location';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,10 @@ import { setMember } from '../../redux/modules/member';
 const OAuth2RedirectHandler = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [accessToken, setAccessToken] = useState('');
+    const location = useLocation();
+    // const [accessToken, setAccessToken] = useState('');
+    const queryParams = new URLSearchParams(location.search);
+    const accessToken = queryParams.get('accessToken');
 
     // 쿠키에서 이름이 'Authorization'인 쿠키의 값을 가져오는 함수
     async function getCookieValue(cookieName) {
@@ -26,7 +29,7 @@ const OAuth2RedirectHandler = () => {
     useEffect(() => {
         const fetchCookieValue = async () => {
             const value = await getCookieValue('Authorization'); // 비동기 처리를 위해 await 사용
-            setAccessToken(value);
+            // setAccessToken(value);
             console.log(value);
         };
 
