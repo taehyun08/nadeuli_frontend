@@ -24,7 +24,7 @@ const OAuth2RedirectHandler = () => {
 
     useEffect(() => {
         const fetchCookieValue = async () => {
-            const value = await getCookieValue('Authorization');
+            const value = getCookieValue('Authorization');
             setAccessToken(value);
             console.log(value)
         };
