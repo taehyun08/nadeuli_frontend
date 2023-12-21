@@ -1,34 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { get, post } from "../../util/axios";
 import axios from 'axios';
+import { addFavorite, deleteFavorite } from '../../shared/axios';
 
-// // 찜하기
-// export const postLike = (postId) => {
-//   return function (dispatch) {
-//     instance
-//       .post(`api/like/${postId}`)
-//       .then((res) => {
-//         dispatch(setLike({ userLike: true, likeNum: res.data.likeNum }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+// 찜하기
+export const postLike = (tag, postId, likeNum) => {
+  return function (dispatch, getState) {
+    addFavorite(tag, postId)
+      .then((res) => {
+        dispatch(setLike({ isLike: true, likeNum: likeNum+1 }));
+        const currentState = getState();
+        console.log('찜이후 Current state:', currentState);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
-// // 찜하기 취소
-// export const postUnLike = (postId) => {
-//   return function (dispatch) {
-//     instance
-//       .delete(`api/like/${postId}`)
-//       .then((res) => {
-//         dispatch(setLike({ userLike: false, likeNum: res.data.likeNum }));
-//       })
-//       .catch((err) => {
-//         console.log(err);
-//       });
-//   };
-// };
+// 찜하기 취소
+export const postUnLike = (tag, postId, likeNum) => {
+  return function (dispatch, getState) {
+    deleteFavorite(tag, postId)
+      .then((res) => {
+        dispatch(setLike({ isLike: false, likeNum: likeNum-1 }));
+        const currentState = getState();
+        console.log('찜 해제 이후 Current state:', currentState);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
 
 // 게시물 등록
 export const carrotPost = (formData, navigate) => {
@@ -84,9 +87,9 @@ export const deletePost = (postId, navigate) => {
 };
 
 // 게시물 상세 조회
-export const carrotGetPost = (postId) => {
+export const carrotGetPost = (postId, tag) => {
   return async function (dispatch, getState) {
-    await get(`/product/getProduct/${postId}`)
+    await get(`/product/getProduct/${postId}/${tag}`)
       .then((res) => {
         console.log(res);
         dispatch(getLoadPost(res));
@@ -172,7 +175,7 @@ const postSlice = createSlice({
     },
     setLike: (state, action) => {
       state.post.likeNum = action.payload.likeNum;
-      state.post.userLike = action.payload.userLike;
+      state.post.isLike = action.payload.isLike;
     },
     changeTradeState: (state, action) => {
       state.postList = state.postList.map((post) => {

@@ -25,6 +25,7 @@ import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
+import GetNadeuliPayList from "./pages/nadeuli_pay/GetNadeuliPayList";
 import GetChatRoomList from "./pages/chat/GetChatRoomList";
 import Chatting from "./pages/chat/Chatting";
 import AddDeliveryOrder from "./pages/nadeuli_delivery/AddDeliveryOrder";
@@ -79,6 +80,7 @@ function Router() {
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
+        <Route path="/nadeuliPay/getNadeuliPayList" element={<GetNadeuliPayList />} />
         <Route
           path="/trade/addTradeReview/:productId"
           element={<AddTradeReview />}
