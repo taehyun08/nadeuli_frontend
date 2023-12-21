@@ -6,7 +6,7 @@ import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-function OrikkiriAlbumList({}) {
+function OrikkiriAlbumList({orikkiriId}) {
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ function OrikkiriAlbumList({}) {
           </CardBox>
         ))}
       </GridContainer>
-        <FixedButton2 onClick={() => navigate("/addOrikkiriAlbum")}>+ 앨범 등록</FixedButton2>
+        <FixedButton2 onClick={() => navigate(`/addOrikkiriAlbum/${orikkiriId}`)}>+ 앨범 등록</FixedButton2>
     </div>
   );
 }
@@ -124,7 +124,7 @@ const FixedButton2 = styled.div`
   height: 50px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;

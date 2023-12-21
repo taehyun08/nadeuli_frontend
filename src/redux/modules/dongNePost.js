@@ -5,7 +5,7 @@ import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 // 게시물 등록
-export const dongNePost = (formData, navigate) => {
+export const dongNePost = (formData, navigate, redirectPath) => {
   return async function (dispatch) {
     try {
       const res = await axios.post(`${BASE_URL}/dongNe/addPost`, formData, {
@@ -16,7 +16,7 @@ export const dongNePost = (formData, navigate) => {
       const postId = res.data.postId;
       console.log(postId); 
       dispatch(addDongNePost(formData));
-      // navigate('/dongNeHome');
+      navigate(redirectPath);
       // navigate('/getDongNePost');
     } catch (err) {
       console.log(err);

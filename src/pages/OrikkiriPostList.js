@@ -34,6 +34,11 @@ function OrikkiriPostList({orikkiriId}) {
         return false;
       }
     }
+
+    // if (!dongNePost.orikkiri || dongNePost.orikkiri.orikkiriId !== orikkiriId) {
+    //   return false;
+    // }
+
     return dongNePost.gu === location;
   });
   
@@ -99,7 +104,7 @@ function OrikkiriPostList({orikkiriId}) {
       </div>
       {selectedCategory == 1 && (
         <div>
-          <FixedButton2 onClick={() => navigate("/addOrikkiriPost")}>+ 글쓰기</FixedButton2>
+          <FixedButton2 onClick={() => navigate(`/addOrikkiriPost/${orikkiriId}`)}>+ 글쓰기</FixedButton2>
         </div>
       )}
     </div>
@@ -162,7 +167,7 @@ const FixedButton2 = styled.div`
   height: 50px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;
@@ -178,3 +183,4 @@ const Img = styled.img`
 `;
 
 export default OrikkiriPostList;
+

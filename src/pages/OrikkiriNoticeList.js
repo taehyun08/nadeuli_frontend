@@ -99,7 +99,7 @@ function OrikkiriNoticeList({orikkiriId}, {masterTag}) {
       </div>
       {selectedCategory == 1 && (
         <div>
-          <FixedButton2 onClick={() => navigate("/addOrikkiriNotice")}>+ 글쓰기</FixedButton2>
+          <FixedButton2 onClick={() => navigate(`/addOrikkiriNotice/${orikkiriId}`)}>+ 글쓰기</FixedButton2>
         </div>
       )}
     </div>
@@ -162,7 +162,7 @@ const FixedButton2 = styled.div`
   height: 50px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;

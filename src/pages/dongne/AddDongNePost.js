@@ -76,8 +76,8 @@ function AddDongNePost() {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    dispatch(dongNePost(formData, navigate));
-    navigate('/dongNeHome');
+    dispatch(dongNePost(formData, navigate, '/dongNeHome/'));
+    // navigate('/dongNeHome');
   };
 
   return (
