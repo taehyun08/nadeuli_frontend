@@ -13,6 +13,7 @@ const OAuth2RedirectHandler = () => {
     // 쿠키에서 이름이 'Authorization'인 쿠키의 값을 가져오는 함수
     async function getCookieValue(cookieName) {
         const cookies = document.cookie.split(';');
+        console.log(cookies)
         for (const cookie of cookies) {
             const [name, value] = cookie.trim().split('=');
             if (name === cookieName) {
