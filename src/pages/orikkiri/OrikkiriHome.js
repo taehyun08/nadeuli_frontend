@@ -18,8 +18,9 @@ function OrikkiriHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orikkiriDetail = useSelector((state) => state.orikkiri.orikkiri);
-  const orikkiriId = orikkiriDetail.orikkiriId;
-  const masterTag = orikkiriDetail.masterTag;
+  const params = useParams();
+  const orikkiriId = params.orikkiriId;
+  const orikkiriMasterTag = params.masterTag;
   const member = useSelector((state) => state.member); // 유저 정보
   const [selectedContent, setSelectedContent] = useState('home');
   const handleOrikkiriHome = () => setSelectedContent('home');
@@ -119,7 +120,7 @@ function OrikkiriHome() {
           {selectedContent === 'post' && <OrikkiriPostList orikkiriId={orikkiriId}/>}
           {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>}
           {selectedContent === 'album' && <OrikkiriAlbumList orikkiriId={orikkiriId}/>}
-          {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} masterTag={masterTag}/>}
+          {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriMasterTag}/>}
           {/* 여기에 다른 컨텐츠 조건부 렌더링 추가 */}
         
         </Contents>

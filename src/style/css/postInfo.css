@@ -33,7 +33,7 @@
 .rectangle-container {
   width: 100px; /* 사각형의 가로 크기 */
   height: 50px; /* 사각형의 세로 크기 */
-  background-color: #e78111; /* 배경색 */
+  background-color: #508BFC; /* 배경색 */
   border-radius: 30px; /* border-radius를 통해 모서리를 둥글게 만듭니다 */
   display: flex; /* 내부 요소를 가운데 정렬하기 위해 flexbox를 사용합니다 */
   align-items: center; /* 세로 중앙 정렬 */

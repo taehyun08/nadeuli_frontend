@@ -140,7 +140,7 @@ const FixedButton = styled.div`
   height: 45px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;
@@ -157,7 +157,7 @@ const FixedButton1 = styled.div`
   height: 50px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;
@@ -174,7 +174,7 @@ const FixedButton2 = styled.div`
   height: 50px;
   font-size: 20px;
   font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
+  background-color: #508BFC;
   color: ${(props) => props.theme.color.white};
   border-radius: 40px;
   justify-content: center;

@@ -21,10 +21,6 @@ function AddOrikkiriPost({orikkiriId}) {
     console.log(member);
   }, [member]);
 
-  const changeCategory = (e) => {
-    setCategory(e.target.value);
-  };
-
   // 파일 업로드 및 미리보기 생성
   const selectFile = (e) => {
     const files = e.target.files;
@@ -55,10 +51,6 @@ function AddOrikkiriPost({orikkiriId}) {
       return;
     }
 
-    if (!category || category === "none") {
-      alert("게시물 카테고리를 선택해주세요!");
-      return;
-    }
     const formData = new FormData();
     const postDTOData = {
       orikkiri,

@@ -77,6 +77,7 @@ function AddDongNePost() {
       formData.append('images', files[i]);
     }
     dispatch(dongNePost(formData, navigate));
+    navigate('/dongNeHome');
   };
 
   return (

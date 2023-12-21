@@ -16,7 +16,7 @@ export const dongNePost = (formData, navigate) => {
       const postId = res.data.postId;
       console.log(postId); 
       dispatch(addDongNePost(formData));
-      navigate('/dongNeHome');
+      // navigate('/dongNeHome');
       // navigate('/getDongNePost');
     } catch (err) {
       console.log(err);
@@ -77,7 +77,6 @@ export const removeDongNePost = (postId, navigate) => {
     await axios.get(`${BASE_URL}/dongNe/deletePost/${postId}`)
       .then((res) => {
         dispatch(deleteDongNePost(res.data));
-        navigate("/dongNeHome");
       })
       .catch((err) => {
         console.log(err);
@@ -102,50 +101,50 @@ const dongNePostSlice = createSlice({
       // action.payload를 통해 서버로부터 받은 게시물 목록을 저장할 수 있음
       state.dongNePostList = action.payload;
     },
-    // getLoadDongNePost: (state, action) => {
-    //   state.dongNePost = action.payload;
-    // },
     getLoadDongNePost: (state, action) => {
-      const {
-      postId,
-      title,
-      content,
-      video,
-      streaming,
-      orikkiriId,
-      orikkiriName,
-      orikkiriPicture,
-      postCategory,
-      gu,
-      dongNe,
-      timeAgo,
-      writer:{
-        tag,
-        picture,
-        nickname,
-        dongNe: writerDongNe
-      },
-      images
-      } = action.payload;
-
-      state.dongNePost.postId = postId;
-      state.dongNePost.title = title;
-      state.dongNePost.content = content;
-      state.dongNePost.video = video;
-      state.dongNePost.streaming = streaming;
-      state.dongNePost.orikkiriId = orikkiriId;
-      state.dongNePost.orikkiriName = orikkiriName;
-      state.dongNePost.orikkiriPicture = orikkiriPicture;
-      state.dongNePost.postCategory = postCategory;
-      state.dongNePost.gu = gu;
-      state.dongNePost.dongNe = dongNe;
-      state.dongNePost.timeAgo = timeAgo;
-      state.dongNePost.writerTag = tag;
-      state.dongNePost.writerPicture = picture;
-      state.dongNePost.writerNickname = nickname;
-      state.dongNePost.writerDongNe = writerDongNe;
-      state.dongNePost.images = images;
+      state.dongNePost = action.payload;
     },
+    // getLoadDongNePost: (state, action) => {
+    //   const {
+    //   postId,
+    //   title,
+    //   content,
+    //   video,
+    //   streaming,
+    //   orikkiriId,
+    //   orikkiriName,
+    //   orikkiriPicture,
+    //   postCategory,
+    //   gu,
+    //   dongNe,
+    //   timeAgo,
+    //   writer:{
+    //     tag,
+    //     picture,
+    //     nickname,
+    //     dongNe: writerDongNe
+    //   },
+    //   images
+    //   } = action.payload;
+
+    //   state.dongNePost.postId = postId;
+    //   state.dongNePost.title = title;
+    //   state.dongNePost.content = content;
+    //   state.dongNePost.video = video;
+    //   state.dongNePost.streaming = streaming;
+    //   state.dongNePost.orikkiriId = orikkiriId;
+    //   state.dongNePost.orikkiriName = orikkiriName;
+    //   state.dongNePost.orikkiriPicture = orikkiriPicture;
+    //   state.dongNePost.postCategory = postCategory;
+    //   state.dongNePost.gu = gu;
+    //   state.dongNePost.dongNe = dongNe;
+    //   state.dongNePost.timeAgo = timeAgo;
+    //   state.dongNePost.writerTag = tag;
+    //   state.dongNePost.writerPicture = picture;
+    //   state.dongNePost.writerNickname = nickname;
+    //   state.dongNePost.writerDongNe = writerDongNe;
+    //   state.dongNePost.images = images;
+    // },
     updateDongNePost: (state, action) => {
       state.dongNePost = action.payload;
     },

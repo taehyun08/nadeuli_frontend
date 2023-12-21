@@ -1,13 +1,17 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import TopDropdownMenu from '../../components/TopDropdownMenu';
 import TopArrowLeft from '../../components/TopArrowLeft';
 import PostInfo from "../../components/PostInfo";
-import { GetDongNePostDetail, deleteDongNePost } from '../../redux/modules/dongNePost';
+import { GetDongNePostDetail, deleteDongNePost, removeDongNePost } from '../../redux/modules/dongNePost';
+import { removeChannel } from '../../redux/modules/streaming';
 import Comment from "../Comment";
 import Hls from 'hls.js';
+import ReactHlsPlayer from 'react-hls-player';
+import AlertDialog from '../../components/AlertDialog'
+
 
 function GetDongNePost() {
   const navigate = useNavigate();
@@ -16,11 +20,74 @@ function GetDongNePost() {
   const params = useParams();
   const postId = params.postId;
   const videoRef = useRef([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogDescription, setDialogDescription] = useState('');
+  const [pendingAction, setPendingAction] = useState(null);
+  const [dialogAgreeText, setDialogAgreeText] = useState('');
+  const [dialogDisagreeText, setDialogDisagreeText] = useState('');
 
   useEffect(() => {
     dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
 
+  const executePendingAction = () => {
+    if (pendingAction) pendingAction();
+    setPendingAction(null);
+    closeDialog();
+  };
+
+  const openDeleteDialog = () => {
+    setPendingAction(() => () => {
+      dispatch(removeDongNePost(postId));
+      dispatch(removeDongNePost(postId));
+      navigate('/dongNeHome');
+    });
+    setDialogTitle("삭제 확인");
+    setDialogDescription("이 게시물을 삭제하시겠습니까?");
+    setDialogAgreeText("삭제");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+  const openShutdownDialog = () => {
+    setPendingAction(() => () => {
+      dispatch(removeDongNePost(postId));
+      navigate('/dongNeHome');
+    });
+    setDialogTitle("종료 확인");
+    setDialogDescription("이 방송을 종료하시겠습니까?");
+    setDialogAgreeText("종료");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+  const openReportDialog = () => {
+    setPendingAction(() => () => {
+      // 신고 관련 로직
+    });
+    setDialogTitle("신고 확인");
+    setDialogDescription("이 채널을 신고하시겠습니까?");
+    setDialogAgreeText("신고");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const handleupdate = async () => {
+
+  }
+
+  const dropdownMenus = [
+    { label: '수정', onClick: handleupdate },
+    { label: '종료', onClick: openShutdownDialog },
+    { label: '삭제', onClick: openDeleteDialog },
+    { label: '신고', onClick: openReportDialog }
+    // 원하는 만큼 추가
+  ];
 
   useEffect(() => {
     if (getDongNePost.streaming) {
@@ -50,17 +117,17 @@ function GetDongNePost() {
     <Wrap>
       <Header>
         <TopArrowLeft/>
-        <TopDropdownMenu onEditClick={handleEditClick} onDeleteClick={handleDeleteClick}/>
+        <TopDropdownMenu dropdownMenus={dropdownMenus}/>
       </Header>
 
       <Container>
         <div>
           <PostInfo
             text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
-            writerImg={getDongNePost.writerPicture}
-            writerNickName={getDongNePost.writerNickname}
-            writerDongNe={getDongNePost.writerDongNe}
-            timeAgo={getDongNePost.timeAgo}
+            writerPicture={getDongNePost?.writer?.picture}
+            writerNickName={getDongNePost?.writer?.nickname}
+            writerDongNe={getDongNePost?.writer?.dongNe}
+            timeAgo={getDongNePost?.timeAgo}
           />
         </div>
         <div>
@@ -71,7 +138,13 @@ function GetDongNePost() {
           <File>
             {/* HLS 스트리밍 비디오 처리 */}
             {getDongNePost.streaming && (
-              <video ref={(el) => (videoRef.current[0] = el)} src={getDongNePost.streaming} controls autoPlay />
+                          <ReactHlsPlayer
+                          src={getDongNePost.streaming}
+                          autoPlay={true}
+                          controls={true}
+                          width="100%"
+                          height="auto"
+                        />
             )}
 
             {/* .mp4 이미지 비디오 처리 */}
@@ -97,6 +170,16 @@ function GetDongNePost() {
         <Comment postId={getDongNePost.postId}>
         </Comment>
       </Container>
+      <AlertDialog
+        open={dialogOpen}
+        handleClose={closeDialog}
+        onAgree={executePendingAction}
+        title={dialogTitle}
+        description={dialogDescription}
+        agreeText={dialogAgreeText}
+        disagreeText={dialogDisagreeText}
+      />
+
     </Wrap>
   );
 }
@@ -124,6 +207,7 @@ textarea::placeholder {
 }
 `;
 const Header = styled.header`
+  position:relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
