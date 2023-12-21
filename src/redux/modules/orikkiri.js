@@ -13,9 +13,9 @@ export const createOrikkiri = (formData, navigate) => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log(res)
+        console.log(res.orikkiriId)
         dispatch(addOrikkiri(formData));
-      navigate("/main");
+      navigate(`/orikkiriHome/${res.orikkiriId}`);
       } catch (err) {
         console.log(err);
       }
@@ -47,7 +47,7 @@ export const getOrikkiriDetail = (orikkiriId) => {
   return async function (dispatch, getState) {
     await get(`/orikkiriManage/getOrikkiri/${orikkiriId}`)
       .then((res) => {
-        console.log(res);
+        console.log(res.orikkiriId);
         dispatch(getLoadOrikkiri(res));
         const currentState = getState();
         console.log('get이후 Current state:', currentState);

@@ -129,7 +129,7 @@ const AddOrikkiri = () => {
                     'Content-Type': 'multipart/form-data', // 변경된 부분
                 },
             });
-            navigate('/dongNeHome');
+            navigate(`/orikkiriHome/${orikkiriId}`);
             // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
         } catch (error) {
             console.error('Error creating orikkiri:', error);
@@ -326,7 +326,6 @@ const TMenuBar = styled.div`
     justify-content: space-between;
     align-items: center;
     text-align: center;
-
     p {
         position: absolute;
         left: 50%;
