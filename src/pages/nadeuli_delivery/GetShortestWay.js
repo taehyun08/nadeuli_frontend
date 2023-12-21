@@ -325,7 +325,7 @@ const GetShortestWay = () => {
           onClick={handleGetDirectionClick}
           style={{ width: "90%" }}
         >
-          최단경로 검색
+          추천경로 조회
         </StyledButton>
         <br />
         {/* 각 출발지 및 도착지의 한글 주소 표시 */}
