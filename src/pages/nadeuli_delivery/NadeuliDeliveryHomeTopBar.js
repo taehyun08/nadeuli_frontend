@@ -6,6 +6,7 @@ import { MdDelete } from "react-icons/md";
 import "./nadeuliDeliveryListForm.css";
 import { get, post } from "../../util/axios";
 import { setMember } from "../../redux/modules/member";
+import { useNavigate } from "react-router";
 
 const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
   const member = useSelector((state) => state.member);
@@ -18,6 +19,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     get(`/member/getMember/${memberTag}`)
@@ -124,16 +126,25 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
       .then((response) => {
         console.log(response);
         // 알림 목록에서 해당 아이템의 상태를 업데이트
-        setNotifications(
-          notifications.map((notification) => {
-            if (
-              notification.deliveryNotificationId === deliveryNotificationId
-            ) {
-              return { ...notification, read: true };
-            }
-            return notification;
-          })
+        const updatedNotifications = notifications.map((notification) => {
+          if (notification.deliveryNotificationId === deliveryNotificationId) {
+            return { ...notification, read: true };
+          }
+          return notification;
+        });
+
+        setNotifications(updatedNotifications);
+
+        // 상태 업데이트 후 네비게이션 처리
+        const readNotification = updatedNotifications.find(
+          (notification) =>
+            notification.deliveryNotificationId === deliveryNotificationId
         );
+        if (readNotification) {
+          navigate(
+            `/getDeliveryOrder/${readNotification.nadeuliDelivery.nadeuliDeliveryId}`
+          );
+        }
       })
       .catch((error) => {
         // 에러 처리
