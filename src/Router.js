@@ -43,6 +43,7 @@ import GetOrikkiriSignUpList from "./pages/orikkiri/GetOrikkiriSignUpList";
 import AddOrikkiriSignUp from "./pages/orikkiri/AddOrikkiriSignUp";
 import Bank from "./pages/member/Bank";
 import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
+import AddOrikkiriSchedule from "./pages/orikkiri/AddOrikkiriSchedule";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -58,6 +59,7 @@ function Router() {
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
         <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
         <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
+        <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
