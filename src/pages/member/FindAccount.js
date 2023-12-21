@@ -7,10 +7,11 @@ import { checkAuthNum, findAccount, getAuthNumEmail } from '../../util/memberAxi
 
 function FindAccount() {
     const [btnState, setBtnState] = useState(false);
-    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumDisabled, setIsAuthNumDisabled] = useState(false);
+    const [isToDisabled, setIsToDisabled] = useState(false);
     const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
     const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
-    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false); // 새로 추가한 상태
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(true); // 새로 추가한 상태
 
     //다음 컴포넌트로 이메일값을 넘기기위해 사용
     const navigate = useNavigate();
@@ -44,7 +45,11 @@ function FindAccount() {
                     getAuthNumEmail(to)
                         .then(() => {
                             alert('인증번호가 발송되었습니다.');
-                            setIsAuthNumBtnDisabled(true); // 버튼 비활성화
+                            setIsAuthNumBtnDisabled(true);
+                            setIsToDisabled(true);
+                            setIsAuthNumDisabled(false);
+                            setIsCheckAuthNumInputDisabled(false); // 활성화로 변경
+                            setIsCheckAuthNumBtnDisabled(true);
                         })
                         .catch((err) => {
                             alert('인증번호 발송 중 오류가 발생했습니다.');
@@ -73,13 +78,11 @@ function FindAccount() {
             .then((response) => {
                 alert('인증번호가 일치합니다.');
                 setBtnState(true);
-                setIsToEditable(false);
-                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumBtnDisabled(false);
                 setIsCheckAuthNumInputDisabled(true);
             })
             .catch((err) => {
                 alert('인증번호가 일치하지 않습니다.');
-                setIsToEditable(true);
             });
     };
 
@@ -114,7 +117,7 @@ function FindAccount() {
                             type="text"
                             placeholder="이메일"
                             required
-                            disabled={!isToEditable}
+                            disabled={isToDisabled}
                             onChange={onChange}
                             name="to"
                         />
@@ -122,6 +125,7 @@ function FindAccount() {
                             className="authNumberBtn"
                             onClick={handleGetAuthNumBtnClick}
                             disabled={isAuthNumBtnDisabled}
+                            isActive={!isAuthNumBtnDisabled}
                         >
                             인증번호 받기
                         </Button>
@@ -135,18 +139,20 @@ function FindAccount() {
                             required
                             onChange={onChange}
                             name="authNum"
-                            disabled={isCheckAuthNumInputDisabled} // 인증번호 확인 입력 창의 활성화 여부 설정
+                            disabled={isCheckAuthNumInputDisabled || isAuthNumDisabled}
                         />
                         <Button
                             className="authNumberBtn"
                             onClick={handleCheckAuthNumBtnClick}
-                            disabled={isCheckAuthNumBtnDisabled}
+                            disabled={!isCheckAuthNumBtnDisabled}
+                            isActive={isCheckAuthNumBtnDisabled}
                         >
                             인증번호 확인
                         </Button>
                     </div>
                     <Button
-                        $isActive={btnState}
+                        disabled={!btnState}
+                        isActive={btnState}
                         onClick={() => handleNavigation(to)}
                     >
                         이메일로 계정 찾기
@@ -225,11 +231,11 @@ const Button = styled.button`
     transition: background 0.3s;
     cursor: pointer;
     ${(props) =>
-        props.$isActive
+        props.isActive
             ? css`
-                  background-color: ${(props) => props.theme.color.orange};
+                  background-color: #508BFC;
                   &:hover {
-                      background-color: ${(props) => props.theme.hoverColor.orange};
+                      background-color: #1e5ed9;
                   }
               `
             : css`
