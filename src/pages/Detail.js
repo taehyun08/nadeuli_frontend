@@ -30,7 +30,6 @@ function Detail() {
     const params = useParams();
     const postId = params.postid;
     const state = params.trade;
-    const user = useSelector((state) => state.gu); // 유저 정보
 
     // 모달.
     const [modalOpen, setModalOpen] = useState(false);
@@ -91,7 +90,7 @@ function Detail() {
                         open={modalOpen}
                         close={closeModal}
                     >
-                        {user?.tag === postDetail?.tag ? (
+                        {member?.tag === postDetail?.seller?.tag ? (
                             <ButtonWrap>
                                 <ButtonModify
                                     onClick={() => {
@@ -142,7 +141,7 @@ function Detail() {
 
                     <Ondo>
                         <div>
-                            <p>{postDetail?.mannerOndo} °C </p>
+                            <p>{postDetail?.seller?.affinity}°C </p>
                             <FaRegSmile size={20} />
                         </div>
 
@@ -175,7 +174,6 @@ function Detail() {
                 <Price>
                     <div>
                         <p>{carrotPrice}원</p>
-
                         {!postDetail?.isBargain ? '' : <p>가격 제안가능</p>}
                     </div>
                     <button
@@ -362,7 +360,7 @@ const Price = styled.div`
     width: 80%;
     padding: 5px 16px;
     border-left: 1px solid #dadada;
-    line-height: 25px;
+    line-height: 5px;
     align-items: center;
 
     div :first-child {

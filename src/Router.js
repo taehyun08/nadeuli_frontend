@@ -42,6 +42,7 @@ import Report from "./pages/member/Report";
 import GetOrikkiriSignUpList from "./pages/orikkiri/GetOrikkiriSignUpList";
 import AddOrikkiriSignUp from "./pages/orikkiri/AddOrikkiriSignUp";
 import Bank from "./pages/member/Bank";
+import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -62,7 +63,10 @@ function Router() {
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
         />
-        <Route path="/nadeuliPay/nadeuliPayPay" element={<NadeuliPayPay />} />
+        <Route
+          path="/nadeuliPay/nadeuliPayPay/:productId"
+          element={<NadeuliPayPay />}
+        />
         <Route
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
@@ -73,7 +77,10 @@ function Router() {
         />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
-        <Route path="/chat/chatting/:chatRoomId/:id/:isProduct" element={<Chatting />} />
+        <Route
+          path="/chat/chatting/:chatRoomId/:id/:isProduct"
+          element={<Chatting />}
+        />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
@@ -121,7 +128,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
-        {/* <Route path="/getShortestWay" element={<GetShortestWay />} /> */}
+        <Route path="/getShortestWay" element={<GetShortestWay />} />
       </Routes>
     </BrowserRouter>
   );

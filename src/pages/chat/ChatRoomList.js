@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import ChatRoomItem from './ChatRoomItem'; // 각 채팅방을 표시하는 하위 컴포넌트
+import { formatMessageTimestamp } from '../../util/date';
 
 const ChatRoomList = (probs) => {
   const { chatRooms } = probs;
@@ -10,7 +10,7 @@ const ChatRoomList = (probs) => {
         <div className="container py-5">
             <div className="row">
                 <div className="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-                    <h5 className="font-weight-bold mb-3 text-center text-lg-start">Member</h5>
+                    <h5 className="font-weight-bold mb-3 text-center text-lg-start">채팅</h5>
                     <div className="card">
                         <div className="card-body">
                             <ul className="list-unstyled mb-0">
@@ -31,11 +31,11 @@ const ChatRoomList = (probs) => {
                                                 />
                                                 <div className="pt-1">
                                                     <p className="fw-bold mb-0">{chatRoom.roomName}</p>
-                                                    <p className="small text-muted">{chatRoom.lastMessage.message}</p>
+                                                    <p className="small text-muted">{chatRoom.lastMessage?.message}</p>
                                                 </div>
                                             </div>
                                             <div className="pt-1">
-                                                <p className="small text-muted mb-1">{chatRoom.lastMessage.createdAt}</p>
+                                                <p className="small text-muted mb-1">{formatMessageTimestamp(chatRoom.lastMessage?.createdAt)}</p>
                                                 {chatRoom.unreadCount > 0 && (
                                                     <span className="badge bg-danger float-end">{chatRoom.unreadCount}</span>
                                                 )}
