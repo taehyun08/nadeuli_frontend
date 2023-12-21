@@ -6,7 +6,7 @@ import { useState, useRef, useEffect } from "react";
 // import { storage } from "../shared/firebase";
 import { carrotPost } from "../redux/modules/post";
 import { useDispatch, useSelector } from "react-redux";
-import member from "../redux/modules/member";
+
 // 이미지 업로드
 
 function Add() {

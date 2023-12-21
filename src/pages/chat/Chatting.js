@@ -72,7 +72,7 @@ function Chatting(){
         try {
           const result = await chatGet(`/api/chatRoom/${params.chatRoomId}/${member.tag}`);
           if(params.isProduct === '1'){
-            const res = await get(`/product/getProduct/${params.id}`);
+            const res = await get(`/product/getProduct/${params.id}/${member.tag}`);
             setTitle(res.title);
             setPrice(res.price);
             setPicture(res.images);

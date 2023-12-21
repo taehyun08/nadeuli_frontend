@@ -8,22 +8,15 @@ import styled from 'styled-components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { carrotGetPost, deletePost } from '../redux/modules/post';
-// import {
-//
-//   postUnLike,
-//
-//   postLike,
-// } from "../redux/modules/post";
+import { carrotGetPost, deletePost, postUnLike, postLike } from '../redux/modules/post';
+import { post } from "../util/chatAxios";
 
 import Modal from '../components/Modal';
-import { addFavorite } from '../shared/axios';
 
 function Detail() {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [heart, setHeart] = useState(false); // 찜하기
     const postDetail = useSelector((state) => state.post.post);
     const member = useSelector((state) => state.member);
     const postPrice = Number(postDetail?.price);
@@ -45,30 +38,32 @@ function Detail() {
     let carrotPrice = postPrice?.toLocaleString('ko-KR');
 
     useEffect(() => {
-        dispatch(carrotGetPost(postId));
-    }, [dispatch, postId]);
+        dispatch(carrotGetPost(postId, member.tag));
+    }, [dispatch, postId, member.tag]);
 
-    // 즐겨찾기 추가
-    const handleFavorite = () => {
-        addFavorite(postId, member.tag)
-            .then((response) => {
-                // 서버로부터의 응답을 확인하고 원하는 동작을 수행
-                if (response.status === 200) {
-                    // 성공적으로 추가된 경우 즐겨찾기 표시 업데이트 또는 다른 동작 수행
-                    console.log('즐겨찾기 추가 성공!');
-                    // 원하는 동작 수행...
-                } else {
-                    // 실패한 경우 에러 처리 또는 다른 동작 수행
-                    console.error('즐겨찾기 추가 실패:', response.data);
-                    // 원하는 동작 수행...
-                }
-            })
-            .catch((error) => {
-                // 에러 발생 시 에러 처리 또는 다른 동작 수행
-                console.error('즐겨찾기 추가 에러:', error);
-                // 원하는 동작 수행...
-            });
-    };
+    const likeHeart = () => {
+        if (postDetail.isLike) {
+          dispatch(postUnLike(member.tag, postId, postDetail.likeNum)); // userlike가 true면 false로 바꿔주라
+        } else {
+          dispatch(postLike(member.tag, postId, postDetail.likeNum));
+        }
+      };
+
+    const chatButtonHandler = async () => {
+        const tag = member.tag;
+        const nickname = member.nickname;
+        const sellerTag = postDetail.seller.tag;
+        const sellerNickname = postDetail.seller.nickname;
+        const title = postDetail.title;
+        const productId = postId;
+        const participants = [{tag: tag, nickname: nickname}, {tag: sellerTag, nickname: sellerNickname}];
+        const req = { tag, productId, participants, title };
+        await post('/api/chatRoom/findOrCreate', req)
+        .then((res) => {
+            console.log(res);
+            navigate(`/chat/chatting/${res.chatRoomId}/${postDetail.productId}/1`)
+        })
+    }
 
     return (
         <Wrap>
@@ -158,16 +153,16 @@ function Detail() {
             </Container>
             <Footer>
                 <Heart>
-                    {postDetail?.userLike ? (
+                    {postDetail?.isLike ? (
                         <BsHeartFill
                             size="35"
                             color="red"
-                            onClick={handleFavorite}
+                            onClick={likeHeart}
                         />
                     ) : (
                         <BsHeart
                             size="35"
-                            onClick={handleFavorite}
+                            onClick={likeHeart}
                         />
                     )}
                 </Heart>
@@ -178,9 +173,7 @@ function Detail() {
                     </div>
                     <button
                         style={{ cursor: 'pointer' }}
-                        onClick={() => {
-                            navigate('/chatting/' + postId + '/' + state);
-                        }}
+                        onClick={chatButtonHandler}
                     >
                         채팅하기
                     </button>

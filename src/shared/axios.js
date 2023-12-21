@@ -116,7 +116,11 @@ export const getMemberList = async (searchDTO) => {
 
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
 export const addFavorite = async (tag, prodId) => {
-    return await instance.get(`/member/addFavorite/${prodId}/${tag}`);
+    return await instance.get(`/member/addFavorite/${tag}/${prodId}`);
+};
+
+export const deleteFavorite = async (tag, prodId) => {
+    return await instance.get(`/member/deleteFavorite/${tag}/${prodId}`);
 };
 
 // 현재 로그인한 사용자의 즐겨찾기 정보를 불러오는 함수

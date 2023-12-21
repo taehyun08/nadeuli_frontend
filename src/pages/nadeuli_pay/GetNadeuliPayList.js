@@ -5,12 +5,12 @@ import React from "react";
 import { get } from "../../util/axios"
 import HeaderBack from "../../components/HeaderBack";
 import NadeuliButton from "../../components/NadeuliButton";
-import NadeuliList from "../../components/NadeuliList";
+// import NadeuliList from "../../components/NadeuliList";
 
-function NadeuliPayPay() {
+function GetNadeuliPayList() {
     const navigate = useNavigate();
-    const {itemList, setItemList} = useState(null);
-    const {tradeType, setTradeType} = useState(null);
+    const [itemList, setItemList] = useState(null);
+    const [tradeType, setTradeType] = useState(null);
     const member = useSelector((state) => state.member);
     const title = '나드리페이 내역조회';
 
@@ -20,7 +20,9 @@ function NadeuliPayPay() {
       },[])
 
     const getList = async () => {
-        await get(`/nadeuliPay/getNadeuliPayList/0/${tradeType || ''}/${member.tag}`)
+      const apiUrl = `/nadeuliPay/getNadeuliPayList/0/${member.tag}${tradeType !== null ? `?tradeType=${tradeType}` : ''}`;
+      // await get(`/nadeuliPay/getNadeuliPayList/0/${member.tag}/${tradeType || null}`)
+      await get(apiUrl)
         .then((res) => {
             console.log(res);
             setItemList(res);
@@ -35,19 +37,19 @@ function NadeuliPayPay() {
     
       const handleCharge = () => {
         console.log('충전 버튼 클릭');
-        setTradeType(0);
+        setTradeType('CHARGE');
         getList();
       };
     
       const handleWithdraw = () => {
         console.log('출금 버튼 클릭');
-        setTradeType(1);
+        setTradeType('WITHDRAW');
         getList();
       };
     
       const handlePayment = () => {
         console.log('결제 버튼 클릭');
-        setTradeType(2);
+        setTradeType('PAYMENT');
         getList();
       };
 
@@ -68,9 +70,9 @@ function NadeuliPayPay() {
           handleWithdraw={handleWithdraw}
           handlePayment={handlePayment}
         />
-        <NadeuliList items={itemList} />
+        {/* <NadeuliList items={itemList} /> */}
       </div>
     );
 }
 
-export default NadeuliPayPay;
+export default GetNadeuliPayList;
