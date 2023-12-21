@@ -26,6 +26,7 @@ const OAuth2RedirectHandler = () => {
         const fetchCookieValue = async () => {
             const value = await getCookieValue('Authorization');
             setAccessToken(value);
+            console.log(value)
         };
 
         fetchCookieValue();
