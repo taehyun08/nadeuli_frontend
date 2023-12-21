@@ -18,7 +18,7 @@ const AddOrikkiri = (props) => {
     useEffect(() => {
         const fetchAnsQuestions = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/45`);
+                const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/47`);
                 // const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/${orikkiriId}`);
                 setAnsQuestions(response.data);
             } catch (error) {
@@ -47,7 +47,7 @@ const AddOrikkiri = (props) => {
                     tag: member.tag,
                 },
                 orikkiri: {
-                    orikkiriId: 45, // prop으로 처리해야함
+                    orikkiriId: 47, // prop으로 처리해야함
                 },
                 ansQuestions: ansQuestions.map((question) => ({ ansQuestionId: question.ansQuestionId })),
             };
@@ -62,7 +62,7 @@ const AddOrikkiri = (props) => {
                     console.log(oriScheMemChatFavId);
                     const ansQuestionDTO = {
                         content: answer,
-                        orikkiri: { orikkiriId: 45 }, //prop으로 처리해야함
+                        orikkiri: { orikkiriId: 47 }, //prop으로 처리해야함
                         oriScheMemChatFav: {
                             oriScheMemChatFavId: oriScheMemChatFavId,
                         },
