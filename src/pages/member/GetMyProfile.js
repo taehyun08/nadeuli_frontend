@@ -48,6 +48,7 @@ import axios from 'axios';
 import { BsHeart } from 'react-icons/bs';
 import { Alert, AlertTitle, Autocomplete, Backdrop, Box, Button, CircularProgress, Fade, Modal, TextField } from '@mui/material';
 import Bank from './Bank';
+import KakaoMapMarker from '../../util/kakaoMapMarker';
 
 export default function GetMyProfile() {
     //hooks
@@ -550,6 +551,7 @@ export default function GetMyProfile() {
                             <TMenuBar>
                                 <HeaderBack />
                                 <p>내 프로필</p>
+                                <KakaoMapMarker/>
                                 <TopDropdownMenu dropdownMenus={dropdownMenus} />
                             </TMenuBar>
                         </MDBBreadcrumb>
