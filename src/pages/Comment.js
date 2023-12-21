@@ -1,21 +1,35 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { postComment, GetDongNeCommentList, modifyDongNeComment, removeDongNeComment } from '../redux/modules/Comment';
+import axios from 'axios';
 import '../style/css/comment.css';
 import "../style/css/orikkiriList.css";
 
 function Comments({ postId }) {
+  const BASE_URL = process.env.REACT_APP_BASE_URL;
   const dispatch = useDispatch();
+  const [setCommentList] = useState([]);
   const commentList = useSelector((state) => state.comment.commentList);
   const member = useSelector((state) => state.member);
-  const commentInputRef = useRef();
   const replyInputRefs = useRef({});
-  const [comments, setComments] = useState([]);
+  const commentInputRef = useRef();
 
   useEffect(() => {
     dispatch(GetDongNeCommentList(postId));
-  }, [postId, dispatch]);
-  // }, [postId, dispatch, commentList]);
+  }, [postId, dispatch, commentList]);
+
+  // useEffect(() => {
+  //   dispatch(GetDongNeCommentList(postId));
+  // }, [postId, dispatch]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/dongNe/getCommentList/${postId}`);
+      setCommentList(response.data);
+    } catch (error) {
+      console.error("댓글 불러오기 오류", error);
+    }
+  };
 
   const handleCommentSubmit = () => {
     const writer = { tag: member.tag };
@@ -32,6 +46,7 @@ function Comments({ postId }) {
     };
 
     dispatch(postComment(commentData));
+    // fetchComments();
     commentInputRef.current.value = "";
   };
 
@@ -51,16 +66,17 @@ function Comments({ postId }) {
     };
 
     dispatch(postComment(commentData));
+    // fetchComments();
     replyInputRefs.current[commentId].value = "";
   };
 
   const renderCommentAndReplies = () => {
-    return commentList.map((comment, index) => {
+    return commentList.map((comment) => {
       if (!comment.refComment) {
         const replies = commentList.filter(reply => reply.refComment?.commentId === comment.commentId);
 
         return (
-          <React.Fragment key={index}>
+          <React.Fragment key={comment.commentId}>
             <div className="comment-item">
               <img className="profile-pic" src={comment.writer?.picture || '/default-profile.jpg'} alt="profile" />
               <div className="comment-content">
@@ -82,8 +98,8 @@ function Comments({ postId }) {
               </button>
             </div>
 
-            {replies.map((reply, replyIndex) => (
-              <div key={`reply-${replyIndex}`} className="comment-item reply-comment">
+            {replies.map((reply) => (
+              <div key={reply.commentId} className="comment-item reply-comment">
                 <img className="profile-pic" src={reply.writer?.picture || '/default-profile.jpg'} alt="profile" />
                 <div className="comment-content">
                   <div className="comment-author">{reply.writer?.nickname || '익명'}</div>

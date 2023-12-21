@@ -53,7 +53,7 @@ function OrikkiriAlbumList({}) {
           </CardBox>
         ))}
       </GridContainer>
-        <FixedButton2 onClick={() => navigate("/addDongNePost")}>+ 앨범 등록</FixedButton2>
+        <FixedButton2 onClick={() => navigate("/addOrikkiriAlbum")}>+ 앨범 등록</FixedButton2>
     </div>
   );
 }

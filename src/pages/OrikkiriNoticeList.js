@@ -99,7 +99,7 @@ function OrikkiriNoticeList({searchQuery}) {
       </div>
       {selectedCategory == 1 && (
         <div>
-          <FixedButton2 onClick={() => navigate("/addDongNePost")}>+ 글쓰기</FixedButton2>
+          <FixedButton2 onClick={() => navigate("/addOrikkiriNotice")}>+ 글쓰기</FixedButton2>
         </div>
       )}
     </div>

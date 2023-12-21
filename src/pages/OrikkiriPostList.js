@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Promotion from './promotion';
 
-function OrikkiriPostList() {
+function OrikkiriPostList({orikkiriId}) {
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -99,7 +99,7 @@ function OrikkiriPostList() {
       </div>
       {selectedCategory == 1 && (
         <div>
-          <FixedButton2 onClick={() => navigate("/addDongNePost")}>+ 글쓰기</FixedButton2>
+          <FixedButton2 onClick={() => navigate("/addOrikkiriPost")}>+ 글쓰기</FixedButton2>
         </div>
       )}
     </div>
