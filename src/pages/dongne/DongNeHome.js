@@ -13,8 +13,8 @@ function DongNeHome() {
   return (
     <div className="Wrap">
       <TopBar onSearch={handleSearch} />
-        <OrikkiriList/>
       <div className="MainListBox">
+        <OrikkiriList/>
         <DongNePostList searchQuery={searchQuery}/>
       </div>
       <BottomBar />

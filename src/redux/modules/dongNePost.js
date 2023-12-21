@@ -13,9 +13,10 @@ export const dongNePost = (formData, navigate) => {
           'Content-Type': 'multipart/form-data'
         },
       });
-      console.log(res); 
+      const postId = res.data.postId;
+      console.log(postId); 
       dispatch(addDongNePost(formData));
-      navigate('/dongNeHome');
+      navigate('/getDongNePost');
     } catch (err) {
       console.log(err);
     }
@@ -83,19 +84,6 @@ export const removeDongNePost = (postId, navigate) => {
   };
 };
 
-// // 스트리밍 등록
-// export const dongNeStreaming = (formData, navigate) => {
-//   return async function (dispatch) {
-//     try {
-//       const res = await axios.post(`${BASE_URL}/dongNe/addStreaming`, formData); // 헤더 제거
-//       console.log(res); 
-//       dispatch(addDongNePost(formData));
-//       navigate('/dongNeHome');
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-// };
 
 // 리덕스슬라이스
 const dongNePostSlice = createSlice({

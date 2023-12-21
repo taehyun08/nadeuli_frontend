@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import DongNePostList from '../../pages/DongNePostList';
-import TopBar from '../../components/TopBar';
 import BottomBar from '../../components/BottonBar';
-import OrikkiriList from '../../pages/OrikkiriList';
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { FiMoreVertical } from "react-icons/fi";
 import styled from "styled-components";
@@ -19,11 +17,10 @@ import OrikkiriAlbumList from "../../pages/OrikkiriAlbumList";
 function OrikkiriHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(0);
   const orikkiriDetail = useSelector((state) => state.orikkiri.orikkiri);
   const params = useParams();
   const orikkiriId = params.orikkiriId;
-  const user = useSelector((state) => state.gu); // 유저 정보
+  const member = useSelector((state) => state.member); // 유저 정보
   const [selectedContent, setSelectedContent] = useState('home');
   const handleOrikkiriHome = () => setSelectedContent('home');
   const handleOrikkirPost = () => setSelectedContent('post');
@@ -60,8 +57,8 @@ function OrikkiriHome() {
           {/* 모달창 열기 */}
           <FiMoreVertical onClick={openModal} />
 
-           <Modal open={modalOpen} close={closeModal}>
-            {user?.tag === orikkiriDetail?.tag ? (
+          <Modal open={modalOpen} close={closeModal}>
+            {orikkiriDetail?.masterTag === member.tag ? (
               <ButtonWrap>
                 <ButtonModify
                   onClick={() => {
@@ -73,7 +70,7 @@ function OrikkiriHome() {
                 <ButtonDelete
                   onClick={() => {
                     dispatch(deleteOrikkiri(orikkiriId, navigate));
-                    alert("삭제가 완료되었습니다. ");
+                    alert("삭제가 완료되었습니다.");
                   }}
                 >
                   삭제
@@ -83,6 +80,7 @@ function OrikkiriHome() {
               <Claim>신고하기</Claim>
             )}
           </Modal>
+
         </div>
       </Header>
 
@@ -118,10 +116,10 @@ function OrikkiriHome() {
               </OrikiriInfo>
             </>
           )}
-          {selectedContent === 'post' && <OrikkiriPostList />}
-          {selectedContent === 'schedule' && <DongNePostList />}
-          {selectedContent === 'album' && <OrikkiriAlbumList />}
-          {selectedContent === 'notice' && <OrikkiriNoticeList />}
+          {selectedContent === 'post' && <OrikkiriPostList orikkiriId={orikkiriId}/>}
+          {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>}
+          {selectedContent === 'album' && <OrikkiriAlbumList orikkiriId={orikkiriId}/>}
+          {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId}/>}
           {/* 여기에 다른 컨텐츠 조건부 렌더링 추가 */}
         
         </Contents>

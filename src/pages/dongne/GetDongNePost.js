@@ -21,6 +21,7 @@ function GetDongNePost() {
     dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
 
+
   useEffect(() => {
     if (getDongNePost.streaming) {
       const videoElement = videoRef.current[0];
@@ -94,7 +95,6 @@ function GetDongNePost() {
         </div>
         
         <Comment postId={getDongNePost.postId}>
-          <p>댓글 위치</p>
         </Comment>
       </Container>
     </Wrap>
