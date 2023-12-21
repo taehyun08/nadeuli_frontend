@@ -8,7 +8,7 @@ import orikkiri from "./modules/orikkiri";
 import otherMember from "./modules/otherMember";
 import nadeuliDelivery from "./modules/nadeuliDelivery";
 import comment from "./modules/Comment";
-import streaming from "./modules/streaming"
+import streaming from "./modules/streaming";
 
 /*
 Redux는 상태 관리 라이브러리로, 

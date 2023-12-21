@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { getOrikkiriList } from '../redux/modules/orikkiri';
-import { FaRegComment } from "react-icons/fa";
-import { BsHeart } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
 import "../style/css/orikkiriList.css"; // CSS 파일을 임포트합니다.
 import { FaUserGroup } from "react-icons/fa6";
 

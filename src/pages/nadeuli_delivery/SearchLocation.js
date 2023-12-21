@@ -4,6 +4,8 @@ import {
   StyledButton,
   StyledContainer,
 } from "./NadeuliDeliveryStyledComponent";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
 
 const SearchLocation = () => {
   const navigate = useNavigate();
@@ -13,6 +15,9 @@ const SearchLocation = () => {
   const [departureAddress, setDepartureAddress] = useState("");
   const [arrivalAddress, setArrivalAddress] = useState("");
   const mapContainer = useRef(null);
+  const [map, setMap] = useState(null);
+  const [geocoder, setGeocoder] = useState(null);
+  const [marker, setMarker] = useState(null);
 
   useEffect(() => {
     // 카카오 지도 스크립트를 동적으로 로드합니다
@@ -33,15 +38,19 @@ const SearchLocation = () => {
 
         // 지도의 초기 옵션 설정
         // 지도 객체 생성
-        const map = new kakao.maps.Map(mapContainer, mapOption);
+        const loadedMap = new kakao.maps.Map(mapContainer, mapOption);
+        setMap(loadedMap);
 
         // 주소-좌표 변환 객체를 생성합니다
-        const geocoder = new kakao.maps.services.Geocoder();
+        const loadedGeocoder = new kakao.maps.services.Geocoder();
+        setGeocoder(loadedGeocoder);
 
         // 클릭한 위치를 표시할 마커입니다
-        const marker = new kakao.maps.Marker(),
+        const loadedMarker = new kakao.maps.Marker(),
           // 클릭한 위치에 대한 주소를 표시할 인포윈도우입니다
           infowindow = new kakao.maps.InfoWindow({ zindex: 1 });
+
+        setMarker(loadedMarker);
 
         // 현재 위치를 가져오는 함수
         if (navigator.geolocation) {
@@ -57,22 +66,27 @@ const SearchLocation = () => {
               });
 
               // 마커를 지도에 표시
-              currentPositionMarker.setMap(map);
+              currentPositionMarker.setMap(loadedMap);
 
               // 인포윈도우에 표시될 내용
-              const message =
-                '<div style="padding:5px; text-align: center; font-size: 14px;">현재 위치(목적지 아님)</div>';
+              const message = `<div class="label" style="display: inline-block; position: relative; bottom: 50px; background: url('https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_bg.png') repeat-x; font-size: 12px; line-height: 24px;">
+                <span class="left" style="position: absolute; left: 0; top: 0; width: 6px; height: 24px; background: url('https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_l.png') no-repeat;"></span>
+                <span class="center" style="display: inline-block; padding: 0 10px; height: 24px;">현재 위치</span>
+                <span class="right" style="position: absolute; right: 0; top: 0; width: 6px; height: 24px; background: url('https://t1.daumcdn.net/localimg/localimages/07/2011/map/storeview/tip_r.png') no-repeat;"></span>
+              </div>`;
 
               // 인포윈도우 생성
-              const infowindow = new kakao.maps.InfoWindow({
+              const customOverlay = new kakao.maps.CustomOverlay({
+                position: newPos,
                 content: message,
+                map: loadedMap,
               });
 
               // 인포윈도우를 마커 위에 표시
-              infowindow.open(map, currentPositionMarker);
+              customOverlay.setMap(loadedMap);
 
               // 지도 중심을 현재 위치로 이동
-              map.setCenter(newPos);
+              loadedMap.setCenter(newPos);
             },
             () => {
               console.error("Geolocation failed or permission denied");
@@ -83,7 +97,7 @@ const SearchLocation = () => {
         }
 
         // 지도를 클릭했을 때 클릭 위치 좌표에 대한 주소정보를 표시하도록 이벤트를 등록합니다
-        kakao.maps.event.addListener(map, "click", function (mouseEvent) {
+        kakao.maps.event.addListener(loadedMap, "click", function (mouseEvent) {
           searchDetailAddrFromCoords(
             mouseEvent.latLng,
             function (result, status) {
@@ -93,16 +107,19 @@ const SearchLocation = () => {
                   : result[0].address.address_name;
 
                 // 마커를 클릭한 위치에 표시합니다
-                marker.setPosition(mouseEvent.latLng);
-                marker.setMap(map);
+                loadedMarker.setPosition(mouseEvent.latLng);
+                loadedMarker.setMap(loadedMap);
+
+                // 클릭한 위치로 중심 이동
+                loadedMap.panTo(mouseEvent.latLng);
 
                 // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
                 infowindow.setContent(
-                  '<div style="padding:5px;font-size:12px;">' +
+                  '<div style="padding:5px;font-size:12px; text-align: center;">' +
                     detailAddr +
                     "</div>"
                 );
-                infowindow.open(map, marker);
+                infowindow.open(loadedMap, loadedMarker);
 
                 // 선택된 주소 상태 업데이트
                 setSelectedAddress(detailAddr);
@@ -113,7 +130,11 @@ const SearchLocation = () => {
 
         function searchDetailAddrFromCoords(coords, callback) {
           // 좌표로 법정동 상세 주소 정보를 요청합니다
-          geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+          loadedGeocoder.coord2Address(
+            coords.getLng(),
+            coords.getLat(),
+            callback
+          );
         }
       });
     };
@@ -149,6 +170,43 @@ const SearchLocation = () => {
     navigate("/addDeliveryOrder", { state: { orderData: updatedOrderData } });
   };
 
+  const open = useDaumPostcodePopup(postcodeScriptUrl);
+
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    setSelectedAddress(fullAddress);
+
+    // 주소를 좌표로 변환
+    geocoder.addressSearch(fullAddress, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 지도 중심을 변경하고 마커를 표시
+        map.setCenter(coords);
+        marker.setPosition(coords);
+        marker.setMap(map);
+      }
+    });
+  };
+
+  const handleClick = () => {
+    open({ onComplete: handleComplete });
+  };
+
   return (
     // 지도 크기 설정
     <StyledContainer style={{ justifyContent: "center" }}>
@@ -158,12 +216,9 @@ const SearchLocation = () => {
         style={{ width: "100%", height: "400px" }}
       ></div>
       <br />
-      <p style={{ fontWeight: "bold" }}>선택된 주소</p>
-      <p>{selectedAddress}</p>
-      <p style={{ fontWeight: "bold" }}>출발지</p>
-      <p>{departureAddress}</p>
-      <p style={{ fontWeight: "bold" }}>도착지</p>
-      <p>{arrivalAddress}</p>
+      <p style={{ fontWeight: "bold" }}>선택된 주소 : {selectedAddress}</p>
+      <p style={{ fontWeight: "bold" }}>출발지 : {departureAddress}</p>
+      <p style={{ fontWeight: "bold" }}>도착지 : {arrivalAddress}</p>
       <div style={{ textAlign: "center", justifyContent: "center" }}>
         <StyledButton onClick={handleSetDeparture} style={{ width: "90%" }}>
           출발지 설정하기
@@ -173,7 +228,18 @@ const SearchLocation = () => {
           도착지 설정하기
         </StyledButton>
 
-        <StyledButton onClick={handleConfirmSettings} style={{ width: "90%" }}>
+        <StyledButton
+          type="button"
+          onClick={handleClick}
+          style={{ width: "90%" }}
+        >
+          주소 검색
+        </StyledButton>
+
+        <StyledButton
+          onClick={handleConfirmSettings}
+          style={{ width: "90%", fontWeight: "bold" }}
+        >
           설정 확인
         </StyledButton>
       </div>

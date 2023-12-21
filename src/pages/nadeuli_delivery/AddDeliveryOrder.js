@@ -497,12 +497,12 @@ const AddDeliveryOrder = () => {
               </FormRow>
               {/* id="departure" name="departure" */}
               <FormRow>
-                <StyledInput
+                {orderData.departure || ""}
+                <HiddenInput
                   type="text"
                   id="departure"
                   name="departure"
                   value={orderData.departure || ""}
-                  placeholder="출발지 주소를 입력해 주세요."
                   onChange={handleChange}
                 />
               </FormRow>
@@ -511,12 +511,12 @@ const AddDeliveryOrder = () => {
               </FormRow>
               {/* id="arrival" name="arrival" */}
               <FormRow>
-                <StyledInput
+                {orderData.arrival || ""}
+                <HiddenInput
                   type="text"
                   id="arrival"
                   name="arrival"
                   value={orderData.arrival || ""}
-                  placeholder="도착지 주소를 입력해 주세요."
                   onChange={handleChange}
                 />
               </FormRow>
