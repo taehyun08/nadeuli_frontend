@@ -12,10 +12,11 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [btnState, setBtnState] = useState(false);
-    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumDisabled, setIsAuthNumDisabled] = useState(false);
+    const [isToDisabled, setIsToDisabled] = useState(false);
     const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
     const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
-    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(false); // 새로 추가한 상태
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(true); // 새로 추가한 상태
 
     const [to, setTo] = useState('');
     const [authNum, setAuthNum] = useState('');
@@ -33,20 +34,22 @@ function Login() {
     }, []); // 빈 배열을 전달하여 컴포넌트가 처음 렌더링될 때만 실행되도록 설정합니다.
 
     const handleGetAuthNumBtnClick = (e) => {
-        e.preventDefault(); // 폼의 기본 동작을 막음
+        e.preventDefault();
         if (/[^0-9]/g.test(to) || to.length < 8) {
-            // 안에 숫자가 아닌 값이 있을 경우
             alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
             return;
         }
-        // 휴대폰 번호가 유효하다면, 인증번호를 받기 위한 요청을 보냄
         getAuthNumCellphone(to)
             .then((response) => {
                 alert('인증번호가 발송되었습니다.');
-                setIsAuthNumBtnDisabled(true); // 버튼 비활성화
+                setIsAuthNumBtnDisabled(true);
+                setIsToDisabled(true);
+                setIsAuthNumDisabled(false);
+                setIsCheckAuthNumInputDisabled(false); // 활성화로 변경
+                setIsCheckAuthNumBtnDisabled(true);
             })
             .catch((err) => {
-                alert('이미 존재하거나 올바르지 않은 이메일입니다.');
+                alert('이미 존재하거나 올바르지 않은 번호입니다.');
             });
     };
 
@@ -66,13 +69,11 @@ function Login() {
             .then((response) => {
                 alert('인증번호가 일치합니다.');
                 setBtnState(true);
-                setIsToEditable(false);
-                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumBtnDisabled(false);
                 setIsCheckAuthNumInputDisabled(true);
             })
             .catch((err) => {
                 alert('인증번호가 일치하지 않습니다.');
-                setIsToEditable(true);
             });
     };
 
@@ -160,7 +161,7 @@ function Login() {
                             placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
                             required
                             maxLength={11}
-                            disabled={!isToEditable}
+                            disabled={isToDisabled}
                             onChange={onChange}
                             name="to"
                         />
@@ -168,6 +169,7 @@ function Login() {
                             className="authNumberBtn"
                             onClick={handleGetAuthNumBtnClick}
                             disabled={isAuthNumBtnDisabled}
+                            isActive={!isAuthNumBtnDisabled}
                         >
                             인증번호 받기
                         </Button>
@@ -181,19 +183,21 @@ function Login() {
                             required
                             onChange={onChange}
                             name="authNum"
-                            disabled={isCheckAuthNumInputDisabled} // 인증번호 확인 입력 창의 활성화 여부 설정
+                            disabled={isCheckAuthNumInputDisabled || isAuthNumDisabled}
                         />
                         <Button
                             className="authNumberBtn"
                             onClick={handleCheckAuthNumBtnClick}
-                            disabled={isCheckAuthNumBtnDisabled}
+                            disabled={!isCheckAuthNumBtnDisabled}
+                            isActive={isCheckAuthNumBtnDisabled}
                         >
                             인증번호 확인
                         </Button>
                     </div>
                     <Button
                         onClick={handleLoginBtnClick}
-                        isActive={!btnState}
+                        disabled={!btnState}
+                        isActive={btnState}
                     >
                         로그인
                     </Button>
@@ -278,14 +282,13 @@ const Button = styled.button`
     ${(props) =>
         props.isActive
             ? css`
-                  background-color: ${(props) => props.theme.color.orange};
+                  background-color: #508BFC;
                   &:hover {
-                      background-color: ${(props) => props.theme.hoverColor.orange};
+                      background-color: #1e5ed9;
                   }
               `
             : css`
                   background-color: #ddd;
               `}
 `;
-
 export default Login;

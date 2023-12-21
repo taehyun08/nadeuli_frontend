@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Promotion from './promotion';
 
-function OrikkiriNoticeList({searchQuery}) {
+function OrikkiriNoticeList({orikkiriId}, {masterTag}) {
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -38,8 +38,8 @@ function OrikkiriNoticeList({searchQuery}) {
   });
   
   useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, location, searchQuery));
-  }, [currentPage, location, searchQuery, dispatch]);
+    dispatch(GetDongNePostList(currentPage, location));
+  }, [currentPage, location, dispatch]);
 
   return (
     <div>
