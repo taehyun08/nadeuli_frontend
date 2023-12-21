@@ -4,6 +4,7 @@ import { getSocialMember } from '../../util/memberAxios';
 import { getCurrentPosition } from '../../util/Location';
 import { useDispatch } from 'react-redux';
 import { setMember } from '../../redux/modules/member';
+import { saveToken } from '../../shared/localStorage';
 
 const OAuth2RedirectHandler = () => {
     const navigate = useNavigate();
@@ -12,7 +13,7 @@ const OAuth2RedirectHandler = () => {
     // const [accessToken, setAccessToken] = useState('');
     const queryParams = new URLSearchParams(location.search);
     const accessToken = queryParams.get('accessToken');
-
+    saveToken(accessToken);
     // 쿠키에서 이름이 'Authorization'인 쿠키의 값을 가져오는 함수
     async function getCookieValue(cookieName) {
         const cookies = document.cookie.split(';');
