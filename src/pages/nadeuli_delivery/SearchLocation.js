@@ -110,6 +110,9 @@ const SearchLocation = () => {
                 loadedMarker.setPosition(mouseEvent.latLng);
                 loadedMarker.setMap(loadedMap);
 
+                // 클릭한 위치로 중심 이동
+                loadedMap.panTo(mouseEvent.latLng);
+
                 // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
                 infowindow.setContent(
                   '<div style="padding:5px;font-size:12px; text-align: center;">' +
