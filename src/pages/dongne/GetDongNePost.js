@@ -21,6 +21,7 @@ function GetDongNePost() {
     dispatch(GetDongNePostDetail(postId));
   }, [dispatch, postId]);
 
+
   useEffect(() => {
     if (getDongNePost.streaming) {
       const videoElement = videoRef.current[0];
@@ -56,9 +57,9 @@ function GetDongNePost() {
         <div>
           <PostInfo
             text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
-            writerImg={getDongNePost.writer.picture}
-            writerNickName={getDongNePost.writer.nickname}
-            writerDongNe={getDongNePost.writer.dongNe}
+            writerImg={getDongNePost.writerPicture}
+            writerNickName={getDongNePost.writerNickname}
+            writerDongNe={getDongNePost.writerDongNe}
             timeAgo={getDongNePost.timeAgo}
           />
         </div>
@@ -94,7 +95,6 @@ function GetDongNePost() {
         </div>
         
         <Comment postId={getDongNePost.postId}>
-          <p>댓글 위치</p>
         </Comment>
       </Container>
     </Wrap>

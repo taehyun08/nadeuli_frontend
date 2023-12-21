@@ -21,8 +21,11 @@ import TopArrowLeft from '../../components/TopArrowLeft';
 import HeaderBack from '../../components/HeaderBack';
 import { addBlockMember, deleteBlockMember, getMemberList } from '../../util/memberAxios';
 import { useInView } from 'react-intersection-observer';
+import styled from 'styled-components';
+import axios from 'axios';
+import { get } from '../../util/axios';
 
-export default function GetMemberList() {
+export default function GetOrikkiriSignUpList() {
     const [items, setItems] = useState([]);
     const [page, setPage] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -30,18 +33,12 @@ export default function GetMemberList() {
     const [blockReason, setBlockReason] = useState('');
     const [blockDay, setBlockDay] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
-
+    const BASE_URL = process.env.REACT_APP_BASE_URL;
     // 서버에서 아이템을 가지고 오는 함수
     const getItems = async () => {
-        const searchDTO = {
-            searchKeyword: searchKeyword,
-            currentPage: 0,
-        };
-
         try {
-            const response = await getMemberList(searchDTO);
+            const response = await axios.get(`${BASE_URL}/orikkiri/getOrikkrirSignupList/2`);
             console.log(response.data);
-
             // 서버 응답 결과를 전부 setItems 호출
             setItems(response.data);
         } catch (error) {
@@ -51,7 +48,7 @@ export default function GetMemberList() {
 
     useEffect(() => {
         getItems(); // 초기 렌더링 시에 데이터 불러오기
-    }, [searchKeyword]); // 검색어가 변경될 때마다 실행
+    }, []); // 검색어가 변경될 때마다 실행
 
     // 회원 정지
     const toggleOpen = () => {
@@ -137,70 +134,41 @@ export default function GetMemberList() {
                 light
                 bgColor="light"
             >
-                <MDBContainer fluid>
+                <TMenuBar>
                     <HeaderBack />
-                    <MDBInputGroup
-                        tag="form"
-                        className="d-flex w-50"
-                    >
-                        <input
-                            className="form-control"
-                            placeholder="닉네임 또는 태그를 입력해주세요"
-                            aria-label="Search"
-                            type="Search"
-                            value={searchKeyword}
-                            onChange={(e) => setSearchKeyword(e.target.value)}
-                            style={{ fontSize: '13px' }} // 원하는 크기로 조절
-                        />
-                    </MDBInputGroup>
-                </MDBContainer>
+                    <p>우리끼리 가입신청 목록</p>
+                </TMenuBar>
             </MDBNavbar>
             <MDBListGroup
                 style={{ minWidth: '22rem' }}
                 light
             >
-                {items.map((item, index) => (
-                    <div
-                        key={index}
-                        className={`list-item ${items.length - 1 === index ? 'last-item' : ''}`}
-                    >
-                        <MDBListGroupItem className="relative d-flex justify-content-between align-items-center">
-                            <div className="d-flex align-items-center">
-                                <img
-                                    src={item.picture}
-                                    alt={`Profile ${index}`}
-                                    style={{ width: '45px', height: '45px' }}
-                                    className="rounded-circle ms-3"
-                                />
-                                <div className="ms-3">
-                                    <p className="fw-bold mb-0">
-                                        {item.nickname}
-                                        <i>#{item.tag}</i>
-                                    </p>
-                                    <p className="text-muted mb-0">{item.email}</p>
-                                    <p className="text-muted mb-0">친화력 {item.affinity}점</p>
-                                    <p className="text-muted mb-0">정지일수 {item.blockDay}일</p>
-                                    <p className="text-muted mb-0">정지기간 {item.blockEnd && formatDate(item.blockEnd)}</p>
-                                    <p className="text-muted mb-0">정지사유 {item.blockReason}</p>
+                {items.length > 0 &&
+                    items.map((item, index) => (
+                        <div
+                            key={index}
+                            className={`list-item ${items.length - 1 === index ? 'last-item' : ''}`}
+                        >
+                            <MDBListGroupItem className="relative d-flex justify-content-between align-items-center">
+                                <div className="d-flex align-items-center">
+                                    <img
+                                        src={item.picture}
+                                        alt={`Profile ${index}`}
+                                        style={{ width: '45px', height: '45px' }}
+                                        className="rounded-circle ms-3"
+                                    />
+                                    <div className="ms-3">
+                                        <p className="fw-bold mb-0">
+                                            {item.nickname}
+                                            <i>#{item.tag}</i>
+                                        </p>
+                                        <p className="text-muted mb-0">{item.email}</p>
+                                    </div>
+                                    <MDBBtn>{/* 버튼 내용 */}</MDBBtn>
                                 </div>
-                                <MDBBtn
-                                    onClick={() => {
-                                        if (item.blockDay === 0 || !item.blockDay) {
-                                            handleMemberClick(item.tag);
-                                        } else {
-                                            handleUnblockMember(item.tag);
-                                        }
-                                    }}
-                                    className={`position-absolute top-50 end-0 translate-middle-y me-3 ${
-                                        item.blockDay !== 0 && item.blockDay ? 'btn-danger' : ''
-                                    }`}
-                                >
-                                    {item.blockDay === 0 || !item.blockDay ? '회원 정지' : '회원 정지 해제'}
-                                </MDBBtn>
-                            </div>
-                        </MDBListGroupItem>
-                    </div>
-                ))}
+                            </MDBListGroupItem>
+                        </div>
+                    ))}
             </MDBListGroup>
             {/* 정지모달 */}
             <MDBModal
@@ -277,3 +245,18 @@ export default function GetMemberList() {
         </div>
     );
 }
+const TMenuBar = styled.div`
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+
+    p {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+    }
+`;

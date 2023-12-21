@@ -1,5 +1,4 @@
 import axios from 'axios';
-import member from '../redux/modules/member';
 
 // 환경 변수에서 기본 URL을 가져옵니다.
 const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -142,3 +141,14 @@ export const addBlockMember = async (memberDTO, blockDTO) => {
 export const deleteBlockMember = async (tag) => {
     return await instance.get(`/member/deleteBlockMember/${tag}`);
 };
+
+// 계좌 조회 함수
+export const checkPortOneAccountName = async (portOneAccountDTO) => {
+    return await instance.post(`/member/checkPortOneAccountName`,{portOneAccountDTO});
+};
+
+// 계좌 조회 함수
+export const deleteMemberBackAccount = async (portOneAccountDTO) => {
+    return await instance.post(`/member/deleteMemberBackAccount`,{portOneAccountDTO});
+};
+

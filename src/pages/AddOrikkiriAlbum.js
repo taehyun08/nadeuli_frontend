@@ -4,9 +4,9 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { dongNePost } from "../../redux/modules/dongNePost";
+import { dongNePost } from "../redux/modules/dongNePost";
 
-function AddDongNePost() {
+function AddOrikkiriAlbum({orikkiriId}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
@@ -45,10 +45,11 @@ function AddDongNePost() {
   };
 
   const addDongNePost = () => {
+    const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = (category === "잡담" ? 1 : 2);
+    const postCategory = (category === 4);
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');
@@ -61,6 +62,7 @@ function AddDongNePost() {
     }
     const formData = new FormData();
     const postDTOData = {
+      orikkiri,
       title,
       content,
       postCategory,
@@ -84,9 +86,9 @@ function AddDongNePost() {
       <Header>
         <IoIosClose
           size="30"
-          onClick={() => navigate("/dongNeHome")}
+          onClick={() => navigate(-1)}
         />
-        <h4>동네나드리 글쓰기</h4>
+        <h4>우리끼리 앨범등록</h4>
         <h5 onClick={addDongNePost}>완료</h5>
       </Header>
 
@@ -96,22 +98,7 @@ function AddDongNePost() {
             <input placeholder="제목을 입력하세요" ref={title_ref} />
           </Title>
 
-          <Categorie>
-            <select name="category" id="category" onChange={changeCategory}>
-              <option value="none">게시물 카테고리를 선택해주세요.</option>
-              <option value="잡담">잡담</option>
-              <option value="홍보">홍보</option>
-            </select>
-          </Categorie>
         </div>
-
-        <textarea
-          cols="40"
-          rows="5"
-          placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.`}
-          ref={content_ref}
-        />
-
         {/* 파일 업로드 */}
         <File>
           <label htmlFor="file-input">
@@ -235,4 +222,4 @@ select {
 `;
 
 
-export default AddDongNePost;
+export default AddOrikkiriAlbum;

@@ -5,7 +5,6 @@ import Register from "./pages/member/Register";
 import Login from "./pages/member/Login";
 import Main from "./pages/Main";
 import GetMyProfile from "./pages/member/GetMyProfile";
-import UpdateMember from "./pages/member/UpdateMember";
 import Add from "./pages/Add";
 import Detail from "./pages/Detail";
 import NotFound from "./pages/NotFound";
@@ -41,6 +40,14 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
+import GetOrikkiriSignUpList from "./pages/orikkiri/GetOrikkiriSignUpList";
+import AddOrikkiriSignUp from "./pages/orikkiri/AddOrikkiriSignUp";
+import Bank from "./pages/member/Bank";
+import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
+import AddOrikkiriSchedule from "./pages/orikkiri/AddOrikkiriSchedule";
+import AddOrikkiriPost from "./pages/AddOrikkiriPost";
+import AddOrikkiriAlbum from "./pages/AddOrikkiriAlbum";
+import AddOrikkiriNotice from "./pages/AddOrikkiriNotice";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -54,12 +61,21 @@ function Router() {
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
+        <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
+        <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
+        <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
+        <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
+        <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
+        <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
         />
-        <Route path="/nadeuliPay/nadeuliPayPay/:productId" element={<NadeuliPayPay />} />
+        <Route
+          path="/nadeuliPay/nadeuliPayPay/:productId"
+          element={<NadeuliPayPay />}
+        />
         <Route
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
@@ -71,13 +87,17 @@ function Router() {
         />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
-        <Route path="/chat/chatting/:chatRoomId/:id/:isProduct" element={<Chatting />} />
+        <Route
+          path="/chat/chatting/:chatRoomId/:id/:isProduct"
+          element={<Chatting />}
+        />
 
         <Route path="/location" element={<RegisterLocation />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
+        <Route path="/bank" element={<Bank />} />
         <Route
           path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}
@@ -88,7 +108,6 @@ function Router() {
         <Route path="/getMyProfile" element={<GetMyProfile />} />
         <Route path="/getOtherProfile" element={<GetOtherProfile />} />
         <Route path="/getMemberList" element={<GetMemberList />} />
-        <Route path="/updateMember" element={<UpdateMember />} />
         <Route path="/report" element={<Report />} />
         <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />
@@ -119,7 +138,7 @@ function Router() {
           path="/getMyAcceptedDeliveryHistoryList"
           element={<GetMyAcceptedDeliveryHistoryList />}
         />
-        {/* <Route path="/getShortestWay" element={<GetShortestWay />} /> */}
+        <Route path="/getShortestWay" element={<GetShortestWay />} />
       </Routes>
     </BrowserRouter>
   );

@@ -10,8 +10,9 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { carrotGetPost, deletePost, postUnLike, postLike } from '../redux/modules/post';
 import { post } from "../util/chatAxios";
-
 import Modal from '../components/Modal';
+import { addFavorite } from '../util/memberAxios';
+
 
 function Detail() {
 

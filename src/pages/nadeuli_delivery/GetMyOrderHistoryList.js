@@ -28,7 +28,7 @@ const GetMyOrderHistoryList = () => {
       },
     };
 
-    post("/nadeuli/nadeulidelivery/getMyOrderHistoryList", requestData, {
+    post("/nadeulidelivery/getMyOrderHistoryList", requestData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -69,9 +69,10 @@ const GetMyOrderHistoryList = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle>주문 내역 목록</OrderTitle>
+          <OrderTitle style={{ paddingLeft: "80px" }}>
+            주문 내역 목록
+          </OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "60px" }}></Box>
       </HeaderContainer>
       {responseDTOList.map((responseDTO, index) => (
         <CardBox

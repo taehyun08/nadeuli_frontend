@@ -4,9 +4,9 @@ import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { dongNePost } from "../../redux/modules/dongNePost";
+import { dongNePost } from "../redux/modules/dongNePost";
 
-function AddDongNePost() {
+function AddOrikkiriPost({orikkiriId}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
@@ -14,7 +14,6 @@ function AddDongNePost() {
   const [category, setCategory] = useState();
   const fileInput = useRef(); // 하나의 file input으로 모든 파일 처리
   const [previewImages, setPreviewImages] = useState([]);
-  const getMember = useSelector((state) => state.member);
   const location = useSelector((state) => state.member.gu);
   const member = useSelector((state) => state.member);
 
@@ -45,10 +44,11 @@ function AddDongNePost() {
   };
 
   const addDongNePost = () => {
+    const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = (category === "잡담" ? 1 : 2);
+    const postCategory = (category === 1);
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');
@@ -61,11 +61,12 @@ function AddDongNePost() {
     }
     const formData = new FormData();
     const postDTOData = {
+      orikkiri,
       title,
       content,
       postCategory,
       gu: location,
-      dongNe: getMember.dongNe,
+      dongNe: member.dongNe,
       writer: writer
     };
 
@@ -84,9 +85,9 @@ function AddDongNePost() {
       <Header>
         <IoIosClose
           size="30"
-          onClick={() => navigate("/dongNeHome")}
+          onClick={() => navigate(-1)}
         />
-        <h4>동네나드리 글쓰기</h4>
+        <h4>우리끼리 글쓰기</h4>
         <h5 onClick={addDongNePost}>완료</h5>
       </Header>
 
@@ -96,13 +97,6 @@ function AddDongNePost() {
             <input placeholder="제목을 입력하세요" ref={title_ref} />
           </Title>
 
-          <Categorie>
-            <select name="category" id="category" onChange={changeCategory}>
-              <option value="none">게시물 카테고리를 선택해주세요.</option>
-              <option value="잡담">잡담</option>
-              <option value="홍보">홍보</option>
-            </select>
-          </Categorie>
         </div>
 
         <textarea
@@ -235,4 +229,4 @@ select {
 `;
 
 
-export default AddDongNePost;
+export default AddOrikkiriPost;

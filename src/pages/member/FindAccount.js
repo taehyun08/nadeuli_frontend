@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { checkAuthNum, findAccount, getAuthNumEmail } from '../../shared/axios';
+import { checkAuthNum, findAccount, getAuthNumEmail } from '../../util/memberAxios';
 
 function FindAccount() {
     const [btnState, setBtnState] = useState(false);

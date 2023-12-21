@@ -20,7 +20,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    get(`/nadeuli/member/getMember/${memberTag}`)
+    get(`/member/getMember/${memberTag}`)
       .then((response) => {
         if (response) {
           console.log(response);
@@ -37,7 +37,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
   const handleNotificationToggle = () => {
     // 현재 체크 상태에 따라 반대 상태로 업데이트
     const newIsNadeuliDeliveryStatus = !isNadeuliDeliveryEnabled;
-    get(`/nadeuli/member/handleNadeuliDelivery/${memberTag}`)
+    get(`/member/handleNadeuliDelivery/${memberTag}`)
       .then((response) => {
         console.log("Server Response:", response); // 서버 응답 로그 출력
         if (response && response.success) {
@@ -69,7 +69,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
       };
 
       post(
-        "/nadeuli/nadeulidelivery/getDeliveryNotificationList",
+        "/nadeulidelivery/getDeliveryNotificationList",
         deliveryNotificationDTO,
         {
           headers: {
@@ -101,13 +101,16 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
   const handelDeleteNotification = (deliveryNotificationId, event) => {
     event.stopPropagation(); // 이벤트 버블링 중단
     // deliveryNotificationId를 사용하여 API 요청
-    get(
-      `/nadeuli/nadeulidelivery/deleteDeliveryNotification/${deliveryNotificationId}`
-    )
+    get(`/nadeulidelivery/deleteDeliveryNotification/${deliveryNotificationId}`)
       .then((response) => {
         // 성공적으로 알림이 삭제되었다면, UI를 업데이트 하거나 사용자에게 피드백 제공
         console.log(response);
         // 필요하다면 여기서 알림 목록을 업데이트하는 로직 추가
+        const updatedNotifications = notifications.filter(
+          (notification) =>
+            notification.deliveryNotificationId !== deliveryNotificationId
+        );
+        setNotifications(updatedNotifications);
       })
       .catch((error) => {
         // 에러 처리
@@ -117,7 +120,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
 
   const handleIsRead = (deliveryNotificationId, event) => {
     event.stopPropagation(); // 이벤트 버블링 중단
-    get(`/nadeuli/nadeulidelivery/updateIsRead/${deliveryNotificationId}`)
+    get(`/nadeulidelivery/updateIsRead/${deliveryNotificationId}`)
       .then((response) => {
         console.log(response);
         // 알림 목록에서 해당 아이템의 상태를 업데이트
@@ -197,7 +200,7 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
                     {notification.notificationContent}
                   </div>
                   <MdDelete
-                    style={{ fontSize: "30px" }}
+                    className="delete-icon"
                     onClick={(event) =>
                       handelDeleteNotification(
                         notification.deliveryNotificationId,

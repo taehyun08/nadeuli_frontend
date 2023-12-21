@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { css } from 'styled-components';
 import HeaderBack from '../../components/HeaderBack';
-import { login, getAuthNumCellphone, checkAuthNum, handleMemberActivate } from '../../shared/axios';
+import { login, getAuthNumCellphone, checkAuthNum, handleMemberActivate } from '../../util/memberAxios';
 import { getToken, removeToken, saveToken } from '../../shared/localStorage';
 import { getMember, setMember } from '../../redux/modules/member';
 

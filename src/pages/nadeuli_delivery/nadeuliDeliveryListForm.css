@@ -151,6 +151,7 @@ input:checked + .slider:before {
 }
 
 .notification-item {
+  display: flex;
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
@@ -171,11 +172,19 @@ input:checked + .slider:before {
 
 .notification-content-container {
   display: flex;
+  margin: auto;
   justify-content: space-between;
   align-items: center;
   width: 100%;
 }
 
 .notification-content {
-  font-size: 0.9rem;
+  font-size: 15px;
+  flex-grow: 1; /* 남은 공간을 채우도록 함 */
+  margin-right: 10px; /* 아이콘과의 간격 유지 */
+}
+
+.delete-icon {
+  font-size: 25px !important;
+  flex-shrink: 0; /* 아이콘 크기 유지 */
 }

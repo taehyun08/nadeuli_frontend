@@ -15,13 +15,15 @@ import {
 } from "./NadeuliDeliveryStyledComponent";
 import HeaderBack from "../../components/HeaderBack";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setDeliveryLocations } from "../../redux/modules/nadeuliDelivery";
 
 const GetMyAcceptedDeliveryHistoryList = () => {
   // 나의 주문 내역을 목록 조회한다.
   const [responseDTOList, setResponseDTOList] = useState([]);
   const navigate = useNavigate();
   const memberTag = useSelector((state) => state.member.tag);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const requestData = {
@@ -30,26 +32,30 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       },
     };
 
-    post(
-      "/nadeuli/nadeulidelivery/getMyAcceptedDeliveryHistoryList",
-      requestData,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        params: {
-          currentPage: 0,
-        },
-      }
-    )
+    post("/nadeulidelivery/getMyAcceptedDeliveryHistoryList", requestData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        currentPage: 0,
+      },
+    })
       .then((response) => {
         console.log("getMyAcceptedDeliveryHistoryList 호출 완료!", response);
         setResponseDTOList(response);
+        const deliveryLocations = response.map((dto) => ({
+          departure: dto.departure,
+          arrival: dto.arrival,
+        }));
+
+        console.log("dispatch 할 장소 리스트 : ", deliveryLocations);
+
+        dispatch(setDeliveryLocations({ deliveryLocations }));
       })
       .catch((error) => {
         console.log("getMyAcceptedDeliveryHistoryList 호출 에러!", error);
       });
-  }, [memberTag]);
+  }, [memberTag, dispatch]);
 
   const handleNavigateToOrder = (nadeuliDeliveryId) => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
@@ -68,6 +74,10 @@ const GetMyAcceptedDeliveryHistoryList = () => {
     return new Intl.NumberFormat("ko-KR", {
       minimumFractionDigits: 0, // 소수점 이하 자릿수 (0으로 설정하면 소수점 없음)
     }).format(value);
+  };
+
+  const handleGetShortestWay = () => {
+    navigate(`/getShortestWay`);
   };
 
   return (
@@ -130,7 +140,9 @@ const GetMyAcceptedDeliveryHistoryList = () => {
           </DetailRow>
         </CardBox>
       ))}
-      <OrderButton>최단경로 계산하기</OrderButton>
+      <OrderButton onClick={handleGetShortestWay}>
+        최단경로 계산하기
+      </OrderButton>
     </div>
   );
 };
