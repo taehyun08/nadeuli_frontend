@@ -58,7 +58,7 @@ const OAuth2RedirectHandler = () => {
         if (accessToken) {
             fetchData();
         }
-    }, [accessToken, navigate]);
+    }, []);
 
     return <>sdfsdf</>;
 };
