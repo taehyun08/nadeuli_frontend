@@ -20,10 +20,11 @@ import {
 import { useSelector } from 'react-redux';
 import { addAnsQuestion, addOrikkiri } from '../../util/orikkiriManageAxios';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const AddOrikkiri = () => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
-
+    const navigate = useNavigate();
     const [orikkiriName, setOrikkiriName] = useState('');
     const [orikkiriIntroduction, setOrikkiriIntroduction] = useState('');
     const imageInput = useRef();
@@ -115,27 +116,69 @@ const AddOrikkiri = () => {
             console.log('orikkiriId :' + orikkiriId);
 
             // 각각의 질문에 대한 처리
-            for (const question of questions) {
-                // question의 입력값을 가져와서 addAnsQuestionDTO 구성
-                const inputValue = document.getElementById(`question-${question.id}`).value; // 사용자 입력 값 가져오기
-                console.log('inputValue :' + inputValue);
-                const formData = new FormData();
+            // question의 입력값을 가져와서 addAnsQuestionDTO 구성
+            const inputValue = document.getElementById(`question`).value; // 사용자 입력 값 가져오기
+            console.log('inputValue :' + inputValue);
+            const newFormData = new FormData();
 
-                formData.append('orikkiriId', orikkiriId);
-                formData.append('content', inputValue);
+            newFormData.append('orikkiriId', orikkiriId);
+            newFormData.append('content', inputValue);
 
-                await axios.post(`${BASE_URL}/orikkiriManage/addAnsQuestion`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data', // 변경된 부분
-                    },
-                });
-            }
-
+            await axios.post(`${BASE_URL}/orikkiriManage/addAnsQuestion`, newFormData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // 변경된 부분
+                },
+            });
+            navigate('/dongNeHome');
             // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
         } catch (error) {
             console.error('Error creating orikkiri:', error);
         }
     };
+
+    // const handleCreateOrikkiri = async () => {
+    //     try {
+    //         const formData = new FormData();
+
+    //         formData.append('image', imageInput.current.files[0]);
+
+    //         formData.append('dongNe', member.dongNe);
+    //         formData.append('masterTag', member.tag);
+    //         formData.append('orikkiriName', orikkiriName);
+    //         formData.append('orikkiriIntroduction', orikkiriIntroduction);
+
+    //         const response = await axios.post(`${BASE_URL}/orikkiriManage/addOrikkiri`, formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',
+    //             },
+    //         });
+
+    //         // createdOrikkiri에서 orikkiriId 추출
+    //         const orikkiriId = response.data.orikkiriId;
+    //         console.log('orikkiriId :' + orikkiriId);
+
+    //         // 각각의 질문에 대한 처리
+    //         for (const question of questions) {
+    //             // question의 입력값을 가져와서 addAnsQuestionDTO 구성
+    //             const inputValue = document.getElementById(`question-${question.id}`).value; // 사용자 입력 값 가져오기
+    //             console.log('inputValue :' + inputValue);
+    //             const formData = new FormData();
+
+    //             formData.append('orikkiriId', orikkiriId);
+    //             formData.append('content', inputValue);
+
+    //             await axios.post(`${BASE_URL}/orikkiriManage/addAnsQuestion`, formData, {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data', // 변경된 부분
+    //                 },
+    //             });
+    //         }
+    //         navigate('/dongNeHome');
+    //         // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
+    //     } catch (error) {
+    //         console.error('Error creating orikkiri:', error);
+    //     }
+    // };
 
     return (
         <section style={{ backgroundColor: '#eee' }}>
@@ -156,7 +199,6 @@ const AddOrikkiri = () => {
                         <MDBCard className="mb-4">
                             <MDBCardBody className="text-center">
                                 <MDBCardImage
-                                    // src={imageSrc || member.picture}
                                     alt="picture"
                                     src={imageSrc}
                                     className="mb-5"
@@ -209,7 +251,7 @@ const AddOrikkiri = () => {
                                 >
                                     우리끼리 가입 신청 질문을 입력해주세요
                                 </MDBTypography>
-                                {questions.map((question) => (
+                                {/* {questions.map((question) => (
                                     <React.Fragment key={question.id}>
                                         <MDBTypography
                                             tag="strong"
@@ -244,10 +286,25 @@ const AddOrikkiri = () => {
                                         style={{ fontSize: '30px', marginTop: '10px', cursor: 'pointer' }}
                                         onClick={addQuestion}
                                     />
-                                )}
+                                )} */}
+
+                                <MDBTypography
+                                    tag="strong"
+                                    style={{ textAlign: 'left', display: 'block', marginTop: '20px' }}
+                                >
+                                    질문
+                                </MDBTypography>
+                                <MDBInput
+                                    label="내용"
+                                    id='question'
+                                    type="text"
+                                    style={{ position: 'relative' }}
+                                    className="mt-1"
+                                ></MDBInput>
+
                                 <br />
                                 <MDBBtn
-                                    className="mt-5"
+                                    className="mt-1"
                                     onClick={handleCreateOrikkiri}
                                 >
                                     우리끼리 생성
