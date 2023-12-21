@@ -24,9 +24,9 @@ const OAuth2RedirectHandler = () => {
 
     useEffect(() => {
         const fetchCookieValue = async () => {
-            const value = getCookieValue('Authorization');
+            const value = await getCookieValue('Authorization'); // 비동기 처리를 위해 await 사용
             setAccessToken(value);
-            console.log(value)
+            console.log(value);
         };
 
         fetchCookieValue();
@@ -40,7 +40,7 @@ const OAuth2RedirectHandler = () => {
                 };
 
                 const response = await getSocialMember(tokenDTO);
-                console.log(response.data)
+                console.log(response.data);
                 if (!response.data.nickname) {
                     // nickname이 없는 경우 oauth2Register로 라우팅
                     navigate('/oauth2Register');
