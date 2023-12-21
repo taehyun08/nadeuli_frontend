@@ -81,10 +81,16 @@ function GetDongNePost() {
 
   }
 
-  const dropdownMenus = [
+  const dropdownMenus1 = [
+    { label: '수정', onClick: handleupdate },
+    { label: '삭제', onClick: openDeleteDialog },
+    { label: '신고', onClick: openReportDialog }
+    // 원하는 만큼 추가
+  ];
+
+  const dropdownMenus2 = [
     { label: '수정', onClick: handleupdate },
     { label: '종료', onClick: openShutdownDialog },
-    { label: '삭제', onClick: openDeleteDialog },
     { label: '신고', onClick: openReportDialog }
     // 원하는 만큼 추가
   ];
@@ -117,7 +123,9 @@ function GetDongNePost() {
     <Wrap>
       <Header>
         <TopArrowLeft/>
-        <TopDropdownMenu dropdownMenus={dropdownMenus}/>
+        {
+           getDongNePost.streaming ? <TopDropdownMenu dropdownMenus={dropdownMenus2}/> : <TopDropdownMenu dropdownMenus={dropdownMenus1}/>
+        }
       </Header>
 
       <Container>

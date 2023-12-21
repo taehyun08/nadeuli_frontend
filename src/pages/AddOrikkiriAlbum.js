@@ -48,23 +48,17 @@ function AddOrikkiriAlbum({orikkiriId}) {
     const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
-    const content = content_ref.current.value;
-    const postCategory = (category === 4);
+    const postCategory = (category === '4');
 
-    if (!title || !content) {
+    if (!title) {
       alert('모든 칸을 입력해주세요.');
       return;
     }
 
-    if (!category || category === "none") {
-      alert("게시물 카테고리를 선택해주세요!");
-      return;
-    }
     const formData = new FormData();
     const postDTOData = {
-      orikkiri,
+      orikkiri: orikkiri,
       title,
-      content,
       postCategory,
       gu: location,
       dongNe: getMember.dongNe,

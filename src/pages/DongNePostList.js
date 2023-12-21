@@ -14,6 +14,11 @@ function DongNePostList({searchQuery}) {
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(1);
 
+  useEffect(() => {
+    dispatch(GetDongNePostList(currentPage, location, searchQuery));
+  }, [currentPage, location, searchQuery, dispatch]);
+
+
   const handleChitChatClick = () => {
     setSelectedCategory(1);
   };
@@ -34,6 +39,13 @@ function DongNePostList({searchQuery}) {
         return false;
       }
     }
+
+      // 추가 조건: orikkiriId 값이 없는 경우
+    if (dongNePost.orikkiri && dongNePost.orikkiri.orikkiriId) {
+        return false;
+    }
+    
+
     return dongNePost.gu === location;
   });
   

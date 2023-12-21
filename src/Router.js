@@ -64,9 +64,9 @@ function Router() {
         <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
         <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
         <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
-        <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
-        <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
-        <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
+        <Route path="/addOrikkiriPost/:orikkiriId" element={<AddOrikkiriPost />} />
+        <Route path="/addOrikkiriAlbum/:orikkiriId" element={<AddOrikkiriAlbum />} />
+        <Route path="/addOrikkiriNotice/:orikkiriId" element={<AddOrikkiriNotice />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"

@@ -22,6 +22,7 @@ function OrikkiriHome() {
   const orikkiriId = params.orikkiriId;
   const orikkiriMasterTag = params.masterTag;
   const member = useSelector((state) => state.member); // 유저 정보
+  const [getOrikkiriId, setOrikkiriId] = useState(null);
   const [selectedContent, setSelectedContent] = useState('home');
   const handleOrikkiriHome = () => setSelectedContent('home');
   const handleOrikkirPost = () => setSelectedContent('post');

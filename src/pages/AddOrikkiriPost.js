@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { dongNePost } from "../redux/modules/dongNePost";
+import { useParams } from 'react-router-dom';
 
-function AddOrikkiriPost({orikkiriId}) {
+function AddOrikkiriPost() {
+  const { orikkiriId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
@@ -40,11 +42,12 @@ function AddOrikkiriPost({orikkiriId}) {
   };
 
   const addDongNePost = () => {
+    console.log(orikkiriId);
     const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = (category === 1);
+    const postCategory = 1;
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');
@@ -53,10 +56,10 @@ function AddOrikkiriPost({orikkiriId}) {
 
     const formData = new FormData();
     const postDTOData = {
-      orikkiri,
+      orikkiri: orikkiri,
       title,
       content,
-      postCategory,
+      postCategory: postCategory,
       gu: location,
       dongNe: member.dongNe,
       writer: writer
@@ -69,7 +72,7 @@ function AddOrikkiriPost({orikkiriId}) {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    dispatch(dongNePost(formData, navigate));
+    dispatch(dongNePost(formData, navigate, '/orikkiriHome/'+orikkiriId));
   };
 
   return (
