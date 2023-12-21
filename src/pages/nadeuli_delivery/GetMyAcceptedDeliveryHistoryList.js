@@ -140,9 +140,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
           </DetailRow>
         </CardBox>
       ))}
-      <OrderButton onClick={handleGetShortestWay}>
-        최단경로 계산하기
-      </OrderButton>
+      <OrderButton onClick={handleGetShortestWay}>추천경로 조회</OrderButton>
     </div>
   );
 };
