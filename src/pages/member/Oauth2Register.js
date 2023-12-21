@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { addMember, addNickname, checkAuthNum, getAuthNumCellphone, updateSocial } from '../../util/memberAxios';
 import { css } from 'styled-components';
 import { getCurrentPosition } from '../../util/Location';
-import { saveToken } from '../../shared/localStorage';
+import { getToken, saveToken } from '../../shared/localStorage';
 import { useDispatch } from 'react-redux';
 import { getMember, setMember } from '../../redux/modules/member';
 
@@ -14,7 +14,7 @@ function Oauth2Register() {
     const dispatch = useDispatch();
     const [btnState, setBtnState] = useState(false);
 
-    const [accessToken, setAccessToken] = useState('');
+    const [accessToken, setAccessToken] = useState(getToken());
     const [nickname, setNickname] = useState('');
     const [latitude, setLatitude] = useState(null);
     const [longitude, setLongitude] = useState(null);
@@ -84,7 +84,7 @@ function Oauth2Register() {
             x: longitude,
         };
 
-        addNickname(tokenDTO, gpsDTO,memberDTO)
+        addNickname(tokenDTO, gpsDTO, memberDTO)
             .then((response) => {
                 if (response.data) {
                     alert('닉네임 설정이 완료되었습니다.');
@@ -129,7 +129,7 @@ function Oauth2Register() {
                         onClick={handleAddMemberBtnClick}
                         isActive={!btnState}
                     >
-                        회원가입
+                        닉네임 설정
                     </Button>
                 </Form>
             </Content>
@@ -205,13 +205,12 @@ const Button = styled.button`
     &.authNumberBtn {
         width: 40%;
     }
-
     ${(props) =>
         props.isActive
             ? css`
-                  background-color: ${(props) => props.theme.color.orange};
+                  background-color: #508bfc;
                   &:hover {
-                      background-color: ${(props) => props.theme.hoverColor.orange};
+                      background-color: #1e5ed9;
                   }
               `
             : css`
