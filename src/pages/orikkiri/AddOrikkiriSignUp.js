@@ -4,21 +4,22 @@ import styled from 'styled-components';
 import { MDBBreadcrumb, MDBCard, MDBCardBody, MDBCol, MDBContainer, MDBRow, MDBTextArea, MDBTypography, MDBBtn } from 'mdb-react-ui-kit';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
-const AddOrikkiri = (props) => {
+const AddOrikkiriSignUp = () => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
     const navigate = useNavigate();
     const [ansQuestions, setAnsQuestions] = useState([]);
     const [answers, setAnswers] = useState([]); // 입력된 값을 저장할 상태
-    const { orikkiriId } = props;
+    const params = useParams();
+    const { orikkiriId } = params.orikkiriId;
     const member = useSelector((state) => state.member);
 
     //질문 가져오는 함수
     useEffect(() => {
         const fetchAnsQuestions = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/47`);
+                const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/${orikkiriId}`);
                 // const response = await axios.get(`${BASE_URL}/orikkiriManage/getAnsQuestionList/${orikkiriId}`);
                 setAnsQuestions(response.data);
             } catch (error) {
@@ -47,7 +48,7 @@ const AddOrikkiri = (props) => {
                     tag: member.tag,
                 },
                 orikkiri: {
-                    orikkiriId: 47, // prop으로 처리해야함
+                    orikkiriId: orikkiriId, // prop으로 처리해야함
                 },
                 ansQuestions: ansQuestions.map((question) => ({ ansQuestionId: question.ansQuestionId })),
             };
@@ -62,7 +63,7 @@ const AddOrikkiri = (props) => {
                     console.log(oriScheMemChatFavId);
                     const ansQuestionDTO = {
                         content: answer,
-                        orikkiri: { orikkiriId: 47 }, //prop으로 처리해야함
+                        orikkiri: { orikkiriId: orikkiriId }, //prop으로 처리해야함
                         oriScheMemChatFav: {
                             oriScheMemChatFavId: oriScheMemChatFavId,
                         },
@@ -145,7 +146,7 @@ const AddOrikkiri = (props) => {
     );
 };
 
-export default AddOrikkiri;
+export default AddOrikkiriSignUp;
 const TMenuBar = styled.div`
     position: relative;
     width: 100%;
