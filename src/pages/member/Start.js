@@ -11,8 +11,8 @@ function Start() {
     const navigate = useNavigate();
 
     const kakaoLogin = () => {
-        window.location.href = "http://110.165.19.112:82/oauth2/authorization/kakao";
-        // window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
+        // window.location.href = "http://110.165.19.112:82/oauth2/authorization/kakao";
+        window.location.href = 'http://localhost:8080/oauth2/authorization/kakao';
     };
     // const googleLogin = () => {
     //   window.location.href = "http://110.165.19.112:82/oauth2/authorization/google";
