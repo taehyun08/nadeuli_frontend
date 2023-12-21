@@ -13,6 +13,7 @@ const OAuth2RedirectHandler = () => {
     // 쿠키에서 이름이 'Authorization'인 쿠키의 값을 가져오는 함수
     async function getCookieValue(cookieName) {
         const cookies = document.cookie.split(';');
+        console.log(cookies)
         for (const cookie of cookies) {
             const [name, value] = cookie.trim().split('=');
             if (name === cookieName) {
@@ -24,8 +25,9 @@ const OAuth2RedirectHandler = () => {
 
     useEffect(() => {
         const fetchCookieValue = async () => {
-            const value = await getCookieValue('Authorization');
+            const value = await getCookieValue('Authorization'); // 비동기 처리를 위해 await 사용
             setAccessToken(value);
+            console.log(value);
         };
 
         fetchCookieValue();
@@ -39,7 +41,7 @@ const OAuth2RedirectHandler = () => {
                 };
 
                 const response = await getSocialMember(tokenDTO);
-                console.log(response.data)
+                console.log(response.data);
                 if (!response.data.nickname) {
                     // nickname이 없는 경우 oauth2Register로 라우팅
                     navigate('/oauth2Register');
@@ -58,7 +60,7 @@ const OAuth2RedirectHandler = () => {
         if (accessToken) {
             fetchData();
         }
-    }, [accessToken, navigate]);
+    }, [accessToken, dispatch, navigate]);
 
     return <>sdfsdf</>;
 };

@@ -163,8 +163,8 @@ export const ButtonContainer = styled.div`
 export const UploadButton = styled.label`
   flex-basis: 100%;
   color: #fff;
-  background-color: #e78111;
-  border-color: #e78111;
+  background-color: #508bfc;
+  border-color: #508bfc;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -175,8 +175,8 @@ export const UploadButton = styled.label`
   text-align: center;
 
   &:hover {
-    background-color: #e78111;
-    border-color: #e78111;
+    background-color: #508bfc;
+    border-color: #508bfc;
   }
 `;
 
@@ -185,7 +185,7 @@ export const OrderButton = styled.button`
   bottom: 100px; // 하단에서 20px 떨어진 위치
   right: 20px; // 우측에서 20px 떨어진 위치
   padding: 10px 15px; // 패딩
-  background-color: #e78111; // 배경색
+  background-color: #508bfc; // 배경색
   color: #fff; // 텍스트 색상
   border: none; // 테두리 없음
   border-radius: 5px; // 테두리 둥글게
@@ -194,7 +194,7 @@ export const OrderButton = styled.button`
   z-index: 1000; // 화면 맨 앞으로 오게 하기
 
   &:hover {
-    background-color: #e78111; // 호버 시 배경색 변경
+    background-color: #508bfc; // 호버 시 배경색 변경
   }
 `;
 
@@ -203,7 +203,7 @@ export const GetMyAcceptedDeliveryHistoryListButton = styled.button`
   bottom: 150px; // 하단에서 떨어진 위치
   right: 20px; // 우측에서 떨어진 위치
   padding: 10px 15px; // 패딩
-  background-color: #e78111; // 배경색
+  background-color: #508bfc; // 배경색
   color: #fff; // 텍스트 색상
   border: none; // 테두리 없음
   border-radius: 5px; // 테두리 둥글게
@@ -212,7 +212,7 @@ export const GetMyAcceptedDeliveryHistoryListButton = styled.button`
   z-index: 1000; // 화면 맨 앞으로 오게 하기
 
   &:hover {
-    background-color: #e78111; // 호버 시 배경색 변경
+    background-color: #508bfc; // 호버 시 배경색 변경
   }
 `;
 
@@ -220,8 +220,8 @@ export const StyledButton = styled.button`
   display: flex;
   width: 100%;
   color: #fff;
-  background-color: #e78111;
-  border-color: #e78111;
+  background-color: #508bfc;
+  border-color: #508bfc;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   border-radius: 0.25rem;
@@ -231,8 +231,8 @@ export const StyledButton = styled.button`
   align-items: center;
 
   &:hover {
-    background-color: #e78111;
-    border-color: #e78111;
+    background-color: #508bfc;
+    border-color: #508bfc;
   }
 `;
 

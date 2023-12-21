@@ -10,9 +10,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { carrotGetPost, deletePost, postUnLike, postLike } from '../redux/modules/post';
 import { post } from "../util/chatAxios";
-import Modal from '../components/Modal';
-import { addFavorite } from '../util/memberAxios';
 
+import Modal from '../components/Modal';
 
 function Detail() {
 
@@ -62,7 +61,7 @@ function Detail() {
         await post('/api/chatRoom/findOrCreate', req)
         .then((res) => {
             console.log(res);
-            navigate(`/chat/chatting/${res.chatRoomId}/${postDetail.productId}/1`)
+            navigate(`/chat/chatting/${res.chatRoomId}/${postDetail.productId}/1`);
         })
     }
 

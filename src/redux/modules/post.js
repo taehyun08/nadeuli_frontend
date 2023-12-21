@@ -118,19 +118,19 @@ export const loadMainposts = (dongNe) => {
   };
 };
 
-// // 판매목록 리드
-// export const loadSalseposts = () => {
-//   return async function (dispatch) {
-//     await instance
-//       .get("/api/user/sellList")
-//       .then((re) => {
-//         dispatch(roadPosts(re.data.sellList));
-//       })
-//       .catch((err) => {
-//         console.log("판매목록" + err);
-//       });
-//   };
-// };
+// 판매목록 리드
+export const loadSalesposts = (tag, type) => {
+  return async function (dispatch) {
+    
+    await get(`/product/getMyProductList/${tag}/0`)
+      .then((re) => {
+        dispatch(roadPosts(re.data.sellList));
+      })
+      .catch((err) => {
+        console.log("판매목록" + err);
+      });
+  };
+};
 
 // // 관심목록 리드
 // export const loadConcernsposts = () => {
