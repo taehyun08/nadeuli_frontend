@@ -8,11 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import Promotion from './promotion';
 
 function OrikkiriPostList({orikkiriId}) {
+  
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(1);
+
+  useEffect(() => {
+    dispatch(GetDongNePostList(currentPage, location, ''));
+  }, [currentPage, location, dispatch]);
 
   const handleChitChatClick = () => {
     setSelectedCategory(1);
@@ -34,16 +39,16 @@ function OrikkiriPostList({orikkiriId}) {
         return false;
       }
     }
-
-    // if (!dongNePost.orikkiri || dongNePost.orikkiri.orikkiriId !== orikkiriId) {
-    //   return false;
-    // }
+    console.log(orikkiriId)
+    if (!dongNePost.orikkiri) {
+      return false;
+    }
 
     return dongNePost.gu === location;
   });
   
   useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, location));
+    dispatch(GetDongNePostList(currentPage, location, ''));
   }, [currentPage, location, dispatch]);
 
   return (
@@ -111,53 +116,6 @@ function OrikkiriPostList({orikkiriId}) {
   );
 }
 
-const CardBox = styled.div`
-  display: flex;
-  padding: 20px;
-  justify-content: space-between;
-  border-bottom: 1px solid #dddddd;
-`;
-
-const TextArea = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  padding: 10px;
-`;
-
-const FixedButton = styled.div`
-  display: flex;
-  margin: 10px 0px; // 위 아래로 20px 여백 추가
-  margin-left: 30px; // 왼쪽 여백 추가
-  width: 100px;
-  height: 45px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
-  color: ${(props) => props.theme.color.white};
-  border-radius: 40px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 6px 0 #999;
-`;
-
-const FixedButton1 = styled.div`
-  display: flex;
-  position: fixed;
-  bottom: 160px;
-  right: 30px;
-  width: 120px;
-  height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: ${(props) => props.theme.color.orange};
-  color: ${(props) => props.theme.color.white};
-  border-radius: 40px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 6px 0 #999;
-`;
-
 const FixedButton2 = styled.div`
   display: flex;
   position: fixed;
@@ -175,12 +133,28 @@ const FixedButton2 = styled.div`
   box-shadow: 0 0 6px 0 #999;
 `;
 
+
+const CardBox = styled.div`
+  display: flex;
+  padding: 10px 20px; /* 상하 패딩 감소 */
+  justify-content: space-between;
+  border-bottom: 1px solid #dddddd;
+`;
+
+const TextArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 5px 10px; /* 상하 패딩 감소 */
+`;
+
 const Img = styled.img`
   width: 100px;
-  height: 100px;
+  height: 80px; /* 이미지 높이 감소 */
   border-radius: 10px;
   object-fit: cover;
 `;
+
 
 export default OrikkiriPostList;
 
