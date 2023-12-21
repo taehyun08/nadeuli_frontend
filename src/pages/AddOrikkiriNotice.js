@@ -56,10 +56,6 @@ function AddOrikkiriNotice({orikkiriId}) {
       return;
     }
 
-    if (!category || category === "none") {
-      alert("게시물 카테고리를 선택해주세요!");
-      return;
-    }
     const formData = new FormData();
     const postDTOData = {
       orikkiri,
@@ -99,6 +95,14 @@ function AddOrikkiriNotice({orikkiriId}) {
           </Title>
 
         </div>
+
+        <textarea
+          cols="40"
+          rows="5"
+          placeholder={`우리끼리와 관련된 공지사항을 작성해주세요.`}
+          ref={content_ref}
+        />
+
         {/* 파일 업로드 */}
         <File>
           <label htmlFor="file-input">

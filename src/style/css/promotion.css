@@ -33,14 +33,14 @@
 
 .video-overlay {
   position: absolute;
-  bottom: 0; /* 아래에 위치하도록 설정 */
+  top: 0; /* 아래에 위치하도록 설정 */
   left: 0;
   width: 100%;
-  height: 20%; /* 카드의 하단 20%만 차지하도록 설정 */
-  background-color: rgba(0, 0, 0, 0.2); /* 배경 회색과 투명도 조절 */
+  height: 60%; /* 카드의 하단 20%만 차지하도록 설정 */
+  background-color: rgba(0, 0, 0, 0); /* 배경 회색과 투명도 조절 */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   text-align: center;
   color: #fff; /* 글자색은 하얀색 */

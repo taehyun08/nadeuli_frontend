@@ -22,37 +22,37 @@ const BottomBar = () => {
         onClick={() => handleMenuClick('main')}
         selected={selectedMenu === 'main'}
       >
-        <AiFillHome size="30px" color={selectedMenu === 'main' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'main' ? '#e78111' : 'black', fontSize: '12px' }}>HOME</p>
+        <AiFillHome size="30px" color={selectedMenu === 'main' ? '#508BFC' : 'black'} />
+        <p style={{ color: selectedMenu === 'main' ? '#508BFC' : 'black', fontSize: '12px' }}>HOME</p>
       </MenuBox>
       <MenuBox
         onClick={() => handleMenuClick('dongNeHome')}
         selected={selectedMenu === 'dongNeHome'}
       >
-        <HiClipboardDocumentList size="30px" color={selectedMenu === 'dongNeHome' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'dongNeHome' ? '#e78111' : 'black', fontSize: '12px' }}>동네나드리</p>
+        <HiClipboardDocumentList size="30px" color={selectedMenu === 'dongNeHome' ? '#508BFC' : 'black'} />
+        <p style={{ color: selectedMenu === 'dongNeHome' ? '#508BFC' : 'black', fontSize: '12px' }}>동네나드리</p>
       </MenuBox>
       <MenuBox
         onClick={() => handleMenuClick('nadeuliDeliveryHome')}
         selected={selectedMenu === 'nadeuliDeliveryHome'}
       >
-        <MdDeliveryDining size="30px" color={selectedMenu === 'nadeuliDeliveryHome' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'nadeuliDeliveryHome' ? '#e78111' : 'black', fontSize: '12px' }}>나드리부름</p>
+        <MdDeliveryDining size="30px" color={selectedMenu === 'nadeuliDeliveryHome' ? '#508BFC' : 'black'} />
+        <p style={{ color: selectedMenu === 'nadeuliDeliveryHome' ? '#508BFC' : 'black', fontSize: '12px' }}>나드리부름</p>
       </MenuBox>
       <MenuBox
         onClick={() => handleMenuClick('chat/getChatRoomList')}
         selected={selectedMenu === 'chat'}
       >
-        <IoChatbubblesSharp size="30px" color={selectedMenu === 'chat' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'chat' ? '#e78111' : 'black', fontSize: '12px' }}>채팅</p>
+        <IoChatbubblesSharp size="30px" color={selectedMenu === 'chat' ? '#508BFC' : 'black'} />
+        <p style={{ color: selectedMenu === 'chat' ? '#508BFC' : 'black', fontSize: '12px' }}>채팅</p>
       </MenuBox>
 
       <MenuBox
         onClick={() => handleMenuClick('getMyProfile')}
         selected={selectedMenu === 'getMyProfile'}
       >
-        <BiUser size="30px" color={selectedMenu === 'getMyProfile' ? '#e78111' : 'black'} />
-        <p style={{ color: selectedMenu === 'getMyProfile' ? '#e78111' : 'black', fontSize: '12px' }}>내 나드리</p>
+        <BiUser size="30px" color={selectedMenu === 'getMyProfile' ? '#508BFC' : 'black'} />
+        <p style={{ color: selectedMenu === 'getMyProfile' ? '#508BFC' : 'black', fontSize: '12px' }}>내 나드리</p>
       </MenuBox>
     </BottomBarContainer>
   );
