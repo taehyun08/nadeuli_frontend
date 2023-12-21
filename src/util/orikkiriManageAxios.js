@@ -57,3 +57,8 @@ export const addAnsQuestion = async (addAnsQuestionDTO) => {
 export const getOrikkrirSignupList = async (orikkiriId) => {
     return await instance.get(`/orikkiriManage/getOrikkrirSignupList/${orikkiriId}`);
 };
+
+//우리끼리 가져오기 함수getOrikkiri
+export const getOrikkiri = async (orikkiriId) => {
+    return await instance.get(`/orikkiriManage/getOrikkiri/${orikkiriId}`);
+};
