@@ -33,6 +33,7 @@ import TopDropdownMenu from '../../components/TopDropdownMenu';
 import { FaLocationDot } from 'react-icons/fa6';
 import {
     checkAuthNum,
+    checkPortOneAccountName,
     getAuthNumCellphone,
     getAuthNumEmail,
     getMemberFavoriteList,
@@ -45,6 +46,8 @@ import { memberLogout, setMember } from '../../redux/modules/member';
 import { removeToken } from '../../shared/localStorage';
 import axios from 'axios';
 import { BsHeart } from 'react-icons/bs';
+import { Alert, AlertTitle, Autocomplete, Backdrop, Box, Button, CircularProgress, Fade, Modal, TextField } from '@mui/material';
+import Bank from './Bank';
 
 export default function GetMyProfile() {
     //hooks
@@ -79,6 +82,33 @@ export default function GetMyProfile() {
     const emailToggleOpen = () => setEmailModal(!emailModal);
     const cellphoneToggleOpen = () => setCellphoneModal(!cellphoneModal);
 
+    //은행리스트
+    const banks = [
+        { name: 'KB국민은행', code: '004' },
+        { name: 'SC제일은행', code: '023' },
+        { name: '경남은행', code: '039' },
+        { name: '광주은행', code: '034' },
+        { name: '기업은행', code: '003' },
+        { name: '농협은행', code: '011' },
+        { name: '대구은행', code: '031' },
+        { name: '부산은행', code: '032' },
+        { name: '산업은행', code: '002' },
+        { name: '수협은행', code: '007' },
+        { name: '신한은행', code: '088' },
+        { name: '신협은행', code: '048' },
+        { name: '외환은행', code: '005' },
+        { name: '우리은행', code: '020' },
+        { name: '우체국', code: '071' },
+        { name: '전북은행', code: '037' },
+        { name: '제주은행', code: '035' },
+        { name: '축협', code: '012' },
+        { name: '하나은행', code: '081' },
+        { name: '케이뱅크', code: '089' },
+        { name: '카카오뱅크', code: '090' },
+        { name: '삼성증권', code: '240' },
+        { name: '키움증권', code: '264' },
+        { name: '한화증권', code: '269' },
+    ];
     //useEffect
     useEffect(() => {
         // 컴포넌트가 처음 렌더링될 때 초기 휴대폰 번호 설정
@@ -447,6 +477,54 @@ export default function GetMyProfile() {
                 console.error('Error fetching favorite list:', error);
             });
     }, []); // []를 사용하여 최초 한 번만 실행되도록 설정
+
+    //계좌 등록
+    // 계좌 등록
+    const checkAccountName = async () => {
+        try {
+            if (account.name && account.accountNumber && account.accountBank) {
+                const portOneAccountDTO = {
+                    tag: member.tag,
+                    name: account.name,
+                    accountNum: account.accountNumber,
+                    code: account.accountBank.code,
+                };
+
+                // 서버에 계좌 조회 요청 보내기
+                const response = await checkPortOneAccountName(portOneAccountDTO);
+
+                // 서버 응답에 대한 처리
+                console.log('서버 응답:', response);
+            } else {
+                console.error('입력값이 부족합니다.');
+            }
+        } catch (error) {
+            // 예외 상황에 대한 처리
+            console.error('에러 발생:', error);
+        }
+    };
+    
+    const deleteBankAccount = async () => {}
+    
+
+    const [account, setAccount] = useState({
+        name: '',
+        accountNumber: '',
+        accountBank: null,
+    });
+
+    const handleInput = (event) => {
+        const { name, value } = event.target;
+        const onlyNumbersPattern = /^\d+$/; // 숫자만 허용하는 정규식
+
+        if (value !== '' && name === 'accountNumber' && !onlyNumbersPattern.test(value)) {
+            return; // 숫자가 아닌 경우에는 더 이상 진행하지 않음
+        }
+
+        setAccount({ ...account, [name]: value });
+    };
+
+    const showForm = member.bankAccountNum === null;
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer>
@@ -552,6 +630,93 @@ export default function GetMyProfile() {
                                     </MDBCol>
                                 </MDBRow>
                                 <hr />
+                                <MDBRow>
+                                    <MDBCol sm="3">
+                                        <MDBCardText>
+                                            BankAccount
+                                            {showForm && (
+                                                <Box
+                                                    component="form"
+                                                    sx={{
+                                                        display: 'flex',
+                                                        gap: '10px',
+                                                        alignItems: 'center',
+                                                        width: '100%',
+                                                        margin: 'auto',
+                                                    }}
+                                                    noValidate
+                                                    autoComplete="off"
+                                                >
+                                                    <div
+                                                        className="form-outline"
+                                                        style={{ width: '200px' }}
+                                                    >
+                                                        <MDBInput
+                                                            id="outlined-required"
+                                                            value={account.name}
+                                                            name="name"
+                                                            onChange={handleInput}
+                                                            onKeyDown={handleInput}
+                                                            label="예금주"
+                                                        />
+                                                    </div>
+                                                    <MDBInput
+                                                        id="outlined-disabled"
+                                                        label="계좌번호"
+                                                        inputProps={{
+                                                            inputMode: 'numeric',
+                                                            pattern: '[0-9]*',
+                                                        }}
+                                                        value={account.accountNumber}
+                                                        name="accountNumber"
+                                                        onChange={handleInput}
+                                                    />
+                                                    <select
+                                                        style={{ height: '35px' }}
+                                                        value={account.accountBank ? account.accountBank.name : ''}
+                                                        onChange={(e) => {
+                                                            const selectedBank = banks.find((bank) => bank.name === e.target.value);
+                                                            setAccount({ ...account, accountBank: selectedBank });
+                                                        }}
+                                                    >
+                                                        <option
+                                                            value=""
+                                                            disabled
+                                                        >
+                                                            은행 선택
+                                                        </option>
+                                                        {banks.map((bank) => (
+                                                            <option
+                                                                key={bank.code}
+                                                                value={bank.name}
+                                                            >
+                                                                {bank.name}
+                                                            </option>
+                                                        ))}
+                                                    </select>
+                                                    <Box sx={{ textAlign: 'center', fontSize: '25px' }}>
+                                                        <i
+                                                            className="far fa-square-plus"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={checkAccountName}
+                                                        ></i>
+                                                    </Box>
+                                                </Box>
+                                            )}
+                                            {!showForm && (
+                                                <p>
+                                                    {member.bankName} {member.bankAccountNum}{' '}
+                                                    <i
+                                                        className="far fa-square-minus"
+                                                        style={{ cursor: 'pointer' ,fontSize: '25px'}}
+                                                        onClick={deleteBankAccount}
+                                                    ></i>
+                                                </p>
+                                            )}
+                                        </MDBCardText>
+                                    </MDBCol>
+                                    <MDBCol sm="9"></MDBCol>
+                                </MDBRow>
                             </MDBCardBody>
                         </MDBCard>
                         <MDBCard className="mb-4 mb-lg-0">

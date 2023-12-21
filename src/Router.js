@@ -39,6 +39,9 @@ import Oauth2Register from "./pages/member/Oauth2Register";
 import GetOtherProfile from "./pages/member/GetOtherProfile";
 import GetMemberList from "./pages/member/GetMemberList";
 import Report from "./pages/member/Report";
+import GetOrikkiriSignUpList from "./pages/orikkiri/GetOrikkiriSignUpList";
+import AddOrikkiriSignUp from "./pages/orikkiri/AddOrikkiriSignUp";
+import Bank from "./pages/member/Bank";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -52,6 +55,8 @@ function Router() {
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
+        <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
+        <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
@@ -74,6 +79,7 @@ function Router() {
         <Route path="/login" element={<Login />} />
         <Route path="/findAccount" element={<FindAccount />} />
         <Route path="/updateCellphone" element={<UpdateCellphone />} />
+        <Route path="/bank" element={<Bank />} />
         <Route
           path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}

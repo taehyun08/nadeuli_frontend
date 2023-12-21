@@ -54,6 +54,6 @@ export const addAnsQuestion = async (addAnsQuestionDTO) => {
     return await instance.post('/orikkiriManage/addAnsQuestion', { addAnsQuestionDTO });
 };
 // 현재 로그인한 사용자의 프로필 정보를 불러오는 함수
-export const getMember = async (tag) => {
-    return await instance.get(`/orikkiriManage/updateOrikkiri/${tag}`);
+export const getOrikkrirSignupList = async (orikkiriId) => {
+    return await instance.get(`/orikkiriManage/getOrikkrirSignupList/${orikkiriId}`);
 };
