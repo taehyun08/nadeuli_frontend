@@ -15,11 +15,11 @@ import OrikkiriAlbumList from "../../pages/OrikkiriAlbumList";
 
 
 function OrikkiriHome() {
+  const { orikkiriId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orikkiriDetail = useSelector((state) => state.orikkiri.orikkiri);
   const params = useParams();
-  const orikkiriId = params.orikkiriId;
   const orikkiriMasterTag = params.masterTag;
   const member = useSelector((state) => state.member); // 유저 정보
   const [getOrikkiriId, setOrikkiriId] = useState(null);
@@ -43,6 +43,9 @@ function OrikkiriHome() {
   useEffect(() => {
     dispatch(getOrikkiriDetail(orikkiriId));
   }, [dispatch, orikkiriId]);
+  
+
+  
 
   return (
     <Wrap>
