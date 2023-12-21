@@ -16,7 +16,8 @@ export const dongNePost = (formData, navigate) => {
       const postId = res.data.postId;
       console.log(postId); 
       dispatch(addDongNePost(formData));
-      navigate('/getDongNePost');
+      navigate('/dongNeHome');
+      // navigate('/getDongNePost');
     } catch (err) {
       console.log(err);
     }
