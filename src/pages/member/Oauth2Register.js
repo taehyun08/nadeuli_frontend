@@ -54,14 +54,14 @@ function Oauth2Register() {
 
         return null;
     }
-    useEffect(() => {
-        const fetchCookieValue = async () => {
-            const value = await getCookieValue('Authorization');
-            setAccessToken(value);
-        };
+    // useEffect(() => {
+    //     const fetchCookieValue = async () => {
+    //         const value = await getCookieValue('Authorization');
+    //         setAccessToken(value);
+    //     };
 
-        fetchCookieValue();
-    }, []);
+    //     fetchCookieValue();
+    // }, []);
 
     const handleAddMemberBtnClick = (e) => {
         e.preventDefault();
