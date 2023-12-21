@@ -20,9 +20,10 @@ import {
 import ImageSlider from "./ImageSlider";
 import { post } from "../../util/axios";
 import HeaderBack from "../../components/HeaderBack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
 import { useLocation, useNavigate } from "react-router-dom";
+import { setMember } from "../../redux/modules/member";
 
 const AddDeliveryOrder = () => {
   const [orderData, setOrderData] = useState({});
@@ -34,6 +35,7 @@ const AddDeliveryOrder = () => {
   const member = useSelector((state) => state.member);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
 
   // 출발지 설정 함수
   const handleSetLocation = () => {
@@ -100,23 +102,20 @@ const AddDeliveryOrder = () => {
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
 
-  // useEffect(() => {
-  //   if (selectedFiles && selectedFiles.length > 0) {
-  //     const newPreviewImages = selectedFiles.map((file) =>
-  //       URL.createObjectURL(file)
-  //     );
-  //     setPreviewImage(newPreviewImages);
-  //   } else {
-  //     // selectedFiles가 비어있는 경우, 미리보기 이미지 상태를 초기화
-  //     setPreviewImage([]);
-  //   }
-  // }, [selectedFiles]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
     // 나드리페이 보증금 계산
     const deposit = calculatedDeposit().replace(/,/g, ""); // 모든 쉼표 제거
+
+    if (member.nadeuliPayBalance < deposit) {
+      alert(
+        "보유하신 나드리페이 잔액보다 보증금 금액이 큽니다. 금액을 조정해주세요. 현재 잔액 : " +
+          member.nadeuliPayBalance +
+          "원"
+      );
+      return;
+    }
 
     // orderData 객체에 buyer.tag와 buyer.nickname 추가
     const updatedOrderData = {
@@ -148,6 +147,28 @@ const AddDeliveryOrder = () => {
     // axios를 사용하여 데이터 전송
     postMultipart("/nadeulidelivery/addDeliveryOrder", formData)
       .then((response) => {
+        const balance = Number(member.nadeuliPayBalance);
+        const depositAmount = Number(deposit);
+        console.log("계산 할 나드리페이 잔액 : " + balance);
+        console.log("계산 할 보증금 : " + depositAmount);
+        if (!isNaN(balance) && !isNaN(depositAmount)) {
+          // 계산된 새로운 잔액을 계산합니다.
+          const newBalance = balance - depositAmount;
+
+          if (!isNaN(newBalance)) {
+            // 새로운 잔액으로 member 객체를 업데이트합니다.
+            const updatedMember = {
+              ...member,
+              nadeuliPayBalance: newBalance,
+            };
+
+            // 업데이트된 member 객체로 상태를 업데이트합니다.
+            dispatch(setMember(updatedMember));
+          }
+
+          console.log("갱신된 나드리페이 잔액 : " + member.nadeuliPayBalance);
+        }
+
         console.log("배달 주문 완료!", response);
         alert("배달 주문 완료!!");
         navigate("/nadeuliDeliveryHome");
@@ -523,7 +544,6 @@ const AddDeliveryOrder = () => {
               {productType === "used" && productDetails ? (
                 <>
                   <SliderWrapper>
-                    {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
                     {previewImage && previewImage.length > 0 ? (
                       <ImageSlider images={previewImage} />
                     ) : productDetails && productDetails.images ? (
