@@ -48,6 +48,7 @@ import axios from 'axios';
 import { BsHeart } from 'react-icons/bs';
 import { Alert, AlertTitle, Autocomplete, Backdrop, Box, Button, CircularProgress, Fade, Modal, TextField } from '@mui/material';
 import Bank from './Bank';
+import KakaoMapMarker from '../../util/kakaoMapMarker';
 
 export default function GetMyProfile() {
     //hooks
@@ -422,6 +423,20 @@ export default function GetMyProfile() {
         }
     };
 
+    const handleNadeuliPayWithdraw = () => {navigate('/nadeuliPay/nadeuliPayWithdraw')};
+
+    const handleNadeuliPayCharge = () => {navigate('/nadeuliPay/nadeuliPayCharge')};
+
+    const handleTradeHistory = () => {navigate('/product/getMyProductList')};
+
+    const handlePayHistory = () => {navigate('/nadeuliPay/getNadeuliPayList')};
+
+    const handleOrderHistoryList = () => {navigate('/getMyOrderHistoryList')};
+
+    const handleDeliveryHistoryList = () => {navigate('/getMyDeliveryHistoryList')};
+
+    const handleTradeReview = () => {navigate('/trade/getTradeReviewList')};
+
     const handleMemberActivateClick = async () => {
         const tag = member.tag;
         try {
@@ -446,9 +461,12 @@ export default function GetMyProfile() {
     };
     console.log(member.tag);
     const dropdownMenus = [
-        { label: '회원 목록 조회', onClick: handleGetMemberList },
-        { label: '주문 내역 목록', onClick: '' },
-        { label: '배달 내역 목록', onClick: '' },
+        { label: '내 상품', onClick: handleTradeHistory },
+        { label: '거래 후기', onClick: handleTradeReview },
+        { label: '거래 내역', onClick: handlePayHistory },
+        { label: '회원 보기', onClick: handleGetMemberList },
+        { label: '주문 보기', onClick: handleOrderHistoryList },
+        { label: '배달 내역', onClick: handleDeliveryHistoryList },
         { label: '비활성화', onClick: handleMemberActivateClick },
         { label: '로그아웃', onClick: handleLogout },
         // 원하는 만큼 추가
@@ -503,9 +521,8 @@ export default function GetMyProfile() {
             console.error('에러 발생:', error);
         }
     };
-    
-    const deleteBankAccount = async () => {}
-    
+
+    const deleteBankAccount = async () => {};
 
     const [account, setAccount] = useState({
         name: '',
@@ -534,6 +551,7 @@ export default function GetMyProfile() {
                             <TMenuBar>
                                 <HeaderBack />
                                 <p>내 프로필</p>
+                                <KakaoMapMarker/>
                                 <TopDropdownMenu dropdownMenus={dropdownMenus} />
                             </TMenuBar>
                         </MDBBreadcrumb>
@@ -581,10 +599,11 @@ export default function GetMyProfile() {
                                 </p>
                                 <p className="text-muted mb-1">나드리페이 잔액 : {member.nadeuliPayBalance}원</p>
                                 <div className="d-flex justify-content-center mb-2">
-                                    <MDBBtn>충전</MDBBtn>
+                                    <MDBBtn onClick={handleNadeuliPayCharge}>충전</MDBBtn>
                                     <MDBBtn
                                         outline
                                         className="ms-1"
+                                        onClick={handleNadeuliPayWithdraw}
                                     >
                                         출금
                                     </MDBBtn>
@@ -708,7 +727,7 @@ export default function GetMyProfile() {
                                                     {member.bankName} {member.bankAccountNum}{' '}
                                                     <i
                                                         className="far fa-square-minus"
-                                                        style={{ cursor: 'pointer' ,fontSize: '25px'}}
+                                                        style={{ cursor: 'pointer', fontSize: '25px' }}
                                                         onClick={deleteBankAccount}
                                                     ></i>
                                                 </p>

@@ -1,9 +1,13 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import {
+  Box,
+  HeaderContainer,
+  OrderTitle,
   StyledButton,
   StyledContainer,
 } from "./NadeuliDeliveryStyledComponent";
+import HeaderBack from "../../components/HeaderBack";
 
 const GetShortestWay = () => {
   const deliveryLocations = useSelector(
@@ -303,31 +307,42 @@ const GetShortestWay = () => {
   };
 
   return (
-    <StyledContainer>
-      <div
-        id="map"
-        ref={mapContainer}
-        style={{ width: "100%", height: "400px" }}
-      ></div>
-      <br />
-      <StyledButton onClick={handleGetDirectionClick} style={{ width: "90%" }}>
-        최단경로 검색
-      </StyledButton>
-      <br />
-      {/* 각 출발지 및 도착지의 한글 주소 표시 */}
-      {deliveryLocations &&
-        deliveryLocations.map((dto, index) => (
-          <div key={index}>
-            {/* <p>{dto.productName}</p> */}
-            <p style={{ fontWeight: "bold" }}>{`출발${index + 1}: ${
-              dto.departure
-            }`}</p>
-            <p style={{ fontWeight: "bold" }}>{`도착${index + 1}: ${
-              dto.arrival
-            }`}</p>
-          </div>
-        ))}
-    </StyledContainer>
+    <>
+      <HeaderContainer>
+        <HeaderBack />
+        <Box style={{ paddingLeft: "80px" }}>
+          <OrderTitle>추천 경로 조회</OrderTitle>
+        </Box>
+      </HeaderContainer>
+      <StyledContainer>
+        <div
+          id="map"
+          ref={mapContainer}
+          style={{ width: "100%", height: "400px" }}
+        ></div>
+        <br />
+        <StyledButton
+          onClick={handleGetDirectionClick}
+          style={{ width: "90%" }}
+        >
+          최단경로 검색
+        </StyledButton>
+        <br />
+        {/* 각 출발지 및 도착지의 한글 주소 표시 */}
+        {deliveryLocations &&
+          deliveryLocations.map((dto, index) => (
+            <div key={index}>
+              {/* <p>{dto.productName}</p> */}
+              <p style={{ fontWeight: "bold" }}>{`출발${index + 1}: ${
+                dto.departure
+              }`}</p>
+              <p style={{ fontWeight: "bold" }}>{`도착${index + 1}: ${
+                dto.arrival
+              }`}</p>
+            </div>
+          ))}
+      </StyledContainer>
+    </>
   );
 };
 

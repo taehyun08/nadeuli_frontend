@@ -109,10 +109,9 @@ const GetDeliveryOrder = () => {
     <>
       <HeaderContainer>
         <HeaderBack />
-        <Box>
+        <Box style={{ paddingLeft: "100px" }}>
           <OrderTitle>배달 주문</OrderTitle>
         </Box>
-        <Box style={{ marginLeft: "20px" }}></Box>
       </HeaderContainer>
       <StyledContainer>
         <DetailContainer>
