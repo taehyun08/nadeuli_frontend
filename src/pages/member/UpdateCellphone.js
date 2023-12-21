@@ -7,10 +7,11 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 function UpdateCellphone() {
     const [btnState, setBtnState] = useState(false);
-    const [isToEditable, setIsToEditable] = useState(true);
+    const [isAuthNumDisabled, setIsAuthNumDisabled] = useState(false);
+    const [isToDisabled, setIsToDisabled] = useState(false);
     const [isAuthNumBtnDisabled, setIsAuthNumBtnDisabled] = useState(false);
-    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(true);
-    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(true);
+    const [isCheckAuthNumBtnDisabled, setIsCheckAuthNumBtnDisabled] = useState(false);
+    const [isCheckAuthNumInputDisabled, setIsCheckAuthNumInputDisabled] = useState(true); // 새로 추가한 상태
     const [to, setTo] = useState('');
     const [authNum, setAuthNum] = useState('');
 
@@ -31,9 +32,10 @@ function UpdateCellphone() {
             .then((response) => {
                 alert('인증번호가 발송되었습니다.');
                 setIsAuthNumBtnDisabled(true);
-                setIsToEditable(false);
-                setIsCheckAuthNumBtnDisabled(false);
-                setIsCheckAuthNumInputDisabled(false)
+                setIsToDisabled(true);
+                setIsAuthNumDisabled(false);
+                setIsCheckAuthNumInputDisabled(false); // 활성화로 변경
+                setIsCheckAuthNumBtnDisabled(true);
             })
             .catch((err) => {
                 alert('이미 존재하거나 올바르지 않은 휴대폰 번호입니다.');
@@ -56,13 +58,11 @@ function UpdateCellphone() {
             .then((response) => {
                 alert('인증번호가 일치합니다.');
                 setBtnState(true);
-                setIsToEditable(false);
-                setIsCheckAuthNumBtnDisabled(true);
+                setIsCheckAuthNumBtnDisabled(false);
                 setIsCheckAuthNumInputDisabled(true);
             })
             .catch((err) => {
                 alert('인증번호가 일치하지 않습니다.');
-                setIsToEditable(true);
             });
     };
 
@@ -79,10 +79,11 @@ function UpdateCellphone() {
                     navigate('/login');
                 } else {
                     alert('이미 등록된 휴대폰 번호입니다.');
-                    setIsAuthNumBtnDisabled(false)
-                    setIsToEditable(true)
                     setTo('')
                     setAuthNum('')
+                    setIsAuthNumBtnDisabled(false);
+                    setIsToDisabled(false);
+                    setIsAuthNumDisabled(true);
                     
                 }
             })
@@ -106,7 +107,7 @@ function UpdateCellphone() {
                         <input
                             className="to"
                             type="text"
-                            disabled={!isToEditable}
+                            disabled={isToDisabled}
                             placeholder="휴대폰 번호 (- 없이 숫자만 입력)"
                             required
                             value={to}
@@ -121,6 +122,7 @@ function UpdateCellphone() {
                             className="authNumberBtn"
                             onClick={handleGetAuthNumBtnClick}
                             disabled={isAuthNumBtnDisabled}
+                            isActive={!isAuthNumBtnDisabled}
                         >
                             인증번호 받기
                         </Button>
@@ -138,21 +140,22 @@ function UpdateCellphone() {
                                 setAuthNum(updatedAuthNum);
                             }}
                             name="authNum"
-                            disabled={isCheckAuthNumInputDisabled}
+                            disabled={isCheckAuthNumInputDisabled || isAuthNumDisabled}
                         />
 
                         <Button
                             className="authNumberBtn"
                             onClick={handleCheckAuthNumBtnClick}
-                            disabled={isCheckAuthNumBtnDisabled}
+                            disabled={!isCheckAuthNumBtnDisabled}
+                            isActive={isCheckAuthNumBtnDisabled}
                         >
                             인증번호 확인
                         </Button>
                     </div>
                     <Button
-                        // $isActive={btnState}
                         onClick={handleUpdateCellphone}
-                        disabled={btnState}
+                        disabled={!btnState}
+                        isActive={btnState}
                     >
                         휴대폰 번호 변경
                     </Button>
@@ -229,7 +232,18 @@ const Button = styled.button`
     color: #fff;
     transition: background 0.3s;
     cursor: pointer;
-
+    ${(props) =>
+        props.isActive
+            ? css`
+                  background-color: #508BFC;
+                  &:hover {
+                      background-color: #1e5ed9;
+                  }
+              `
+            : css`
+                  background-color: #ddd;
+              `}
 `;
+
 
 export default UpdateCellphone;
