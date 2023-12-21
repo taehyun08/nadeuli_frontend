@@ -25,6 +25,7 @@ import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
+import GetNadeuliPayList from "./pages/nadeuli_pay/GetNadeuliPayList";
 import GetChatRoomList from "./pages/chat/GetChatRoomList";
 import Chatting from "./pages/chat/Chatting";
 import AddDeliveryOrder from "./pages/nadeuli_delivery/AddDeliveryOrder";
@@ -43,6 +44,7 @@ import GetOrikkiriSignUpList from "./pages/orikkiri/GetOrikkiriSignUpList";
 import AddOrikkiriSignUp from "./pages/orikkiri/AddOrikkiriSignUp";
 import Bank from "./pages/member/Bank";
 import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
+import AddOrikkiriSchedule from "./pages/orikkiri/AddOrikkiriSchedule";
 import AddOrikkiriPost from "./pages/AddOrikkiriPost";
 import AddOrikkiriAlbum from "./pages/AddOrikkiriAlbum";
 import AddOrikkiriNotice from "./pages/AddOrikkiriNotice";
@@ -61,6 +63,7 @@ function Router() {
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
         <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
         <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
+        <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
         <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
         <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
         <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
@@ -77,6 +80,7 @@ function Router() {
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
+        <Route path="/nadeuliPay/getNadeuliPayList" element={<GetNadeuliPayList />} />
         <Route
           path="/trade/addTradeReview/:productId"
           element={<AddTradeReview />}

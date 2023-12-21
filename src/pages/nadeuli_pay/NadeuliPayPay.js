@@ -10,7 +10,7 @@ function NadeuliPayPay() {
     const [inputNumber, setInputNumber] = useState('');
     const [payMoney, setPayMoney] = useState(null);
     const [open, setOpen] = React.useState(false);
-
+    const params = useParams();
     const navigate = useNavigate();
     const member = useSelector((state) => state.member);
 

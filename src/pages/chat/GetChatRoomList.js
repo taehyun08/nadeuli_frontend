@@ -12,39 +12,39 @@ const GetChatRoomList = () => {
   
   const [chatRooms, setChatRooms] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const result = await chatGet(`/api/chatRoom/${member.tag}`);
+      const updatedChatRooms = await Promise.all(
+        result.map(async (item) => {
+          socket.emit('joinRoom', {"roomId": item._id});
+          if (item.orikkiriId === 0) {
+            const filteredParticipants = item.participants.filter(
+              (participant) => participant.tag !== member.tag
+            );
+            const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
+            item.picture = res.picture;
+            item.roomName = res.nickname;
+          } else {
+            const res = await get(`/orikkiriManage/getOrikkiri/${item.orikkiriId}`);
+            item.picture = res.orikkiriPicture;
+            item.roomName = res.orikkiriName;
+          }
+          return item;
+        })
+      );
+
+      // 모든 비동기 작업이 완료된 후에 상태 업데이트를 수행합니다.
+      setChatRooms(updatedChatRooms);
+      console.log(updatedChatRooms);
+    } catch (error) {
+      console.error('채팅방을 불러오는 중 오류가 발생했습니다:', error);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await chatGet(`/api/chatRoom/${member.tag}`);
-        const updatedChatRooms = await Promise.all(
-          result.map(async (item) => {
-            socket.emit('joinRoom', {"roomId": item._id});
-            if (item.orikkiriId === 0) {
-              const filteredParticipants = item.participants.filter(
-                (participant) => participant.tag !== member.tag
-              );
-              const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
-              item.picture = res.picture;
-              item.roomName = res.nickname;
-            } else {
-              const res = await get(`/orikkiriManage/getOrikkiri/${item.orikkiriId}`);
-              item.picture = res.orikkiriPicture;
-              item.roomName = res.orikkiriName;
-            }
-            return item;
-          })
-        );
-  
-        // 모든 비동기 작업이 완료된 후에 상태 업데이트를 수행합니다.
-        setChatRooms(updatedChatRooms);
-        console.log(updatedChatRooms);
-      } catch (error) {
-        console.error('채팅방을 불러오는 중 오류가 발생했습니다:', error);
-      }
-    };
-  
     fetchData();
-  }, [member.tag]);
+  }, []);
 
 
 
