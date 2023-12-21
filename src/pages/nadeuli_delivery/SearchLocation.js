@@ -4,6 +4,8 @@ import {
   StyledButton,
   StyledContainer,
 } from "./NadeuliDeliveryStyledComponent";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
 
 const SearchLocation = () => {
   const navigate = useNavigate();
@@ -149,6 +151,58 @@ const SearchLocation = () => {
     navigate("/addDeliveryOrder", { state: { orderData: updatedOrderData } });
   };
 
+  const open = useDaumPostcodePopup(postcodeScriptUrl);
+
+  const handleComplete = (data) => {
+    let fullAddress = data.address;
+    let extraAddress = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddress +=
+          extraAddress !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== "" ? ` (${extraAddress})` : "";
+    }
+
+    console.log(fullAddress); // e.g. '서울 성동구 왕십리로2길 20 (성수동1가)'
+    setSelectedAddress(fullAddress);
+
+    const geocoder = new kakao.maps.services.Geocoder();
+    // 지도가 표시될 div의 참조
+    const mapContainer = document.getElementById("map"), // 지도를 표시할 div
+      mapOption = {
+        center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
+        level: 3, // 지도의 확대 레벨
+      };
+
+    // 지도의 초기 옵션 설정
+    // 지도 객체 생성
+    const map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 클릭한 위치를 표시할 마커입니다
+    const marker = new kakao.maps.Marker();
+
+    // 주소를 좌표로 변환
+    geocoder.addressSearch(fullAddress, function (result, status) {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+        // 지도 중심을 변경하고 마커를 표시
+        map.setCenter(coords);
+        marker.setPosition(coords);
+        marker.setMap(map);
+      }
+    });
+  };
+
+  const handleClick = () => {
+    open({ onComplete: handleComplete });
+  };
+
   return (
     // 지도 크기 설정
     <StyledContainer style={{ justifyContent: "center" }}>
@@ -158,12 +212,9 @@ const SearchLocation = () => {
         style={{ width: "100%", height: "400px" }}
       ></div>
       <br />
-      <p style={{ fontWeight: "bold" }}>선택된 주소</p>
-      <p>{selectedAddress}</p>
-      <p style={{ fontWeight: "bold" }}>출발지</p>
-      <p>{departureAddress}</p>
-      <p style={{ fontWeight: "bold" }}>도착지</p>
-      <p>{arrivalAddress}</p>
+      <p style={{ fontWeight: "bold" }}>선택된 주소 : {selectedAddress}</p>
+      <p style={{ fontWeight: "bold" }}>출발지 : {departureAddress}</p>
+      <p style={{ fontWeight: "bold" }}>도착지 : {arrivalAddress}</p>
       <div style={{ textAlign: "center", justifyContent: "center" }}>
         <StyledButton onClick={handleSetDeparture} style={{ width: "90%" }}>
           출발지 설정하기
@@ -173,7 +224,18 @@ const SearchLocation = () => {
           도착지 설정하기
         </StyledButton>
 
-        <StyledButton onClick={handleConfirmSettings} style={{ width: "90%" }}>
+        <StyledButton
+          type="button"
+          onClick={handleClick}
+          style={{ width: "90%" }}
+        >
+          주소 검색
+        </StyledButton>
+
+        <StyledButton
+          onClick={handleConfirmSettings}
+          style={{ width: "90%", fontWeight: "bold" }}
+        >
           설정 확인
         </StyledButton>
       </div>
