@@ -159,7 +159,7 @@ function GetDongNePost() {
             {getDongNePost.images && getDongNePost.images.map((image, index) => {
               if (image.endsWith('.mp4')) {
                 return (
-                  <video key={index} ref={(el) => (videoRef.current[index] = el)} src={image} controls autoPlay />
+                  <video playinline key={index} ref={(el) => (videoRef.current[index] = el)} src={image} controls autoPlay />
                 );
               } else {
                 return (

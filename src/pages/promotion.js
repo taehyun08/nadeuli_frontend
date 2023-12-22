@@ -67,7 +67,7 @@ function Promotion({searchQuery}) {
           return (
             <div className="promotion-scroll" key={dongNePost.postId}>
               <div className="video-card" onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
-                <video 
+                <video playinline 
                   ref={(el) => videoRefs.current[index] = el}
                   src={videoSource} 
                   controls autoPlay muted 
