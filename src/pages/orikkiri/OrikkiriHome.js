@@ -90,15 +90,15 @@ function OrikkiriHome() {
       </Header>
 
       <div>
-        {orikkiriDetail && <SmallImage src={orikkiriDetail.orikkiriPicture}/>}
+        {orikkiriDetail && <SmallImage src={orikkiriDetail?.orikkiriPicture}/>}
       </div>
 
       <Container>
         <ProfileBar>
           <Profile>
-            <RoundedImage src={orikkiriDetail.orikkiriPicture} alt="orikkiriImg" />
+            <RoundedImage src={orikkiriDetail?.orikkiriPicture} alt="orikkiriImg" />
             <Nickname>
-              <p>{orikkiriDetail.orikkiriName}</p>
+              <p>{orikkiriDetail?.orikkiriName}</p>
             </Nickname>
           </Profile>
 
@@ -122,10 +122,10 @@ function OrikkiriHome() {
             </>
           )}
           {selectedContent === 'post' && <OrikkiriPostList orikkiriId={orikkiriId}/>}
-          {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>}
+          {/* 여기 아래에 일점 컴포넌트로 이름 변경 */}
+          {/* {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>} */}
           {selectedContent === 'album' && <OrikkiriAlbumList orikkiriId={orikkiriId}/>}
           {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriMasterTag}/>}
-          {/* 여기에 다른 컨텐츠 조건부 렌더링 추가 */}
         
         </Contents>
       

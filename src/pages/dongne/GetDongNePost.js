@@ -142,7 +142,9 @@ function GetDongNePost() {
           <Title>
             <p>{getDongNePost.title}</p>
           </Title>
-
+        
+        {/* 파일(이미지/비디오)이 있는 경우에만 File 컴포넌트를 렌더링 */}
+        {(getDongNePost.streaming || (getDongNePost.images && getDongNePost.images.length > 0)) && (
           <File>
             {/* HLS 스트리밍 비디오 처리 */}
             {getDongNePost.streaming && (
@@ -159,7 +161,7 @@ function GetDongNePost() {
             {getDongNePost.images && getDongNePost.images.map((image, index) => {
               if (image.endsWith('.mp4')) {
                 return (
-                  <video playinline key={index} ref={(el) => (videoRef.current[index] = el)} src={image} controls autoPlay />
+                  <video key={index} ref={(el) => (videoRef.current[index] = el)} src={image} playsInline controls autoPlay />
                 );
               } else {
                 return (
@@ -168,6 +170,7 @@ function GetDongNePost() {
               }
             })}
           </File>
+        )}
 
 
           <Content>
