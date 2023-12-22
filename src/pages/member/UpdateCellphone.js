@@ -22,7 +22,7 @@ function UpdateCellphone() {
     console.log(data);
 
     const handleGetAuthNumBtnClick = (e) => {
-        console.log(to)
+        console.log(to);
         e.preventDefault();
         if (/[^0-9]/g.test(to) || to.length < 8) {
             alert('번호는 숫자만, 길이는 8자 이상 입력해주세요');
@@ -74,17 +74,16 @@ function UpdateCellphone() {
 
         updateCellphone(memberDTO)
             .then((response) => {
-                if (response.data === 'true') {
+                if (response.data) {
                     alert('휴대폰 번호 변경 완료!');
                     navigate('/login');
                 } else {
                     alert('이미 등록된 휴대폰 번호입니다.');
-                    setTo('')
-                    setAuthNum('')
+                    setTo('');
+                    setAuthNum('');
                     setIsAuthNumBtnDisabled(false);
                     setIsToDisabled(false);
                     setIsAuthNumDisabled(true);
-                    
                 }
             })
             .catch((err) => {
@@ -95,7 +94,7 @@ function UpdateCellphone() {
     const handleFormSubmit = (e) => {
         e.preventDefault();
         // 나머지 제출 로직을 이곳에 추가
-      };
+    };
     return (
         <Box>
             <HeaderBack />
@@ -235,7 +234,7 @@ const Button = styled.button`
     ${(props) =>
         props.isActive
             ? css`
-                  background-color: #508BFC;
+                  background-color: #508bfc;
                   &:hover {
                       background-color: #1e5ed9;
                   }
@@ -244,6 +243,5 @@ const Button = styled.button`
                   background-color: #ddd;
               `}
 `;
-
 
 export default UpdateCellphone;
