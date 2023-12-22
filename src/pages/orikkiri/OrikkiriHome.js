@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import DongNePostList from '../../pages/DongNePostList';
 import BottomBar from '../../components/BottonBar';
 import { BiLeftArrowAlt } from "react-icons/bi";
 import { FiMoreVertical } from "react-icons/fi";
@@ -12,6 +11,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import OrikkiriPostList from "../../pages/OrikkiriPostList";
 import OrikkiriNoticeList from "../../pages/OrikkiriNoticeList";
 import OrikkiriAlbumList from "../../pages/OrikkiriAlbumList";
+import TopDropdownMenu from '../../components/TopDropdownMenu';
+import AlertDialog from '../../components/AlertDialog'
 
 
 function OrikkiriHome() {
@@ -20,7 +21,6 @@ function OrikkiriHome() {
   const dispatch = useDispatch();
   const orikkiriDetail = useSelector((state) => state.orikkiri.orikkiri);
   const params = useParams();
-  const orikkiriMasterTag = params.masterTag;
   const member = useSelector((state) => state.member); // 유저 정보
   const [getOrikkiriId, setOrikkiriId] = useState(null);
   const [selectedContent, setSelectedContent] = useState('home');
@@ -29,64 +29,104 @@ function OrikkiriHome() {
   const handleSchule = () => setSelectedContent('schedule');
   const handleAlbum = () => setSelectedContent('album');
   const handleNotice = () => setSelectedContent('notice');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState('');
+  const [dialogDescription, setDialogDescription] = useState('');
+  const [pendingAction, setPendingAction] = useState(null);
+  const [dialogAgreeText, setDialogAgreeText] = useState('');
+  const [dialogDisagreeText, setDialogDisagreeText] = useState('');
 
 
-    // 모달.
-  const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => {
-    setModalOpen(true);
+  const executePendingAction = () => {
+    if (pendingAction) pendingAction();
+    setPendingAction(null);
+    closeDialog();
   };
-  const closeModal = () => {
-    setModalOpen(false);
+
+  const closeDialog = () => {
+    setDialogOpen(false);
   };
 
   useEffect(() => {
     dispatch(getOrikkiriDetail(orikkiriId));
   }, [dispatch, orikkiriId]);
-  
 
+  // 우리끼리 가입 리스트 이동
+  const handleSignUpList = () => {
+      navigate('/dongNeHome');
+  };
+
+    // 우리끼리 회원 리스트 이동
+  const handleMemberList = () => {
+      navigate('/dongNeHome');
+  };
+
+    // 우리끼리 업데이트 확인
+  const openUpdateDialog = () => {
+    setPendingAction(() => () => {
+      // dispatch(removeDongNePost(postId));
+      navigate('/dongNeHome');
+    });
+    setDialogTitle("우리끼리 수정 확인");
+    setDialogDescription("우리끼리를 수정 하시겠습니까?");
+    setDialogAgreeText("우리끼리 수정");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+    // 우리끼리 삭제 확인
+  const openDeleteDialog = () => {
+    setPendingAction(() => () => {
+      dispatch(deleteOrikkiri(orikkiriId));
+      navigate('/dongNeHome');
+    });
+    setDialogTitle("우리끼리 삭제 확인");
+    setDialogDescription("우리끼리를 삭제하시겠습니까?");
+    setDialogAgreeText("우리끼리 삭제");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+      // 우리끼리 탈퇴 확인
+  const openOutOrikkiri = () => {
+    setPendingAction(() => () => {
+      // dispatch(removeDongNePost(postId));
+      navigate('/dongNeHome');
+    });
+    setDialogTitle("우리끼리 탈퇴 확인");
+    setDialogDescription("우리끼리를 탈퇴 하시겠습니까?");
+    setDialogAgreeText("우리끼리 탈퇴");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
   
+  const dropdownMenuMaster = [
+    { label: '가입 신청 조회', onClick: handleSignUpList },
+    { label: '회원 목록 조회', onClick: handleMemberList },
+    { label: '우리끼리 수정', onClick: openUpdateDialog },
+    { label: '우리끼리 삭제', onClick: openDeleteDialog }
+  ];
+
+  const dropdownMenuMember = [
+    { label: '회원 목록 조회', onClick: handleMemberList },
+    { label: '탈퇴', onClick: openOutOrikkiri },
+  ];
+  
+  console.log(orikkiriDetail.masterTag);
 
   return (
     <Wrap>
       <Header>
-        <div>
           <BiLeftArrowAlt
             size={30}
             onClick={() => {
               navigate("/dongNeHome");
             }}
           />
-        </div>
-        <div>
           {/* 모달창 열기 */}
-          <FiMoreVertical onClick={openModal} />
-
-          <Modal open={modalOpen} close={closeModal}>
-            {orikkiriDetail?.masterTag === member.tag ? (
-              <ButtonWrap>
-                <ButtonModify
-                  onClick={() => {
-                    navigate("/modify/" + orikkiriId);
-                  }}
-                >
-                  수정
-                </ButtonModify>
-                <ButtonDelete
-                  onClick={() => {
-                    dispatch(deleteOrikkiri(orikkiriId, navigate));
-                    alert("삭제가 완료되었습니다.");
-                  }}
-                >
-                  삭제
-                </ButtonDelete>
-              </ButtonWrap>
-            ) : (
-              <Claim>신고하기</Claim>
-            )}
-          </Modal>
-
-        </div>
+          {
+           member.tag === orikkiriDetail.masterTag ? <TopDropdownMenu dropdownMenus={dropdownMenuMaster}/> : <TopDropdownMenu dropdownMenus={dropdownMenuMember}/>
+          }
       </Header>
 
       <div>
@@ -125,7 +165,7 @@ function OrikkiriHome() {
           {/* 여기 아래에 일점 컴포넌트로 이름 변경 */}
           {/* {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>} */}
           {selectedContent === 'album' && <OrikkiriAlbumList orikkiriId={orikkiriId}/>}
-          {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriMasterTag}/>}
+          {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriDetail.masterTag}/>}
         
         </Contents>
       
@@ -134,6 +174,17 @@ function OrikkiriHome() {
       <Footer>
         <BottomBar />
       </Footer>
+
+      <AlertDialog
+        open={dialogOpen}
+        handleClose={closeDialog}
+        onAgree={executePendingAction}
+        title={dialogTitle}
+        description={dialogDescription}
+        agreeText={dialogAgreeText}
+        disagreeText={dialogDisagreeText}
+      />
+
     </Wrap>
   );
 }  
@@ -141,20 +192,21 @@ function OrikkiriHome() {
 const Wrap = styled.div`
   box-sizing: border-box;
   overflow-y:hidden;
-
+  
   img {
     background-size: cover;
     background-position: center;
     height: 300px;
     width: 100%;
   }
-`;
-
-const Container = styled.div`
+  `;
+  
+  const Container = styled.div`
   padding: 16px 16px;
   position: relative;
-`;
-const Header = styled.div`
+  `;
+  const Header = styled.header`
+  position:relative;
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -162,48 +214,12 @@ const Header = styled.div`
   padding: 16px 10px;
   color: white;
   font-size: 23px;
-  position: absolute;
 
   svg {
     filter: drop-shadow(0px 0px 1px rgb(0 0 0 / 0.4));
   }
 `;
-// 모달 css
-const ButtonWrap = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
 
-const ButtonModify = styled.button`
-  width: 100%;
-  height: 50px;
-  border-top-left-radius: 15px;
-  border-top-right-radius: 15px;
-  background-color: whitesmoke;
-  color: #6bb7e0;
-  font-size: 13px;
-  border:0;
-  border-bottom:1px solid #dadada;
-`;
-
-const ButtonDelete = styled.button`
-  width: 100%;
-  height: 50px;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  background-color: whitesmoke;
-  color: red;
-  font-size: 13px;
-  border:0;
-`;
-
-const Claim = styled(ButtonModify)`
-  border-radius: 15px;
-  color: red;
-`;
-
-// 여기 까지 모달
 const ProfileBar = styled.div`
   display: flex;
   justify-content: space-between;
@@ -243,24 +259,6 @@ const Nickname = styled.div`
 
 `;
 
-const Ondo = styled.div`
-  line-height: 20px;
-  div {
-    display: flex;
-    justify-content: space-between;
-    width: 80px;
-    align-items: center;
-  }
-  & p:first-child {
-    color: #6bb7e0;
-    font-weight: 600;
-    font-size: 15px;
-  }
-  & p:last-child {
-    color: #aaa;
-    text-decoration: underline;
-  }
-`;
 
 const Contents = styled.div`
   padding-top: 30px;
@@ -298,66 +296,6 @@ const Footer = styled.div`
   border-top: 1px solid #dadada;
 `;
 
-const Heart = styled.div`
-  width: 20%;
-  text-align: center;
-  align-items: center;
-`;
-
-const Price = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  padding: 5px 16px;
-  border-left: 1px solid #dadada;
-  line-height: 25px;
-  align-items: center;
-
-  div :first-child {
-    font-weight: 600;
-  }
-  div > p:nth-child(2) {
-    color: #ff7e36;
-    font-size: 14px;
-  }
-  button {
-    background-color: #ff7e36;
-    border: none;
-    border-radius: 5px;
-    width: 90px;
-    height: 40px;
-    color: white;
-  }
-`;
-
-
-const TradeState = styled.div`
-  margin-top: 5px;
-  margin-left:10px;
-  display: flex;
-  align-items: center;
-`;
-
-const SoldOut = styled.div`
-  padding: 6px 5px;
-  width: 65px;
-  height:26px;
-  border-radius: 5px;
-  background-color: #565656;
-  color: white;
-  font-size: 12px;
-  text-align: center;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-`;
-
-const Book = styled(SoldOut)`
-  width: 55px;
-  height: 26px;
-  background-color: #34bf9e;
-`;
-
 const SmallImage = styled.img`
   height: 50px; /* 원하는 높이 값으로 설정 */
 `;
@@ -368,7 +306,6 @@ const RoundedImage = styled.img`
   width: 100px; /* 원하는 너비 */
   height: 100px; /* 원하는 높이 */
 `;
-
 
 const StyledButton = styled.button`
   width: 60px; /* 버튼의 너비 */

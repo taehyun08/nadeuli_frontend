@@ -40,7 +40,6 @@ function GetDongNePost() {
   const openDeleteDialog = () => {
     setPendingAction(() => () => {
       dispatch(removeDongNePost(postId));
-      dispatch(removeDongNePost(postId));
       navigate('/dongNeHome');
     });
     setDialogTitle("삭제 확인");
@@ -110,14 +109,6 @@ function GetDongNePost() {
       }
     }
   }, [getDongNePost.streaming]);
-
-  const handleEditClick = () => {
-    navigate('/addDongNePost');
-  };
-  
-  const handleDeleteClick = () => {
-    deleteDongNePost();
-  };
 
   return (
     <Wrap>
