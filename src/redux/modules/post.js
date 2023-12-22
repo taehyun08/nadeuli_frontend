@@ -120,11 +120,14 @@ export const loadMainposts = (dongNe) => {
 
 // 판매목록 리드
 export const loadSalesposts = (tag, type) => {
-  return async function (dispatch) {
-    
-    await get(`/product/getMyProductList/${tag}/0`)
-      .then((re) => {
-        dispatch(roadPosts(re.data.sellList));
+  return async function (dispatch, getState) {
+    const url = `/product/getMyProductList/${tag}/0${type ? `?type=${type}` : ''}`;
+    await get(url)
+      .then((res) => {
+        console.log(res)
+        dispatch(roadPosts(res));
+        const currentState = getState();
+        console.log('Current state:', currentState);
       })
       .catch((err) => {
         console.log("판매목록" + err);
