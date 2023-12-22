@@ -40,7 +40,7 @@ function PayModal(props) {
         buyer_email: member.email, // 구매자 이메일
         buyer_addr: member.dongNe, // 구매자 주소
         buyer_postcode: member.postcode, // 구매자 우편번호
-        m_redirect_url: "https://nadeuli.kr:80/main"
+        m_redirect_url: "https://nadeuli.kr/main"
     };
 
     IMP.request_pay(data, (res) => {
@@ -76,7 +76,7 @@ function PayModal(props) {
         buyer_email: member.email, // 구매자 이메일
         buyer_addr: member.dongNe, // 구매자 주소
         buyer_postcode: member.postcode, // 구매자 우편번호
-        m_redirect_url: "https://nadeuli.kr:80/main"
+        m_redirect_url: "https://nadeuli.kr/main"
     };
 
     IMP.request_pay(data, (res) => {
