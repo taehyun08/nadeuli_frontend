@@ -2,7 +2,7 @@ import React, { useState }from 'react';
 import DongNePostList from '../../pages/DongNePostList';
 import TopBar from '../../components/TopBar';
 import BottomBar from '../../components/BottonBar';
-import OrikkiriList from '../../pages/OrikkiriList';
+import MyOrikkiriList from '../../pages/MyOrikkiriList';
 function DongNeHome() {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -14,7 +14,7 @@ function DongNeHome() {
     <div className="Wrap">
       <TopBar onSearch={handleSearch} />
       <div className="MainListBox">
-        <OrikkiriList/>
+        <MyOrikkiriList/>
         <DongNePostList searchQuery={searchQuery}/>
       </div>
       <BottomBar />

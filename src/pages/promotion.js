@@ -67,10 +67,10 @@ function Promotion({searchQuery}) {
           return (
             <div className="promotion-scroll" key={dongNePost.postId}>
               <div className="video-card" onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
-                <video playinline 
+                <video 
                   ref={(el) => videoRefs.current[index] = el}
                   src={videoSource} 
-                  controls autoPlay muted 
+                  playsInline controls autoPlay muted 
                 />
                 <div className="video-overlay">
                   <h3>{dongNePost.title}</h3>

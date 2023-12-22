@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { GetDongNePostList } from '../redux/modules/dongNePost';
+import Orikkiri, { allOrikkiriList } from '../redux/modules/orikkiri';
 import '../style/css/postInfo.css';
 import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import Promotion from './promotion';
+import OrikkiriList from "./OrikkiriList";
 
 function DongNePostList({searchQuery}) {
   const location = useSelector((state) => state.member.gu);
@@ -18,6 +20,10 @@ function DongNePostList({searchQuery}) {
     dispatch(GetDongNePostList(currentPage, location, searchQuery));
   }, [currentPage, location, searchQuery, dispatch]);
 
+  useEffect(() => {
+    dispatch(allOrikkiriList());
+  }, [dispatch]);
+
 
   const handleChitChatClick = () => {
     setSelectedCategory(1);
@@ -25,6 +31,10 @@ function DongNePostList({searchQuery}) {
 
   const handlePromotionClick = () => {
     setSelectedCategory(2);
+  };
+
+  const handleOrikkiriClick = () => {
+    setSelectedCategory(3);
   };
 
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
@@ -59,8 +69,14 @@ function DongNePostList({searchQuery}) {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <FixedButton onClick={handleChitChatClick}>잡담</FixedButton>
         <FixedButton onClick={handlePromotionClick}>홍보</FixedButton>
+        <FixedButton onClick={handleOrikkiriClick}>우리끼리</FixedButton>
       </div>
-      <div className="MainListBox">
+      {selectedCategory === 3 ? (
+        // 우리끼리 카테고리 선택 시, OrikkiriList만 렌더링
+        <OrikkiriList/>
+      ) : (
+        // 그 외의 경우 기존 포스트 목록 렌더링
+        <div className="MainListBox">
         {filteredDongNePostList.map((dongNePost) => (
           <div key={dongNePost.postId}>
             <CardBox className="card">
@@ -113,7 +129,8 @@ function DongNePostList({searchQuery}) {
             </CardBox>
           </div>
         ))}
-      </div>
+        </div>
+      )}
       {selectedCategory == 1 && (
         <div>
           <FixedButton1 onClick={() => navigate("/addOrikkiri")}>+ 우리끼리</FixedButton1>
@@ -125,7 +142,7 @@ function DongNePostList({searchQuery}) {
           <FixedButton2 onClick={() => navigate("/addStreaming")}>+ 스트리밍</FixedButton2>
         </div>
       )}
-
+      
     </div>
   );
 }

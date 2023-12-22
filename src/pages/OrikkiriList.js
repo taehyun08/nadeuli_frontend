@@ -1,48 +1,68 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getOrikkiriList } from '../redux/modules/orikkiri';
+import { allOrikkiriList } from '../redux/modules/orikkiri';
+import '../style/css/postInfo.css';
+import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import "../style/css/orikkiriList.css"; // CSS 파일을 임포트합니다.
-import { FaUserGroup } from "react-icons/fa6";
 
 function OrikkiriList() {
-  const member = useSelector((state) => state.member);
-  const tag = useSelector((state) => state.member.tag);
+  const memberDongNe = useSelector((state) => state.member.dongNe);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentPage, setCurrentPage] = useState(0);
 
-  // 데이터 구조 변경에 따라 필드 수정
-  const orikkiriList = useSelector((state) => state.orikkiri.orikkiriList);
-
   useEffect(() => {
-    dispatch(getOrikkiriList(tag, currentPage));
-  }, [tag, currentPage, dispatch]);
+    dispatch(allOrikkiriList(memberDongNe));
+  }, [dispatch]);
 
-  // console.log("dongNePostList:", dongNePostList);
+
+  const OrikkiriList = useSelector((state) => state.orikkiri.orikkiriList);
+
+  const filteredOrikkiriList = OrikkiriList.filter(orikkiri => orikkiri.dongNe === memberDongNe);
 
   return (
-    <div className="top-toolbar">
-      <div className="image-container">
-        <FaUserGroup className="orikkiri-image" />
-        <div className="orikkiri-text">우리끼리 목록</div>
-      </div>
-      <div className="vertical-line"></div>
-
-      {orikkiriList && orikkiriList.map((list, index) => (
-      <div key={index}>
-        <div onClick={() => {
-          navigate("/orikkiriHome/" + list.orikkiri.orikkiriId);
-        }}>
-          <div className="image-container">
-            <img className="circle-image" src={list?.orikkiri.orikkiriPicture } alt="orikkiri Image" />
-            <div className="orikkiri-text">{list.orikkiri.orikkiriName}</div>
+    <div className="MainListBox">
+      {filteredOrikkiriList.map((orikkiri, index) => {
+        const hasPicture = orikkiri.orikkiriPicture;
+        return (
+          <div key={orikkiri.orikkiriId || index}>
+            <CardBox className="card" onClick={() => navigate("/orikkiriHome/" + orikkiri.orikkiriId)}>
+              {hasPicture && <Img src={orikkiri?.orikkiriPicture} alt="Orikkiri Image" />}
+              <TextArea>
+                <span>
+                  {orikkiri.orikkiriName}
+                </span>
+              </TextArea>
+              <div>
+                {orikkiri.orikkiriIntroduction}
+              </div>
+            </CardBox>
           </div>
-        </div>
-      </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
+
+const CardBox = styled.div`
+  display: flex;
+  padding: 20px;
+  justify-content: space-between;
+  border-bottom: 1px solid #dddddd;
+`;
+
+const TextArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 10px;
+`;
+
+const Img = styled.img`
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: cover;
+`;
 
 export default OrikkiriList;

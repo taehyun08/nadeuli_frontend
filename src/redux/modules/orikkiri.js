@@ -65,6 +65,22 @@ export const getOrikkiriList= (tag, currentPage) => {
       await get(`/orikkiri/getMyOrikkiriList/${tag}/0`)
         .then((res) => {
           console.log(res);
+          dispatch(loadMyOrikkiris(res));
+          const currentState = getState();
+          console.log('Current state:', currentState);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+  };
+
+  // 모든 우리끼리 조회
+  export const allOrikkiriList= () => {
+    return async function (dispatch, getState) {
+      await get(`/orikkiriManage/allOrikkiri`)
+        .then((res) => {
+          console.log(res);
           dispatch(loadOrikkiris(res));
           const currentState = getState();
           console.log('Current state:', currentState);
@@ -94,6 +110,7 @@ export const deleteOrikkiri = (orikkiriId, navigate) => {
 const orikkiriSlice = createSlice({
   name: "orikkiri",
   initialState: {
+    myOrikkiriList: [],
     orikkiriList: [],
     orikkiri: {},
   },
@@ -101,22 +118,29 @@ const orikkiriSlice = createSlice({
     addOrikkiri: (state, action) => {
       state.orikkiriList.push(action.payload);
     },
+    addMyOrikkiri: (state, action) => {
+      state.myOrikkiriList.push(action.payload);
+    },
     getLoadOrikkiri: (state, action) => {
       state.orikkiri = action.payload;
     },
     loadOrikkiris: (state, action) => {
       state.orikkiriList = action.payload;
     },
+    loadMyOrikkiris: (state, action) => {
+      state.myOrikkiriList = action.payload;
+    },
     updateOrikkiri: (state, action) => {
       state.orikkiri = action.payload;
     },
     deletOrikkiri: (state, action) => {
-      state.orikkiriList = state.orikkiriList.filter((orikkiri) => orikkiri.orikkiriId != action.payload)
+      state.orikkiriList = state.orikkiriList.filter((orikkiri) => orikkiri.orikkiriId != action.payload);
+      state.myOrikkiriList = state.myOrikkiriList.filter((orikkiri) => orikkiri.orikkiriId != action.payload)
     }
 
   },
 });
 
-const { addOrikkiri, getLoadOrikkiri, loadOrikkiris, updateOrikkiri, deletOrikkiri } =
+const { addOrikkiri, addMyOrikkiri, getLoadOrikkiri, loadOrikkiris, loadMyOrikkiris, updateOrikkiri, deletOrikkiri } =
 orikkiriSlice.actions;
 export default orikkiriSlice.reducer;
