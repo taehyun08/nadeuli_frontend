@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
-import { deletePost } from "../redux/modules/post";
+import { deletePost, loadSalesposts } from "../redux/modules/post";
 
 function SalesList() {
   const dispatch = useDispatch();
@@ -16,16 +16,17 @@ function SalesList() {
   // const [boardList, setBoardList] = useState();
 
   const postList = useSelector((state) => state.post.postList);
-  const user = useSelector((state) => state.user); // 유저 정보
+  const member = useSelector((state) => state.member); // 유저 정보
 
   // 현재 탭
   const NOW_SELL = 0;
   const COMPLETE_SELL = 1;
+  const COMPLETE_BUY = 2;
   const [tab, setTab] = useState(NOW_SELL);
 
-  // useEffect(() => {
-  //   dispatch(loadSalseposts());
-  // }, [dispatch]);
+  useEffect(() => {
+    dispatch(loadSalesposts(member.tag, tab));
+  }, [dispatch, tab]);
 
   useEffect(() => {
     console.log(postList);
@@ -55,28 +56,25 @@ function SalesList() {
             setTab(COMPLETE_SELL);
           }}
         >
-          거래완료
+          판매완료
+        </button>
+        <button
+          onClick={() => {
+            setTab(COMPLETE_BUY);
+          }}
+        >
+          구매완료
         </button>
       </SellMenu>
       {!postList ? <NotFound> 판매내역이 없어요</NotFound> : ""}
       <div>
         {/* 위 디브에 온클릭 이벤트 걸어둘것! list.pistId */}
         {postList
-          ?.filter((post) => {
-            if (tab === 0) {
-              // 거래중
-              return post.tradeState === "0" || post.tradeState === "1";
-            } else if (tab === 1) {
-              // 거래 완료
-              return post.tradeState === "2";
-            }
-            return false;
-          })
-          .map((list, index) => (
+          ?.map((list, index) => (
             <Card key={index}>
               <CardBox className="card">
                 <div style={{ display: "flex", width: "100%" }}>
-                  <Img src={list.postImg} />
+                  <Img src={list.images?.[0]} />
                   <TextArea>
                     <span
                       style={{
@@ -95,7 +93,7 @@ function SalesList() {
                         color: "#AAAAAA",
                       }}
                     >
-                      {list.userLocation}
+                      {list.seller?.dongNe}
                     </span>
                     <div
                       style={{
@@ -232,7 +230,7 @@ const SellMenu = styled.div`
 
   button {
     border: none;
-    width: 50%;
+    width: 33%;
     box-sizing: border-box;
     display: block;
     padding: 20px 0;
@@ -257,6 +255,16 @@ const SellMenu = styled.div`
   // COMPLETE_SELL
   ${(props) =>
     props.active === 1 &&
+    css`
+      button:nth-of-type(2) {
+        border-bottom: 3px solid #333;
+        color: #333;
+      }
+    `}
+
+    // NOW_SELL
+  ${(props) =>
+    props.active === 2 &&
     css`
       button:last-of-type {
         border-bottom: 3px solid #333;

@@ -10,6 +10,7 @@ import Detail from "./pages/Detail";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
 import Modify from "./pages/Modify";
+import SalesList from "./pages/SalesList";
 import ProfileLocation from "./pages/ProfileLocation";
 import FindAccount from "./pages/member/FindAccount";
 import UpdateCellphone from "./pages/member/UpdateCellphone";
@@ -23,6 +24,7 @@ import OrikkiriHome from "./pages/orikkiri/OrikkiriHome";
 import AddTradeReview from "./pages/trade/AddTradeReview";
 import Test from "./pages/member/GetMyProfile";
 import NadeuliPayCharge from "./pages/nadeuli_pay/NadeuliPayCharge";
+import Charge from "./pages/nadeuli_pay/Charge";
 import NadeuliPayPay from "./pages/nadeuli_pay/NadeuliPayPay";
 import NadeuliPayWithdraw from "./pages/nadeuli_pay/NadeuliPayWithdraw";
 import GetNadeuliPayList from "./pages/nadeuli_pay/GetNadeuliPayList";
@@ -62,15 +64,17 @@ function Router() {
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
         <Route path="/getOrikkiriSignUpList" element={<GetOrikkiriSignUpList />} />
-        <Route path="/addOrikkiriSignUp/:orikkiriId" element={<AddOrikkiriSignUp />} />
+        <Route path="/addOrikkiriSignUp" element={<AddOrikkiriSignUp />} />
         <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
-        <Route path="/addOrikkiriPost/:orikkiriId" element={<AddOrikkiriPost />} />
-        <Route path="/addOrikkiriAlbum/:orikkiriId" element={<AddOrikkiriAlbum />} />
-        <Route path="/addOrikkiriNotice/:orikkiriId" element={<AddOrikkiriNotice />} />
+        <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
+        <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
+        <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
+        />
+        <Route path="/nadeuliPay/charge" element={<Charge />}
         />
         <Route
           path="/nadeuliPay/nadeuliPayPay/:productId"
@@ -102,6 +106,7 @@ function Router() {
           path="/oAuth2RedirectHandler"
           element={<OAuth2RedirectHandler />}
         />
+        <Route path="/product/getMyProductList" element={<SalesList />} />
         <Route path="/oauth2Register" element={<Oauth2Register />} />
         <Route path="/add" element={<Add />} />
         <Route path="/test" element={<Test />} />
