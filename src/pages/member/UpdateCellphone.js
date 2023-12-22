@@ -74,7 +74,7 @@ function UpdateCellphone() {
 
         updateCellphone(memberDTO)
             .then((response) => {
-                if (response.data) {
+                if (response.data === 1) {
                     alert('휴대폰 번호 변경 완료!');
                     navigate('/login');
                 } else {
