@@ -65,6 +65,7 @@ function DongNePostList({searchQuery}) {
 
   return (
     <div>
+      <MainListBox>
       <Promotion/>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <FixedButton onClick={handleChitChatClick}>잡담</FixedButton>
@@ -142,10 +143,16 @@ function DongNePostList({searchQuery}) {
           <FixedButton2 onClick={() => navigate("/addStreaming")}>+ 스트리밍</FixedButton2>
         </div>
       )}
-      
+      </MainListBox>
     </div>
   );
 }
+
+const MainListBox = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
 
 const CardBox = styled.div`
   display: flex;

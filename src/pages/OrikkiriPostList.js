@@ -5,7 +5,6 @@ import '../style/css/postInfo.css';
 import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import Promotion from './promotion';
 
 function OrikkiriPostList({orikkiriId}) {
   
@@ -18,14 +17,6 @@ function OrikkiriPostList({orikkiriId}) {
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, ''));
   }, [currentPage, location, dispatch]);
-
-  const handleChitChatClick = () => {
-    setSelectedCategory(1);
-  };
-
-  const handlePromotionClick = () => {
-    setSelectedCategory(2);
-  };
 
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
@@ -53,69 +44,31 @@ function OrikkiriPostList({orikkiriId}) {
 
   return (
     <div>
-      <div className="MainListBox">
+      <MainListBox>
         {filteredDongNePostList.map((dongNePost) => (
-          <div key={dongNePost.postId}>
-            <CardBox className="card">
-              <div
-                style={{ display: "flex" }}
-                onClick={() => {
-                  navigate("/getDongNePost/" + dongNePost.postId);
-                }}
-              >
-                <Img src={dongNePost.images[0]} alt="Post Image" />
-                <TextArea>
-                  <span
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      marginBottom: "5px",
-                      padding: "0 5px",
-                      width: "100%",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {dongNePost.title}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "15px",
-                      fontWeight: "bold",
-                      padding: "5px",
-                      color: "#AAAAAA",
-                    }}
-                  >
-                    {dongNePost.gu}
-                  </span>
-                </TextArea>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  width: "35px",
-                  fontSize: "16px",
-                }}
-              >
-                <FaRegComment size="20" />
-                {dongNePost.CommentNum}
-              </div>
-            </CardBox>
-          </div>
+          <CardBox key={dongNePost.postId}>
+            <div onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
+              <Img src={dongNePost.images[0]} alt="게시물 이미지" />
+              <TextArea>
+                <TitleSpan>{dongNePost.title}</TitleSpan>
+                <DetailSpan>{dongNePost.gu}</DetailSpan>
+              </TextArea>
+            </div>
+            <CommentSection>
+              <FaRegComment size="20" />
+              {dongNePost.CommentNum}
+            </CommentSection>
+          </CardBox>
         ))}
-      </div>
-      {selectedCategory == 1 && (
-        <div>
-          <FixedButton2 onClick={() => navigate(`/addOrikkiriPost/${orikkiriId}`)}>+ 글쓰기</FixedButton2>
-        </div>
+      </MainListBox>
+      {selectedCategory === 1 && (
+        <FixedButton2 onClick={() => navigate(`/addOrikkiriPost/${orikkiriId}`)}>+ 글쓰기</FixedButton2>
       )}
     </div>
   );
 }
 
+// Styled Components
 const FixedButton2 = styled.div`
   display: flex;
   position: fixed;
@@ -126,17 +79,16 @@ const FixedButton2 = styled.div`
   font-size: 20px;
   font-weight: bold;
   background-color: #508BFC;
-  color: ${(props) => props.theme.color.white};
+  color: white;
   border-radius: 40px;
   justify-content: center;
   align-items: center;
   box-shadow: 0 0 6px 0 #999;
 `;
 
-
 const CardBox = styled.div`
   display: flex;
-  padding: 10px 20px; /* 상하 패딩 감소 */
+  padding: 10px 20px;
   justify-content: space-between;
   border-bottom: 1px solid #dddddd;
 `;
@@ -144,17 +96,47 @@ const CardBox = styled.div`
 const TextArea = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  padding: 5px 10px; /* 상하 패딩 감소 */
+  padding: 5px 10px;
 `;
 
 const Img = styled.img`
   width: 100px;
-  height: 80px; /* 이미지 높이 감소 */
+  height: 80px;
   border-radius: 10px;
   object-fit: cover;
+  margin-right: 10px; /* 이미지와 텍스트 간 간격 */
 `;
 
+const TitleSpan = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding: 0 5px;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const DetailSpan = styled.span`
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  color: #AAAAAA;
+`;
+
+const MainListBox = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+`;
+
+const CommentSection = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 35px;
+  font-size: 16px;
+`;
 
 export default OrikkiriPostList;
-

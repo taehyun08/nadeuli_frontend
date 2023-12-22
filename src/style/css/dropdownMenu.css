@@ -50,7 +50,8 @@
   border: 1px solid #ccc;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  width: 100px; /* 너비를 늘려서 아이콘보다 크게 만듭니다. */
+  min-width: 100px; /* 너비를 최소값으로 설정하여 내용에 따라 조절되도록 변경 */
+  white-space: nowrap; /* 텍스트가 줄바꿈 되지 않도록 설정 */
 }
 
 /* 텍스트 정렬을 가운데로 조절 */

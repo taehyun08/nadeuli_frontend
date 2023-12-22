@@ -1,9 +1,15 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { allOrikkiriList } from '../redux/modules/orikkiri';
 import '../style/css/postInfo.css';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
+import AspectRatio from '@mui/joy/AspectRatio';
+import Card from '@mui/joy/Card';
+import CardContent from '@mui/joy/CardContent';
+import CardOverflow from '@mui/joy/CardOverflow';
+import Typography from '@mui/joy/Typography';
 
 function OrikkiriList() {
   const memberDongNe = useSelector((state) => state.member.dongNe);
@@ -26,7 +32,8 @@ function OrikkiriList() {
         const hasPicture = orikkiri.orikkiriPicture;
         return (
           <div key={orikkiri.orikkiriId || index}>
-            <CardBox className="card" onClick={() => navigate("/orikkiriHome/" + orikkiri.orikkiriId)}>
+            {/* <CardBox className="card" onClick={() => navigate("/orikkiriHome/" + orikkiri.orikkiriId)}> */}
+            <CardBox className="card">
               {hasPicture && <Img src={orikkiri?.orikkiriPicture} alt="Orikkiri Image" />}
               <TextArea>
                 <span>
