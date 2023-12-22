@@ -58,7 +58,17 @@ export const getOrikkrirSignupList = async (orikkiriId) => {
     return await instance.get(`/orikkiriManage/getOrikkrirSignupList/${orikkiriId}`);
 };
 
-//우리끼리 가져오기 함수getOrikkiri
+//우리끼리 가져오기 함수
 export const getOrikkiri = async (orikkiriId) => {
     return await instance.get(`/orikkiriManage/getOrikkiri/${orikkiriId}`);
+};
+
+//우리끼리 가입신청 수락 함수
+export const addSignUp = async (ansQuestionId) => {
+    return await instance.get(`/orikkiriManage/addSignUp/${ansQuestionId}`);
+};
+
+//우리끼리 가입신청 거절 함수
+export const deleteSignUp = async (oriScheMemChatFavId) => {
+    return await instance.get(`/orikkiriManage/deleteSignUp/${oriScheMemChatFavId}`);
 };
