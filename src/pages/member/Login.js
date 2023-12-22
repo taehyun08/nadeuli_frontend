@@ -196,7 +196,7 @@ function Login() {
                     </div>
                     <Button
                         onClick={handleLoginBtnClick}
-                        disabled={!btnState}
+                        disabled={btnState}
                         isActive={btnState}
                     >
                         로그인
