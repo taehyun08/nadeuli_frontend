@@ -236,6 +236,26 @@ export const StyledButton = styled.button`
   }
 `;
 
+export const StyledQueryButton = styled.button`
+  display: flex;
+  width: 40%;
+  color: #fff;
+  background-color: #508bfc;
+  border-color: #508bfc;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  border-radius: 0.25rem;
+  line-height: 1.5;
+  margin: 0.375rem 0.75rem;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: #508bfc;
+    border-color: #508bfc;
+  }
+`;
+
 export const InfoText = styled.p`
   text-align: center;
 `;

@@ -71,6 +71,9 @@ function Router() {
         <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
         <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
         <Route path="/orikkiriScheduleList/:orikkiriId" element={<OrikkiriScheduleList />} />
+        <Route path="/addOrikkiriPost/:orikkiriId" element={<AddOrikkiriPost />} />
+        <Route path="/addOrikkiriAlbum/:orikkiriId" element={<AddOrikkiriAlbum />} />
+        <Route path="/addOrikkiriNotice/:orikkiriId" element={<AddOrikkiriNotice />} />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
