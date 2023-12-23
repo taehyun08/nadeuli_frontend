@@ -72,3 +72,24 @@ export const addSignUp = async (ansQuestionId) => {
 export const deleteSignUp = async (oriScheMemChatFavId) => {
     return await instance.get(`/orikkiriManage/deleteSignUp/${oriScheMemChatFavId}`);
 };
+
+// 우리끼리 일정 추가 함수
+export const addOrikkiriSchedule = async (orikkiriScheduleDTO) => {
+    console.log(orikkiriScheduleDTO);
+    return await instance.post('/orikkiri/addOrikkiriSchedule', { orikkiriScheduleDTO });
+};
+
+//우리끼리 일정 목록 조회 함수
+export const getOrikkiriScheduleList = async (orikkiriId) => {
+    return await instance.get(`/orikkiri/getOrikkiriScheduleList/${orikkiriId}`);
+};
+
+//우리끼리 일정 목록 조회 함수
+export const getOrikkiriSchedule = async (orikkirischeduleId) => {
+    return await instance.get(`/orikkiri/getOrikkiriSchedule/${orikkirischeduleId}`);
+};
+
+//우리끼리 일정 삭제 함수
+export const deleteOrikkiriSchedule = async (orikkirischeduleId) => {
+    return await instance.get(`/orikkiri/deleteOrikkiriSchedule/${orikkirischeduleId}`);
+};
