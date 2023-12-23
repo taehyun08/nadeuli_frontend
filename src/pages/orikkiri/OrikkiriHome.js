@@ -13,6 +13,7 @@ import OrikkiriNoticeList from "../../pages/OrikkiriNoticeList";
 import OrikkiriAlbumList from "../../pages/OrikkiriAlbumList";
 import TopDropdownMenu from '../../components/TopDropdownMenu';
 import AlertDialog from '../../components/AlertDialog'
+import OrikkiriScheduleList from "./OrikkiriScheduleList";
 
 
 function OrikkiriHome() {
@@ -174,6 +175,7 @@ function OrikkiriHome() {
           {/* {selectedContent === 'schedule' && <DongNePostList orikkiriId={orikkiriId}/>} */}
           {selectedContent === 'album' && <OrikkiriAlbumList orikkiriId={orikkiriId}/>}
           {selectedContent === 'notice' && <OrikkiriNoticeList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriDetail.masterTag}/>}
+          {selectedContent === 'schedule' && <OrikkiriScheduleList orikkiriId={orikkiriId} orikkiriMasterTag={orikkiriDetail.masterTag}/>}
         
         </Contents>
       
