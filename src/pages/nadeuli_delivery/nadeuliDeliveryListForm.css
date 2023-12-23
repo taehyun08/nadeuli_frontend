@@ -188,3 +188,9 @@ input:checked + .slider:before {
   font-size: 25px !important;
   flex-shrink: 0; /* 아이콘 크기 유지 */
 }
+
+.query-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
