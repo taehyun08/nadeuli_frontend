@@ -5,8 +5,53 @@ import ImageListItemBar from '@mui/material/ImageListItemBar';
 import ListSubheader from '@mui/material/ListSubheader';
 import IconButton from '@mui/material/IconButton';
 import InfoIcon from '@mui/icons-material/Info';
+import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { GetDongNePostList } from '../redux/modules/dongNePost';
+import '../style/css/postInfo.css';
+import { FaRegComment } from "react-icons/fa";
+import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
-export default function TitlebarImageList() {
+export default function OrikkiriAlbumList(orikkiriId) {
+
+  const checkOrikkiriId = orikkiriId;
+  const location = useSelector((state) => state.member.gu);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [currentPage] = useState(0);
+  const [selectedCategory] = useState(4);
+
+  useEffect(() => {
+    dispatch(GetDongNePostList(currentPage, location, ''));
+  }, [currentPage, location, dispatch]);
+
+  const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
+
+  
+  const filteredDongNePostList = dongNePostList.filter(dongNePost => {
+    if (selectedCategory !== null && dongNePost.postCategory !== selectedCategory) {
+      return false;
+    }
+    // if (dongNePost.images && dongNePost.images.length > 0) {
+    //   const extension = dongNePost.images[0].split('.').pop().toLowerCase();
+    //   if (extension === 'mp4') {
+    //     return false;
+    //   }
+    // }
+    // console.log(dongNePost?.orikkiri?.orikkiriId)
+    if (dongNePost.orikkiri?.orikkiriId != checkOrikkiriId) {
+      return false;
+    }
+
+    return dongNePost.gu === location;
+  });
+  
+  useEffect(() => {
+    dispatch(GetDongNePostList(currentPage, location, ''));
+  }, [currentPage, location, dispatch]);
+
+
   return (
     <ImageList sx={{ width: '100%', height: '100%' }}>
       <ImageListItem key="Subheader" cols={2}>
@@ -23,20 +68,39 @@ export default function TitlebarImageList() {
           <ImageListItemBar
             title={item.title}
             subtitle={item.author}
-            actionIcon={
-              <IconButton
-                sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-                aria-label={`info about ${item.title}`}
-              >
-                <InfoIcon />
-              </IconButton>
-            }
+            // actionIcon={
+            //   <IconButton
+            //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+            //     aria-label={`info about ${item.title}`}
+            //   >
+            //     <InfoIcon />
+            //   </IconButton>
+            // }
           />
         </ImageListItem>
       ))}
+    {selectedCategory === 4 && (
+      <FixedButton2 onClick={() => navigate(`/addOrikkiriAlbum/${checkOrikkiriId}`)}>+ 앨범 추가</FixedButton2>
+    )}
     </ImageList>
   );
 }
+const FixedButton2 = styled.div`
+  display: flex;
+  position: fixed;
+  bottom: 100px;
+  right: 30px;
+  width: 120px;
+  height: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #508BFC;
+  color: white;
+  border-radius: 40px;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0 6px 0 #999;
+`;
 
 const itemData = [
   {
