@@ -6,32 +6,31 @@ import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-function OrikkiriPostList({orikkiriId}) {
+function OrikkiriPostList({orikkiriId ,updatePostCount}) {
   
+  const checkOrikkiriId = orikkiriId;
   const location = useSelector((state) => state.member.gu);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [currentPage, setCurrentPage] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState(1);
-
-  useEffect(() => {
-    dispatch(GetDongNePostList(currentPage, location, ''));
-  }, [currentPage, location, dispatch]);
+  const [currentPage] = useState(0);
+  const [selectedCategory] = useState(1);
+  
 
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
+  
   const filteredDongNePostList = dongNePostList.filter(dongNePost => {
     if (selectedCategory !== null && dongNePost.postCategory !== selectedCategory) {
       return false;
     }
-    if (dongNePost.images && dongNePost.images.length > 0) {
-      const extension = dongNePost.images[0].split('.').pop().toLowerCase();
-      if (extension === 'mp4') {
-        return false;
-      }
-    }
-    console.log(orikkiriId)
-    if (!dongNePost.orikkiri) {
+    // if (dongNePost.images && dongNePost.images.length > 0) {
+    //   const extension = dongNePost.images[0].split('.').pop().toLowerCase();
+    //   if (extension === 'mp4') {
+    //     return false;
+    //   }
+    // }
+    // console.log(dongNePost?.orikkiri?.orikkiriId)
+    if (dongNePost.orikkiri?.orikkiriId != checkOrikkiriId) {
       return false;
     }
 
@@ -41,6 +40,12 @@ function OrikkiriPostList({orikkiriId}) {
   useEffect(() => {
     dispatch(GetDongNePostList(currentPage, location, ''));
   }, [currentPage, location, dispatch]);
+
+  // useEffect(() => {
+  //   // 컴포넌트가 마운트되거나 filteredDongNePostList가 변경될 때마다 게시물 수 업데이트
+  //   updatePostCount(filteredDongNePostList.length);
+  // }, [filteredDongNePostList, updatePostCount]);
+  
 
   return (
     <div>

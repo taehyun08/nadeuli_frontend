@@ -35,7 +35,11 @@ function OrikkiriHome() {
   const [pendingAction, setPendingAction] = useState(null);
   const [dialogAgreeText, setDialogAgreeText] = useState('');
   const [dialogDisagreeText, setDialogDisagreeText] = useState('');
+  const [postCount, setPostCount] = useState(0);
 
+  // const updatePostCount = (count) => {
+  //   setPostCount(count);
+  // };
 
   const executePendingAction = () => {
     if (pendingAction) pendingAction();
@@ -53,7 +57,7 @@ function OrikkiriHome() {
 
   // 우리끼리 가입 리스트 이동
   const handleSignUpList = () => {
-      navigate('/dongNeHome');
+      navigate(`/getOrikkiriSignUpList/${orikkiriId}`);
   };
 
     // 우리끼리 회원 리스트 이동
@@ -139,6 +143,10 @@ function OrikkiriHome() {
             <RoundedImage src={orikkiriDetail?.orikkiriPicture} alt="orikkiriImg" />
             <Nickname>
               <p>{orikkiriDetail?.orikkiriName}</p>
+              {/* {selectedContent === 'post' && (
+              <OrikkiriPostList orikkiriId={orikkiriId} updatePostCount={updatePostCount}/>
+              )}
+              <p>게시물 수: {postCount}</p> */}
             </Nickname>
           </Profile>
 
