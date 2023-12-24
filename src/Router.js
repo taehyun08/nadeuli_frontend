@@ -118,7 +118,7 @@ function Router() {
         <Route path="/getMyProfile" element={<GetMyProfile />} />
         <Route path="/getOtherProfile" element={<GetOtherProfile />} />
         <Route path="/getMemberList" element={<GetMemberList />} />
-        <Route path="/report" element={<Report />} />
+        <Route path="/report/:type/:id" element={<Report />} />
         <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid" element={<Detail />} />

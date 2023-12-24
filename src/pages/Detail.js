@@ -9,12 +9,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { carrotGetPost, deletePost, postUnLike, postLike } from '../redux/modules/post';
-import { post } from "../util/chatAxios";
+import { post } from '../util/chatAxios';
 
 import Modal from '../components/Modal';
 
 function Detail() {
-
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const postDetail = useSelector((state) => state.post.post);
@@ -43,11 +42,11 @@ function Detail() {
 
     const likeHeart = () => {
         if (postDetail.isLike) {
-          dispatch(postUnLike(member.tag, postId, postDetail.likeNum)); // userlike가 true면 false로 바꿔주라
+            dispatch(postUnLike(member.tag, postId, postDetail.likeNum)); // userlike가 true면 false로 바꿔주라
         } else {
-          dispatch(postLike(member.tag, postId, postDetail.likeNum));
+            dispatch(postLike(member.tag, postId, postDetail.likeNum));
         }
-      };
+    };
 
     const chatButtonHandler = async () => {
         const tag = member.tag;
@@ -56,14 +55,21 @@ function Detail() {
         const sellerNickname = postDetail.seller.nickname;
         const title = postDetail.title;
         const productId = postId;
-        const participants = [{tag: tag, nickname: nickname}, {tag: sellerTag, nickname: sellerNickname}];
+        const participants = [
+            { tag: tag, nickname: nickname },
+            { tag: sellerTag, nickname: sellerNickname },
+        ];
         const req = { tag, productId, participants, title };
-        await post('/api/chatRoom/findOrCreate', req)
-        .then((res) => {
+        await post('/api/chatRoom/findOrCreate', req).then((res) => {
             console.log(res);
             navigate(`/chat/chatting/${res.chatRoomId}/${postDetail.productId}/1`);
-        })
-    }
+        });
+    };
+
+    const handleReportClick = () => {
+        // 신고 버튼이 클릭되었을 때, Report 페이지로 이동
+        navigate(`/report/product/${postId}`);
+    };
 
     return (
         <Wrap>
@@ -104,7 +110,7 @@ function Detail() {
                                 </ButtonDelete>
                             </ButtonWrap>
                         ) : (
-                            <Claim>신고하기</Claim>
+                            <Claim onClick={handleReportClick}>신고하기</Claim>
                         )}
                     </Modal>
                 </div>

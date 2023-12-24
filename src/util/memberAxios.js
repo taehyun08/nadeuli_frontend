@@ -157,3 +157,7 @@ export const deleteMemberBackAccount = async (memberDTO) => {
     return await instance.post(`/member/deleteMemberBackAccount`,{memberDTO});
 };
 
+// 신고 함수
+export const addReport = async (reportDTO) => {
+    return await instance.post(`/member/addReport`,{reportDTO});
+};
