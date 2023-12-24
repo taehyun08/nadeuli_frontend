@@ -31,7 +31,7 @@ export default function Report() {
             const chatReq = {
                 tag: member.tag,
                 nickname: member.nickname,
-                roomId: '6588a39c2a0ac9acb5556e0b', // 해당 부분을 채팅방의 고유한 ID로 변경
+                roomId: '6588a4122a0ac9acb5556e27', // 해당 부분을 채팅방의 고유한 ID로 변경
                 message: reportMessage,
             };
             await post('/api/chatRoom/sendMessage', chatReq);
