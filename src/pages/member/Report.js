@@ -6,6 +6,7 @@ import { addReport } from '../../util/memberAxios';
 import { useSelector } from 'react-redux';
 import { post } from '../../util/axios';
 import { useParams } from 'react-router-dom';
+import socket from '../../util/socket';
 export default function Report() {
     const [content, setContent] = useState('');
     const member = useSelector((state) => state.member);
@@ -34,8 +35,8 @@ export default function Report() {
                 roomId: '6588a4122a0ac9acb5556e27', // 해당 부분을 채팅방의 고유한 ID로 변경
                 message: reportMessage,
             };
-            await post('/api/chatRoom/sendMessage', chatReq);
-
+            // post('/api/chatRoom/sendMessage', chatReq);
+            socket.emit('sendMessage', chatReq);
             alert('신고 접수가 완료되었습니다.');
             // Report 생성 후 추가적인 처리나 화면 전환 등을 할 수 있음
         } catch (error) {
