@@ -152,8 +152,8 @@ export const checkPortOneAccountName = async (portOneAccountDTO) => {
     return await instance.post(`/member/checkPortOneAccountName`,{portOneAccountDTO});
 };
 
-// 계좌 조회 함수
-export const deleteMemberBackAccount = async (portOneAccountDTO) => {
-    return await instance.post(`/member/deleteMemberBackAccount`,{portOneAccountDTO});
+// 계좌 삭제 함수
+export const deleteMemberBackAccount = async (memberDTO) => {
+    return await instance.post(`/member/deleteMemberBackAccount`,{memberDTO});
 };
 
