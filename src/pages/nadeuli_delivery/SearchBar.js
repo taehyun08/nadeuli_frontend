@@ -4,7 +4,7 @@ import {
   StyledLabel,
   StyledQueryButton,
 } from "./NadeuliDeliveryStyledComponent";
-import "./nadeuliDeliveryListForm.css";
+import "../public/css/nadeuliDeliveryListForm.css";
 
 const SearchBar = ({ onSearch }) => {
   const [searchTerm, setSearchTerm] = useState("");
