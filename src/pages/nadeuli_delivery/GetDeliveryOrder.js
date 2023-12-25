@@ -40,7 +40,7 @@ const GetDeliveryOrder = () => {
   }, [nadeuliDeliveryId]);
 
   const handleUpdateDeliveryOrder = () => {
-    navigate("/updateDeliveryOrder", { state: { nadeuliDeliveryDTO } });
+    navigate(`/updateDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
   const handleCancelDeliveryOrder = () => {
