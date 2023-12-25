@@ -1,4 +1,4 @@
-import { post } from "../../util/chatAxios";
+import axios from "axios";
 import { useEffect, useState } from "react";
 
 const WebCrawler = ({ searchQuery, onAveragePriceChange }) => {
@@ -11,7 +11,8 @@ const WebCrawler = ({ searchQuery, onAveragePriceChange }) => {
 
   useEffect(() => {
     if (searchQuery && !isPriceCalculated) {
-      post("/api/search", { query: searchQuery })
+      axios
+        .post("https://nadeuli.kr:3001/api/search", { query: searchQuery })
         .then((response) => {
           const prices = response.prices;
 
