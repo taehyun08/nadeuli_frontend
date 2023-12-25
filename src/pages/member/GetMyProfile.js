@@ -357,6 +357,10 @@ export default function GetMyProfile() {
         } catch (error) {
             // 회원 정보 업데이트에 실패한 경우
             alert('이미 존재하는 이메일입니다.');
+            setEmail(member.email); // 이메일 초기값으로 설정
+            setEmailAuthNum(''); // 인증번호 초기값으로 설정
+            setIsEmailAuthNumReceived(false); // 인증번호 받은 여부 초기값으로 설정
+            setIsEmailAuthNumCheck(false);
         }
     };
 

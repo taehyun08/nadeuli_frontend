@@ -31,14 +31,13 @@ export default function Report() {
             const reportMessage = `[${member.tag}] ${member.nickname}님이 신고했습니다: ${content}`;
             const chatReq = {
                 tag: member.tag,
-                nickname: member.nickname,
-                roomId: '6588a4122a0ac9acb5556e27', // 해당 부분을 채팅방의 고유한 ID로 변경
+                nickname: member.nickname, // 표시할 멤버닉네임이지만 "신고채팅봇"으로 할 예정
+                roomId: '6588a4122a0ac9acb5556e27', // 고정된 채팅방 아이디
                 message: reportMessage,
             };
             // post('/api/chatRoom/sendMessage', chatReq);
             socket.emit('sendMessage', chatReq);
             alert('신고 접수가 완료되었습니다.');
-            // Report 생성 후 추가적인 처리나 화면 전환 등을 할 수 있음
         } catch (error) {
             console.error('Error creating report:', error);
             // 에러 처리
