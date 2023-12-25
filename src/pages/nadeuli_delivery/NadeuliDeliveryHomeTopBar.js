@@ -3,7 +3,7 @@ import { ImSearch } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { IoIosNotifications } from "react-icons/io";
 import { MdDelete } from "react-icons/md";
-import "./nadeuliDeliveryListForm.css";
+import "../public/css/nadeuliDeliveryListForm.css";
 import { get, post } from "../../util/axios";
 import { setMember } from "../../redux/modules/member";
 import { useNavigate } from "react-router";
