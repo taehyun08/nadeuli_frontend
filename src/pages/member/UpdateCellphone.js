@@ -84,6 +84,7 @@ function UpdateCellphone() {
                     setIsAuthNumBtnDisabled(false);
                     setIsToDisabled(false);
                     setIsAuthNumDisabled(true);
+                    setBtnState(false);
                 }
             })
             .catch((err) => {

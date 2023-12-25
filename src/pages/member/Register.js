@@ -132,6 +132,7 @@ function Register() {
                 setIsAuthNumBtnDisabled(false);
                 setIsToDisabled(false);
                 setIsAuthNumDisabled(true);
+                setBtnState(false);
             });
     };
     
