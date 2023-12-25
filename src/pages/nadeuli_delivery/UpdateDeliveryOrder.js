@@ -20,9 +20,12 @@ import {
 import ImageSlider from "./ImageSlider";
 import { get, post } from "../../util/axios";
 import HeaderBack from "../../components/HeaderBack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import SearchBar from "./SearchBar";
+import WebCrawler from "./WebCrawler";
+import { setMember } from "../../redux/modules/member";
 
 const UpdateDeliveryOrder = () => {
   const [orderData, setOrderData] = useState({});
@@ -30,25 +33,50 @@ const UpdateDeliveryOrder = () => {
   const [tradingOptions, setTradingOptions] = useState([]);
   const [productDetails, setProductDetails] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
   const [files, setFiles] = useState([]);
   const { nadeuliDeliveryId } = useParams();
   const member = useSelector((state) => state.member);
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
+  // 웹크롤링으로 불러올 가격을 상품 키워드로 검색한다.
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      productName: query,
+    }));
+  };
+
+  // 검색으로 가져온 평균 가격을 상품 가격에 설정한다.
+  const handleAveragePriceChange = (newAveragePrice) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      productPrice: newAveragePrice,
+    }));
+  };
 
   // 출발지 설정 함수
   const handleSetLocation = () => {
     // orderData를 상태로 전달하며 목적지 설정 페이지로 이동
-    navigate("/searchLocation", { state: { orderData: orderData } });
+    navigate("/searchLocation", {
+      state: { orderData: orderData, productType: productType },
+    });
   };
 
   // 주문 정보 불러오기
   useEffect(() => {
-    if (location.state && location.state.nadeuliDeliveryDTO) {
-      const data = location.state.nadeuliDeliveryDTO;
-      setOrderData(data);
-      const determinedProductType = data.productNum ? "new" : "used";
-      setProductType(determinedProductType);
+    if (location.state) {
+      const { orderData, departure, arrival, productType } = location.state;
+
+      setOrderData({
+        ...orderData,
+        departure: departure,
+        arrival: arrival,
+      });
+      setProductType(productType);
     } else if (nadeuliDeliveryId) {
       // URL 파라미터를 통해 데이터를 가져오는 로직
       get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
@@ -114,6 +142,15 @@ const UpdateDeliveryOrder = () => {
     // 나드리페이 보증금 계산
     const deposit = calculatedDeposit().replace(/,/g, ""); // 모든 쉼표 제거
 
+    if (member.nadeuliPayBalance < deposit) {
+      alert(
+        "보유하신 나드리페이 잔액보다 보증금 금액이 큽니다. 금액을 조정해주세요. 현재 잔액 : " +
+          member.nadeuliPayBalance +
+          "원"
+      );
+      return;
+    }
+
     // orderData 객체에 buyer.tag와 buyer.nickname 추가
     const updatedOrderData = {
       ...orderData,
@@ -144,6 +181,28 @@ const UpdateDeliveryOrder = () => {
     // axios를 사용하여 데이터 전송
     postMultipart("/nadeulidelivery/updateDeliveryOrder", formData)
       .then((response) => {
+        const balance = Number(member.nadeuliPayBalance);
+        const depositAmount = Number(deposit);
+        console.log("계산 할 나드리페이 잔액 : " + balance);
+        console.log("계산 할 보증금 : " + depositAmount);
+        if (!isNaN(balance) && !isNaN(depositAmount)) {
+          // 계산된 새로운 잔액을 계산합니다.
+          const newBalance = balance - depositAmount;
+
+          if (!isNaN(newBalance)) {
+            // 새로운 잔액으로 member 객체를 업데이트합니다.
+            const updatedMember = {
+              ...member,
+              nadeuliPayBalance: newBalance,
+            };
+
+            // 업데이트된 member 객체로 상태를 업데이트합니다.
+            dispatch(setMember(updatedMember));
+          }
+
+          console.log("갱신된 나드리페이 잔액 : " + member.nadeuliPayBalance);
+        }
+
         console.log("주문 수정 완료!", response);
         alert("주문 수정 완료!!");
         navigate("/nadeuliDeliveryHome");
@@ -271,6 +330,42 @@ const UpdateDeliveryOrder = () => {
           </FormRow>
           {productType ? (
             <>
+              <FormRow>
+                <StyledButton type="button" onClick={handleSetLocation}>
+                  목적지 설정
+                </StyledButton>
+                {/* <StyledButton type="button" onClick={handleSetArrival}>
+                  도착지 설정
+                </StyledButton> */}
+              </FormRow>
+              <FormRow>
+                <StyledLabel htmlFor="departure">출발지</StyledLabel>
+              </FormRow>
+              {/* id="departure" name="departure" */}
+              <FormRow>
+                {orderData.departure || ""}
+                <HiddenInput
+                  type="text"
+                  id="departure"
+                  name="departure"
+                  value={orderData.departure || ""}
+                  onChange={handleChange}
+                />
+              </FormRow>
+              <FormRow>
+                <StyledLabel htmlFor="arrival">도착지</StyledLabel>
+              </FormRow>
+              {/* id="arrival" name="arrival" */}
+              <FormRow>
+                {orderData.arrival || ""}
+                <HiddenInput
+                  type="text"
+                  id="arrival"
+                  name="arrival"
+                  value={orderData.arrival || ""}
+                  onChange={handleChange}
+                />
+              </FormRow>
               {productType === "used" && (
                 <FormRow>
                   <StyledSelect
@@ -327,6 +422,11 @@ const UpdateDeliveryOrder = () => {
                 </>
               ) : (
                 <>
+                  <SearchBar onSearch={handleSearch} />
+                  <WebCrawler
+                    searchQuery={searchQuery}
+                    onAveragePriceChange={handleAveragePriceChange}
+                  />
                   <FormRow>
                     <StyledLabel
                       style={{ textAlign: "right" }}
@@ -477,39 +577,6 @@ const UpdateDeliveryOrder = () => {
                   type="number"
                   id="deposit"
                   name="deposit"
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <StyledButton type="button" onClick={handleSetLocation}>
-                  목적지 설정
-                </StyledButton>
-              </FormRow>
-              <FormRow>
-                <StyledLabel htmlFor="departure">출발지</StyledLabel>
-              </FormRow>
-              {/* id="departure" name="departure" */}
-              <FormRow>
-                {orderData.departure || ""}
-                <HiddenInput
-                  type="text"
-                  id="departure"
-                  name="departure"
-                  value={orderData.departure || ""}
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <StyledLabel htmlFor="arrival">도착지</StyledLabel>
-              </FormRow>
-              {/* id="arrival" name="arrival" */}
-              <FormRow>
-                {orderData.arrival || ""}
-                <HiddenInput
-                  type="text"
-                  id="arrival"
-                  name="arrival"
-                  value={orderData.arrival || ""}
                   onChange={handleChange}
                 />
               </FormRow>
