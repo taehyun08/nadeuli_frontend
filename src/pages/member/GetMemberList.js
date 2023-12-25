@@ -1,4 +1,6 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { Doughnut } from 'react-chartjs-2';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import {
     MDBBadge,
     MDBListGroup,
@@ -21,6 +23,7 @@ import TopArrowLeft from '../../components/TopArrowLeft';
 import HeaderBack from '../../components/HeaderBack';
 import { addBlockMember, deleteBlockMember, getMemberList } from '../../util/memberAxios';
 import { useInView } from 'react-intersection-observer';
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function GetMemberList() {
     const [items, setItems] = useState([]);
@@ -30,6 +33,16 @@ export default function GetMemberList() {
     const [blockReason, setBlockReason] = useState('');
     const [blockDay, setBlockDay] = useState('');
     const [selectedMember, setSelectedMember] = useState(null);
+    const [dataDoughnut, setDataDoughnut] = useState({
+        labels: ['활동 회원', '정지 회원', '비활성 회원'],
+        datasets: [
+            {
+                data: [300, 50, 10],
+                backgroundColor: ['#386bc0', '#dc4c64', '#e4a11b'],
+                hoverBackgroundColor: ['#386bc1', '#d1485f', '#d9991a'],
+            },
+        ],
+    });
 
     // 서버에서 아이템을 가지고 오는 함수
     const getItems = async () => {
@@ -41,6 +54,22 @@ export default function GetMemberList() {
         try {
             const response = await getMemberList(searchDTO);
             console.log(response.data);
+            // "활동 회원", "정지 회원", "비활성 회원"의 수 계산
+            const activeMembers = response.data.filter((item) => !item.blockDay && !item.activate);
+            const blockedMembers = response.data.filter((item) => item.blockDay);
+            const inactiveMembers = response.data.filter((item) => item.activate);
+
+            // 데이터 업데이트
+            setDataDoughnut({
+                labels: ['활동 회원', '정지 회원', '비활성 회원'],
+                datasets: [
+                    {
+                        data: [activeMembers.length, blockedMembers.length, inactiveMembers.length],
+                        backgroundColor: ['#386bc0', '#dc4c64', '#e4a11b'],
+                        hoverBackgroundColor: ['#386bc1', '#d1485f', '#d9991a'],
+                    },
+                ],
+            });
 
             // 서버 응답 결과를 전부 setItems 호출
             setItems(response.data);
@@ -88,6 +117,8 @@ export default function GetMemberList() {
                 // setItems, setPage, 또는 다른 상태 업데이트 로직을 추가할 수 있음
                 const updatedItems = await getMemberList({ searchKeyword, currentPage: page });
                 setItems(updatedItems.data);
+                // 차트 데이터 업데이트
+                getItems();
             } catch (error) {
                 console.error('정지에 실패했습니다.', error);
             }
@@ -115,6 +146,8 @@ export default function GetMemberList() {
             const updatedItems = await getMemberList({ searchKeyword, currentPage: page });
             setItems(updatedItems.data);
             setBasicModal(false); // 모달을 강제로 닫기
+            // 차트 데이터 업데이트
+            getItems();
         } catch (error) {
             // 에러 처리
             console.error('회원 정지 해제에 실패했습니다.', error);
@@ -159,6 +192,15 @@ export default function GetMemberList() {
                 style={{ minWidth: '22rem' }}
                 light
             >
+                <MDBContainer style={{ width: '100%', height: '200px', display: 'flex', justifyContent: 'center', padding: '10px 0' }}>
+                    <Doughnut
+                        style={{ display: 'flex' }}
+                        data={dataDoughnut}
+                        options={{
+                            responsive: true,
+                        }}
+                    />
+                </MDBContainer>
                 {items.map((item, index) => (
                     <div
                         key={index}
