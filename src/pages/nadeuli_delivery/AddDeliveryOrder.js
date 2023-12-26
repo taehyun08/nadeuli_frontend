@@ -102,6 +102,7 @@ const AddDeliveryOrder = () => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    console.log("받은 이미지들 : ", files);
     setFiles(files);
 
     // FileReader를 사용하여 각 파일에 대한 미리보기 생성
@@ -202,6 +203,7 @@ const AddDeliveryOrder = () => {
         currentPage: 0,
       })
         .then((response) => {
+          console.log("거래일정으로 불러온 데이터 : ", response);
           setTradingOptions(
             response.map((item) => ({
               ...item,
@@ -375,7 +377,6 @@ const AddDeliveryOrder = () => {
               </FormRow>
               <FormRow>
                 <StyledTextArea
-                  type="text"
                   id="content"
                   name="content"
                   value={orderData.content || ""}
@@ -574,9 +575,10 @@ const AddDeliveryOrder = () => {
                   <SliderWrapper>
                     {previewImage && previewImage.length > 0 ? (
                       <ImageSlider images={previewImage} />
-                    ) : productDetails && productDetails.images ? (
-                      <ImageSlider images={productDetails.images} />
                     ) : null}
+                    {/* : productDetails && productDetails.images ? (
+                      <ImageSlider images={productDetails.images} />
+                    ) */}
                   </SliderWrapper>
                   <FormRow>
                     <HiddenInput

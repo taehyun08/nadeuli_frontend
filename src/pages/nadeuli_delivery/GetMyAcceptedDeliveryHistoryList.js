@@ -106,7 +106,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
         </Box>
       </HeaderContainer>
       {!responseDTOList.length > 0 && (
-        <InfoText style={{ paddingTop: "300px" }}>
+        <InfoText style={{ paddingTop: "300px", fontWeight: "bold" }}>
           주문 수락 목록이 없습니다.
         </InfoText>
       )}

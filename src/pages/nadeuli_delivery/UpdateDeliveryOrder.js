@@ -105,6 +105,7 @@ const UpdateDeliveryOrder = () => {
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
+    console.log("받은 이미지들 : ", files);
     setFiles(files);
 
     // FileReader를 사용하여 각 파일에 대한 미리보기 생성
@@ -205,6 +206,7 @@ const UpdateDeliveryOrder = () => {
         currentPage: 0,
       })
         .then((response) => {
+          console.log("거래일정으로 불러온 데이터 : ", response);
           setTradingOptions(
             response.map((item) => ({
               ...item,
@@ -378,7 +380,6 @@ const UpdateDeliveryOrder = () => {
               </FormRow>
               <FormRow>
                 <StyledTextArea
-                  type="text"
                   id="content"
                   name="content"
                   value={orderData.content || ""}
@@ -578,9 +579,10 @@ const UpdateDeliveryOrder = () => {
                     {/* Redux에서 가져온 이미지가 있으면 해당 이미지 사용, 그렇지 않으면 previewImage 사용 */}
                     {previewImage && previewImage.length > 0 ? (
                       <ImageSlider images={previewImage} />
-                    ) : productDetails && productDetails.images ? (
-                      <ImageSlider images={productDetails.images} />
                     ) : null}
+                    {/* : productDetails && productDetails.images ? (
+                      <ImageSlider images={productDetails.images} />
+                    )  */}
                   </SliderWrapper>
                   <FormRow>
                     <HiddenInput
