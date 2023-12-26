@@ -159,6 +159,7 @@ export const StyledTextArea = styled.textarea`
   border: 1px solid #ced4da;
   border-radius: 0.25rem;
   resize: vertical;
+  white-space: pre-wrap; // 줄 바꿈 적용
 `;
 
 export const ButtonContainer = styled.div`
