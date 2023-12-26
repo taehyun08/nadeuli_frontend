@@ -116,14 +116,15 @@ export default function GetOrikkiriSignUpList() {
 
     // 가입 신청 수락 함수
     const handleAddSignUpClick = async (ansQuestionId) => {
-        const participants = [{ tag: selectedMember.tag, name: selectedMember.nickname }];
+        const participant = [{ tag: selectedMember.tag, name: selectedMember.nickname }];
 
         const chatReq = {
             orikkiriId: orikkiriId,
-            participants,
+            participant:participant,
         };
 
         console.log(ansQuestionId);
+        console.log(chatReq);
         try {
             await addSignUp(ansQuestionId);
             await chatPost("/api/chatRoom/joinChatRoom",chatReq)
