@@ -20,7 +20,7 @@ function GetDongNePost() {
   const member = useSelector((state) => state.member);
   const params = useParams();
   const postId = params.postId;
-  const videoRef = useRef([]);
+  const videoRef = useRef({});
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogTitle, setDialogTitle] = useState('');
   const [dialogDescription, setDialogDescription] = useState('');
@@ -106,20 +106,18 @@ function GetDongNePost() {
   ];
 
   useEffect(() => {
-    if (getDongNePost.streaming) {
-      const videoElement = videoRef.current[0];
+    const videoElement = videoRef.current[0]; // 첫 번째 비디오 요소 참조
+    if (getDongNePost.streaming && videoElement) {
       if (Hls.isSupported()) {
         const hls = new Hls();
         hls.loadSource(getDongNePost.streaming);
         hls.attachMedia(videoElement);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          videoElement.play();
-        });
       } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
         videoElement.src = getDongNePost.streaming;
       }
     }
   }, [getDongNePost.streaming]);
+
 
   return (
     <Wrap>
@@ -128,7 +126,7 @@ function GetDongNePost() {
         {
           member?.tag !== getDongNePost?.writer?.tag ? 
             <TopDropdownMenu dropdownMenus={dropdownMenus3}/> :
-            (getDongNePost.streaming ? 
+            (getDongNePost?.streaming ? 
               <TopDropdownMenu dropdownMenus={dropdownMenus2}/> : 
               <TopDropdownMenu dropdownMenus={dropdownMenus1}/>
             )
@@ -139,11 +137,11 @@ function GetDongNePost() {
         <div>
           <PostInfo
            text={
-            getDongNePost.postCategory === 0 ? "공지사항" :
-            getDongNePost.postCategory === 1 ? "잡담" :
-            getDongNePost.postCategory === 2 ? "홍보" :
-            getDongNePost.postCategory === 3 ? "스트리밍" :
-            getDongNePost.postCategory === 4 ? "앨범" : "기타"
+            getDongNePost?.postCategory === 0 ? "공지사항" :
+            getDongNePost?.postCategory === 1 ? "잡담" :
+            getDongNePost?.postCategory === 2 ? "홍보" :
+            getDongNePost?.postCategory === 3 ? "스트리밍" :
+            getDongNePost?.postCategory === 4 ? "앨범" : "기타"
           }
             writerPicture={getDongNePost?.writer?.picture}
             writerNickName={getDongNePost?.writer?.nickname}
@@ -157,23 +155,24 @@ function GetDongNePost() {
           </Title>
         
         {/* 파일(이미지/비디오)이 있는 경우에만 File 컴포넌트를 렌더링 */}
-        {(getDongNePost.streaming || (getDongNePost.images && getDongNePost.images.length > 0)) && (
+        {(getDongNePost?.streaming || (getDongNePost?.images && getDongNePost?.images.length > 0)) && (
           <File>
             {/* HLS 스트리밍 비디오 처리 */}
-            {getDongNePost.streaming && (
-                          <ReactHlsPlayer
-                          src={getDongNePost.streaming}
-                          autoPlay
-                          controls
-                          playsInline
-                          muted
-                          width="100%"
-                          height="auto"
-                        />
-            )}
+              {getDongNePost?.streaming && (
+                <video
+                  ref={(el) => videoRef.current[0] = el} // 비디오 참조 설정
+                  src={getDongNePost?.streaming}
+                  playsInline
+                  controls
+                  autoPlay
+                  muted
+                  width="100%"
+                  height="auto"
+                />
+              )}
 
             {/* .mp4 이미지 비디오 처리 */}
-            {getDongNePost.images && getDongNePost.images.map((image, index) => {
+            {getDongNePost?.images && getDongNePost?.images.map((image, index) => {
               if (image.endsWith('.mp4')) {
                 return (
                   <video key={index} ref={(el) => (videoRef.current[index] = el)} src={image} playsInline controls autoPlay muted />
@@ -187,13 +186,13 @@ function GetDongNePost() {
           </File>
         )}
           <Content>
-            <p>{getDongNePost.content}</p>
+            <p>{getDongNePost?.content}</p>
           </Content>
         </div>
         
         {
-          ![0, 3, 4].includes(getDongNePost.postCategory) && 
-            <Comment postId={getDongNePost.postId}></Comment>
+          ![0, 3, 4].includes(getDongNePost?.postCategory) && 
+            <Comment postId={getDongNePost?.postId}></Comment>
         }
 
       </Container>
