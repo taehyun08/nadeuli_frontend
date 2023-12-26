@@ -126,7 +126,7 @@ function GetDongNePost() {
       <Header>
         <TopArrowLeft/>
         {
-          member.tag !== getDongNePost.writer.tag ? 
+          member?.tag !== getDongNePost?.writer?.tag ? 
             <TopDropdownMenu dropdownMenus={dropdownMenus3}/> :
             (getDongNePost.streaming ? 
               <TopDropdownMenu dropdownMenus={dropdownMenus2}/> : 
@@ -193,7 +193,7 @@ function GetDongNePost() {
           ![0, 3, 4].includes(getDongNePost.postCategory) && 
             <Comment postId={getDongNePost.postId}></Comment>
         }
-        
+
       </Container>
       <AlertDialog
         open={dialogOpen}
