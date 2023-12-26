@@ -233,7 +233,8 @@ export default function GetMemberList() {
                                             handleUnblockMember(item.tag);
                                         }
                                     }}
-                                    className={`position-absolute top-50 end-0 translate-middle-y me-3 ${
+                                    style={{top:'40px'}}
+                                    className={`position-absolute end-0 translate-middle-y me-3 ${
                                         item.blockDay !== 0 && item.blockDay ? 'btn-danger' : ''
                                     }`}
                                 >
