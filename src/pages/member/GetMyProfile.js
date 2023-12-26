@@ -669,7 +669,7 @@ export default function GetMyProfile() {
                                             <MDBBadge
                                                 color="info"
                                                 light
-                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                                style={{ marginRight: '5px', fontSize: '15px' }}
                                             >
                                                 이메일
                                             </MDBBadge>
@@ -689,10 +689,10 @@ export default function GetMyProfile() {
                                 <MDBRow>
                                     <MDBCol sm="3">
                                         <MDBCardText>
-                                        <MDBBadge
+                                            <MDBBadge
                                                 color="info"
                                                 light
-                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                                style={{ marginRight: '5px', fontSize: '15px' }}
                                             >
                                                 휴대폰
                                             </MDBBadge>
@@ -711,99 +711,102 @@ export default function GetMyProfile() {
                                 <hr />
                                 <MDBRow>
                                     <MDBCol sm="3">
-                                        <MDBCardText>
-                                        <MDBBadge
+                                        <MDBCardText style={{position:'relative'}}>
+                                            <MDBBadge
                                                 color="info"
                                                 light
-                                                style={{ marginRight: '5px' ,fontSize:"15px", marginBottom:"5px"}}
+                                                style={{ marginRight: '5px', fontSize: '15px', marginBottom: '5px' }}
                                             >
                                                 대표 계좌
                                             </MDBBadge>
-                                            {!showForm && (
-                                                <MDBIcon
-                                                    far
-                                                    icon="edit"
-                                                    style={{ fontSize: '20px', marginLeft: '10px', cursor: 'pointer' }}
-                                                    onClick={deleteBankAccount}
-                                                />
-                                            )}
                                             {showForm && (
-                                                <Box
-                                                    component="form"
-                                                    sx={{
-                                                        display: 'flex',
-                                                        gap: '10px',
-                                                        alignItems: 'center',
-                                                        width: '100%',
-                                                        margin: 'auto',
-                                                    }}
-                                                    noValidate
-                                                    autoComplete="off"
-                                                >
-                                                    <div
-                                                        className="form-outline"
-                                                        style={{ width: '200px' }}
-                                                    >
-                                                        <MDBInput
-                                                            id="outlined-required"
-                                                            value={account.name}
-                                                            name="name"
-                                                            onChange={handleInput}
-                                                            onKeyDown={handleInput}
-                                                            label="예금주"
-                                                        />
-                                                    </div>
-                                                    <MDBInput
-                                                        id="outlined-disabled"
-                                                        label="계좌번호"
-                                                        inputProps={{
-                                                            inputMode: 'numeric',
-                                                            pattern: '[0-9]*',
-                                                        }}
-                                                        value={account.accountNumber}
-                                                        name="accountNumber"
-                                                        onChange={handleInput}
-                                                    />
-                                                    <select
-                                                        style={{ height: '35px' }}
-                                                        value={account.accountBank ? account.accountBank.name : ''}
-                                                        onChange={(e) => {
-                                                            const selectedBank = banks.find((bank) => bank.name === e.target.value);
-                                                            setAccount({ ...account, accountBank: selectedBank });
-                                                        }}
-                                                    >
-                                                        <option
-                                                            value=""
-                                                            disabled
-                                                        >
-                                                            은행 선택
-                                                        </option>
-                                                        {banks.map((bank) => (
-                                                            <option
-                                                                key={bank.code}
-                                                                value={bank.name}
-                                                            >
-                                                                {bank.name}
-                                                            </option>
-                                                        ))}
-                                                    </select>
-                                                    <Box sx={{ textAlign: 'center', fontSize: '25px', position:'absolute',top:'66%', left:'25%'}}>
-                                                        <i
-                                                            className="far fa-square-plus"
-                                                            style={{ cursor: 'pointer' }}
-                                                            onClick={checkAccountName}
-                                                        ></i>
-                                                    </Box>
+                                                <Box sx={{ textAlign: 'center', fontSize: '25px', position:'absolute', top:"-5px", left:'95px'}}>
+                                                    <i
+                                                        className="far fa-square-plus"
+                                                        style={{ cursor: 'pointer' }}
+                                                        onClick={checkAccountName}
+                                                    ></i>
                                                 </Box>
-                                            )}
-                                            {!showForm && (
-                                                <p>
-                                                    {getBankNameByCode(member.bankName)} {member.bankAccountNum}{' '}
-                                                </p>
                                             )}
                                         </MDBCardText>
                                     </MDBCol>
-                                    <MDBCol sm="9"></MDBCol>
+                                    <MDBCol sm="9">
+                                        {!showForm && (
+                                            <MDBIcon
+                                                far
+                                                icon="edit"
+                                                style={{ fontSize: '20px', marginLeft: '10px', cursor: 'pointer' }}
+                                                onClick={deleteBankAccount}
+                                            />
+                                        )}
+                                        {showForm && (
+                                            <Box
+                                                component="form"
+                                                sx={{
+                                                    display: 'flex',
+                                                    gap: '10px',
+                                                    alignItems: 'center',
+                                                    width: '100%',
+                                                    margin: 'auto',
+                                                }}
+                                                noValidate
+                                                autoComplete="off"
+                                            >
+                                                <div
+                                                    className="form-outline"
+                                                    style={{ width: '200px' }}
+                                                >
+                                                    <MDBInput
+                                                        id="outlined-required"
+                                                        value={account.name}
+                                                        name="name"
+                                                        onChange={handleInput}
+                                                        onKeyDown={handleInput}
+                                                        label="예금주"
+                                                    />
+                                                </div>
+                                                <MDBInput
+                                                    id="outlined-disabled"
+                                                    label="계좌번호"
+                                                    inputProps={{
+                                                        inputMode: 'numeric',
+                                                        pattern: '[0-9]*',
+                                                    }}
+                                                    value={account.accountNumber}
+                                                    name="accountNumber"
+                                                    onChange={handleInput}
+                                                />
+                                                <select
+                                                    style={{ height: '35px' }}
+                                                    value={account.accountBank ? account.accountBank.name : ''}
+                                                    onChange={(e) => {
+                                                        const selectedBank = banks.find((bank) => bank.name === e.target.value);
+                                                        setAccount({ ...account, accountBank: selectedBank });
+                                                    }}
+                                                >
+                                                    <option
+                                                        value=""
+                                                        disabled
+                                                    >
+                                                        은행 선택
+                                                    </option>
+                                                    {banks.map((bank) => (
+                                                        <option
+                                                            key={bank.code}
+                                                            value={bank.name}
+                                                        >
+                                                            {bank.name}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </Box>
+                                        )}
+                                        {!showForm && (
+                                            <p>
+                                                {getBankNameByCode(member.bankName)} {member.bankAccountNum}{' '}
+                                            </p>
+                                        )}
+                                    </MDBCol>
                                 </MDBRow>
                             </MDBCardBody>
                         </MDBCard>
@@ -893,10 +896,10 @@ export default function GetMyProfile() {
                                                     textAlign: 'left',
                                                     width: '50px',
                                                     fontSize: '16px',
-                                                    height:'100%'
+                                                    height: '100%',
                                                 }}
                                             >
-                                                <div style={{position:'absolute', right:'20px', bottom:'20px'}}>
+                                                <div style={{ position: 'absolute', right: '20px', bottom: '20px' }}>
                                                     <BsHeart size="18" />
                                                     &nbsp;{list?.product?.likeNum}
                                                 </div>
@@ -936,13 +939,13 @@ export default function GetMyProfile() {
                                     type="text"
                                     maxLength={11}
                                     minLength={11}
-                                    style={{ position: 'relative'}}
+                                    style={{ position: 'relative' }}
                                     disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
                                         onClick={handleReceiveAuthNum}
                                         disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -967,7 +970,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
                                         disabled={!isAuthNumReceived || isAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckAuthNum}
                                     >
@@ -1021,7 +1024,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
                                         onClick={handleReceiveEmailAuthNum}
                                         disabled={isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -1046,7 +1049,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
                                         disabled={!isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckEmailAuthNum}
                                     >
