@@ -5,17 +5,18 @@ import styled from 'styled-components';
 import { addReport } from '../../util/memberAxios';
 import { useSelector } from 'react-redux';
 import { post } from '../../util/axios';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import socket from '../../util/socket';
 export default function Report() {
     const [content, setContent] = useState('');
     const member = useSelector((state) => state.member);
     const { type, id } = useParams();
-
+    const location = useLocation();
+    const currentUrl = location.state?.currentUrl || '';
     const handleReport = async () => {
         try {
             const reportData = {
-                content: `${content}\nURL: ${window.location.href}`,
+                content: `${content}\nURL: ${currentUrl}`,
                 reporter: {
                     tag: member.tag,
                 },
