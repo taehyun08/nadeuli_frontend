@@ -936,13 +936,13 @@ export default function GetMyProfile() {
                                     type="text"
                                     maxLength={11}
                                     minLength={11}
-                                    style={{ position: 'relative' }}
+                                    style={{ position: 'relative'}}
                                     disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
                                         onClick={handleReceiveAuthNum}
                                         disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -967,7 +967,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
                                         disabled={!isAuthNumReceived || isAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckAuthNum}
                                     >
@@ -1021,7 +1021,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
                                         onClick={handleReceiveEmailAuthNum}
                                         disabled={isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -1046,7 +1046,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-35%', padding:"0.32rem" }}
                                         disabled={!isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckEmailAuthNum}
                                     >
