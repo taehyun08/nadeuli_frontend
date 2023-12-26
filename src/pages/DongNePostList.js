@@ -82,51 +82,23 @@ function DongNePostList({searchQuery}) {
           <div key={dongNePost.postId}>
             <CardBox className="card">
               <div
-                style={{ display: "flex" }}
                 onClick={() => {
                   navigate("/getDongNePost/" + dongNePost.postId);
                 }}
               >
-                <Img src={dongNePost.images[0]} alt="Post Image" />
+                {/* 조건부 렌더링: 이미지가 있을 때만 Img 컴포넌트 렌더링 */}
+                {dongNePost.images && dongNePost.images.length > 0 && (
+                  <Img src={dongNePost.images[0]} alt="Post Image" />
+                )}
                 <TextArea>
-                  <span
-                    style={{
-                      fontSize: "20px",
-                      fontWeight: "bold",
-                      marginBottom: "5px",
-                      padding: "0 5px",
-                      width: "100%",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {dongNePost.title}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: "15px",
-                      fontWeight: "bold",
-                      padding: "5px",
-                      color: "#AAAAAA",
-                    }}
-                  >
-                    {dongNePost.gu}
-                  </span>
+                  <TitleSpan>{dongNePost.title}</TitleSpan>
+                  <DetailSpan>{dongNePost.gu}</DetailSpan>
                 </TextArea>
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "flex-end",
-                  justifyContent: "space-between",
-                  width: "35px",
-                  fontSize: "16px",
-                }}
-              >
-                <FaRegComment size="20" />
-                {dongNePost.CommentNum}
-              </div>
+            <CommentSection>
+              <FaRegComment size="20" />
+              {dongNePost.CommentNum}
+            </CommentSection>
             </CardBox>
           </div>
         ))}
@@ -148,6 +120,50 @@ function DongNePostList({searchQuery}) {
   );
 }
 
+const ButtonStyle = styled.div`
+  margin: 10px 0px; // 위 아래로 10px 여백 추가
+  margin-left: 30px; // 왼쪽 여백 추가
+  width: 100px;
+  height: 45px;
+  font-size: 20px;
+  font-weight: bold;
+  background-color: #508BFC;
+  color: white;
+  border-radius: 40px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  box-shadow: 0 0 6px 0 #999;
+`;
+
+const TitleSpan = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  padding: 0 5px;
+  width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+`;
+
+const DetailSpan = styled.span`
+  font-size: 15px;
+  font-weight: bold;
+  padding: 5px;
+  color: #AAAAAA;
+`;
+
+
+
+const CommentSection = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  width: 35px;
+  font-size: 16px;
+`;
+
 const MainListBox = styled.div`
   display: flex;
   width: 100%;
@@ -168,55 +184,22 @@ const TextArea = styled.div`
   padding: 10px;
 `;
 
-const FixedButton = styled.div`
-  display: flex;
-  margin: 10px 0px; // 위 아래로 20px 여백 추가
-  margin-left: 30px; // 왼쪽 여백 추가
-  width: 100px;
-  height: 45px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #508BFC;
-  color: ${(props) => props.theme.color.white};
-  border-radius: 40px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 6px 0 #999;
-`;
-
-const FixedButton1 = styled.div`
-  display: flex;
+const FixedButton = styled(ButtonStyle)``;
+const FixedButton1 = styled(ButtonStyle)`
   position: fixed;
   bottom: 160px;
   right: 30px;
-  width: 120px;
+  width: 120px; // 크기를 조금 더 크게
   height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #508BFC;
-  color: ${(props) => props.theme.color.white};
-  border-radius: 40px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 6px 0 #999;
 `;
-
-const FixedButton2 = styled.div`
-  display: flex;
+const FixedButton2 = styled(ButtonStyle)`
   position: fixed;
   bottom: 100px;
   right: 30px;
-  width: 120px;
+  width: 120px; // 크기를 조금 더 크게
   height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  background-color: #508BFC;
-  color: ${(props) => props.theme.color.white};
-  border-radius: 40px;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0 0 6px 0 #999;
 `;
+
 
 const Img = styled.img`
   width: 100px;

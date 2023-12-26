@@ -56,7 +56,9 @@ function OrikkiriNoticeList({orikkiriId, orikkiriMasterTag}) {
         {filteredDongNePostList.map((dongNePost) => (
           <CardBox key={dongNePost.postId}>
             <div onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
-              <Img src={dongNePost.images[0]} alt="게시물 이미지" />
+            {dongNePost.images && dongNePost.images.length > 0 && (
+                  <Img src={dongNePost.images[0]} alt="Post Image" />
+                )}
               <TextArea>
                 <TitleSpan>{dongNePost.title}</TitleSpan>
                 <DetailSpan>{dongNePost.gu}</DetailSpan>
