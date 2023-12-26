@@ -51,8 +51,10 @@ import AddOrikkiriPost from "./pages/AddOrikkiriPost";
 import AddOrikkiriAlbum from "./pages/AddOrikkiriAlbum";
 import AddOrikkiriNotice from "./pages/AddOrikkiriNotice";
 import OrikkiriScheduleList from "./pages/orikkiri/OrikkiriScheduleList";
+import AddTradeSchedule from "./pages/trade/AddTradeSchedule";
 import OrikkiriMemberList from "./pages/OrikkiriMemberList";
 import UpdateDongNePost from "./pages/dongne/UpdateDongNePost"
+
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -118,6 +120,7 @@ function Router() {
           path="/trade/addTradeReview/:productId"
           element={<AddTradeReview />}
         />
+        <Route path="/trade/addTradeSchedule/:sellerTag/:buyerTag/:productId" element={<AddTradeSchedule />} />
 
         <Route path="/chat/getChatRoomList" element={<GetChatRoomList />} />
         <Route
