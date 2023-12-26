@@ -123,11 +123,10 @@ html, body{
     background: white;
     border-radius: 5px;
     font-size: 15px;
-    padding: 0.5px;
-    padding : 10px;
+    padding: 10px;
     margin-left: 10px;
-    overflow:hidden;
-    width:auto;
+    overflow-wrap: break-word;  /* 긴 단어를 자동으로 줄 바꿈 */
+    word-wrap: break-word;      /* IE에서의 줄 바꿈 처리 */
 
 }
 
