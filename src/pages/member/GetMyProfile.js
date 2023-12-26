@@ -715,7 +715,7 @@ export default function GetMyProfile() {
                                         <MDBBadge
                                                 color="info"
                                                 light
-                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                                style={{ marginRight: '5px' ,fontSize:"15px", marginBottom:"5px"}}
                                             >
                                                 대표 계좌
                                             </MDBBadge>
@@ -787,7 +787,7 @@ export default function GetMyProfile() {
                                                             </option>
                                                         ))}
                                                     </select>
-                                                    <Box sx={{ textAlign: 'center', fontSize: '25px' }}>
+                                                    <Box sx={{ textAlign: 'center', fontSize: '25px', position:'absolute',top:'66%', left:'25%'}}>
                                                         <i
                                                             className="far fa-square-plus"
                                                             style={{ cursor: 'pointer' }}
@@ -942,7 +942,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-65%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
                                         onClick={handleReceiveAuthNum}
                                         disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -967,7 +967,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-65%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
                                         disabled={!isAuthNumReceived || isAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckAuthNum}
                                     >
@@ -1021,7 +1021,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-65%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
                                         onClick={handleReceiveEmailAuthNum}
                                         disabled={isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -1046,7 +1046,7 @@ export default function GetMyProfile() {
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-65%' }}
+                                        style={{ position: 'absolute', top: '0', right: '-48%' }}
                                         disabled={!isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckEmailAuthNum}
                                     >

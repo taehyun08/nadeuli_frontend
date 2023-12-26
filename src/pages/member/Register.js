@@ -185,6 +185,7 @@ function Register() {
                             onClick={handleGetAuthNumBtnClick}
                             disabled={isAuthNumBtnDisabled}
                             isActive={!isAuthNumBtnDisabled}
+                            style={{fontSize:'16px'}}
                         >
                             인증번호 받기
                         </Button>
@@ -206,6 +207,7 @@ function Register() {
                             onClick={handleCheckAuthNumBtnClick}
                             disabled={!isCheckAuthNumBtnDisabled}
                             isActive={isCheckAuthNumBtnDisabled}
+                            style={{fontSize:'16px'}}
                         >
                             인증번호 확인
                         </Button>

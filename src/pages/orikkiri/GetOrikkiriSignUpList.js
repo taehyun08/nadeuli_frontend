@@ -27,7 +27,7 @@ import { addBlockMember, deleteBlockMember, getMember, getMemberList } from '../
 import { useInView } from 'react-intersection-observer';
 import styled from 'styled-components';
 import axios from 'axios';
-import { get } from '../../util/axios';
+import { get, post } from '../../util/axios';
 import { useParams } from 'react-router-dom';
 import { addSignUp, deleteSignUp } from '../../util/orikkiriManageAxios';
 
@@ -112,11 +112,20 @@ export default function GetOrikkiriSignUpList() {
             console.error('가입신청서를 못받아왔습니다.', error);
         }
     };
+
     // 가입 신청 수락 함수
     const handleAddSignUpClick = async (ansQuestionId) => {
+        const participants = [{ tag: selectedMember.tag, name: selectedMember.nickname }];
+
+        const chatReq = {
+            orikkiriId: orikkiriId,
+            participants,
+        };
+
         console.log(ansQuestionId);
         try {
             await addSignUp(ansQuestionId);
+            await post("/api/chatRoom/joinChatRoom",{chatReq})
             toggleOpen();
             getItems(); // 데이터 재로딩
         } catch (error) {
@@ -242,8 +251,26 @@ export default function GetOrikkiriSignUpList() {
                                     </MDBCardBody>
                                     <MDBCardBody className="p-0 d-flex align-items-center">
                                         <div>
-                                            <p className="text-muted mb-1 mt-2">질문{question}</p>
-                                            <p className="text-muted mb-1 mt-2">답변{selectedMember?.content}</p>
+                                            <p className="text-muted mb-1 mt-2">
+                                                <MDBBadge
+                                                    color="info"
+                                                    style={{ fontSize: '16px', margin: '0 5px' }}
+                                                    light
+                                                >
+                                                    질문
+                                                </MDBBadge>
+                                                {question}
+                                            </p>
+                                            <p className="text-muted mb-1 mt-2">
+                                                <MDBBadge
+                                                    color="danger"
+                                                    style={{ fontSize: '16px', margin: '0 5px' }}
+                                                    light
+                                                >
+                                                    답변
+                                                </MDBBadge>
+                                                {selectedMember?.content}
+                                            </p>
                                         </div>
                                     </MDBCardBody>
                                 </MDBCard>
