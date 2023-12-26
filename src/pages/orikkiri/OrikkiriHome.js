@@ -122,6 +122,7 @@ function OrikkiriHome() {
       <Header>
           <BiLeftArrowAlt
             size={30}
+            color="black" // 여기에서 색상을 지정합니다.
             onClick={() => {
               navigate("/dongNeHome");
             }}

@@ -4,11 +4,12 @@ import { postComment, GetDongNeCommentList, modifyDongNeComment, removeDongNeCom
 import axios from 'axios';
 import '../style/css/comment.css';
 import "../style/css/orikkiriList.css";
+import { FaRegComment } from "react-icons/fa";
 
 function Comments({ postId }) {
   const BASE_URL = process.env.REACT_APP_BASE_URL;
   const dispatch = useDispatch();
-  const [setCommentList] = useState([]);
+  const [showReplyInput, setShowReplyInput] = useState({}); // 대댓글 입력창 상태
   const commentList = useSelector((state) => state.comment.commentList);
   const member = useSelector((state) => state.member);
   const replyInputRefs = useRef({});
@@ -18,18 +19,14 @@ function Comments({ postId }) {
     dispatch(GetDongNeCommentList(postId));
   }, [postId, dispatch, commentList]);
 
+
+  const toggleReplyInput = (commentId) => {
+    setShowReplyInput(prev => ({...prev, [commentId]: !prev[commentId]}));
+  };
+
   // useEffect(() => {
   //   dispatch(GetDongNeCommentList(postId));
   // }, [postId, dispatch]);
-
-  const fetchComments = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/dongNe/getCommentList/${postId}`);
-      setCommentList(response.data);
-    } catch (error) {
-      console.error("댓글 불러오기 오류", error);
-    }
-  };
 
   const handleCommentSubmit = () => {
     const writer = { tag: member.tag };
@@ -72,7 +69,7 @@ function Comments({ postId }) {
 
   const renderCommentAndReplies = () => {
     return commentList.map((comment) => {
-      if (!comment.refComment) {
+      if (!comment.refComment) { // 대댓글이 아닌 경우에만 렌더링
         const replies = commentList.filter(reply => reply.refComment?.commentId === comment.commentId);
 
         return (
@@ -82,21 +79,32 @@ function Comments({ postId }) {
               <div className="comment-content">
                 <div className="comment-author">{comment.writer?.nickname || '익명'}</div>
                 <div className="comment-time">{comment.timeAgo}</div>
-                <div className="comment-body">{comment.content}</div>
+                <div className="comment-body">
+                  {comment.content}
+                  <FaRegComment 
+                    className="reply-icon" 
+                    onClick={() => toggleReplyInput(comment.commentId)}
+                  /> {/* 대댓글 아이콘 추가 */}
+                </div>
               </div>
             </div>
 
-            <div className="reply-input-container">
-              <input
-                type="text"
-                className="reply-input"
-                placeholder="대댓글을 입력하세요..."
-                ref={el => replyInputRefs.current[comment.commentId] = el}
-              />
-              <button className="reply-submit-button" onClick={() => handleReplySubmit(comment.commentId)}>
-                대댓글 제출
-              </button>
-            </div>
+            {showReplyInput[comment.commentId] && (
+              <div className="comment-input-container reply-input-container">
+                <input
+                  type="text"
+                  className="comment-input reply-input"
+                  placeholder="대댓글을 입력하세요..."
+                  ref={el => replyInputRefs.current[comment.commentId] = el}
+                />
+                <button 
+                  className="comment-submit-button reply-submit-button" 
+                  onClick={() => handleReplySubmit(comment.commentId)}
+                >
+                  <i className="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            )}
 
             {replies.map((reply) => (
               <div key={reply.commentId} className="comment-item reply-comment">
@@ -126,11 +134,14 @@ function Comments({ postId }) {
           ref={commentInputRef}
         />
         <button className="comment-submit-button" onClick={handleCommentSubmit}>
-          제출
+          <i className="fas fa-paper-plane"></i>
         </button>
       </div>
     </div>
   );
 }
+
+
+
 
 export default Comments;
