@@ -116,7 +116,7 @@ export default function GetOrikkiriSignUpList() {
 
     // 가입 신청 수락 함수
     const handleAddSignUpClick = async (ansQuestionId) => {
-        const participant = [{ tag: selectedMember.tag, name: selectedMember.nickname }];
+        const participant = { tag: selectedMember.tag, name: selectedMember.nickname };
 
 
         console.log("받은 orikkiriId는 "+orikkiriId)
@@ -124,7 +124,7 @@ export default function GetOrikkiriSignUpList() {
 
         const chatReq = {
             orikkiriId: orikkiriId,
-            participant:participant,
+            participant: participant,
             
         };
 
