@@ -19,11 +19,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDeliveryLocations } from "../../redux/modules/nadeuliDelivery";
 
 const GetMyAcceptedDeliveryHistoryList = () => {
-  // 나의 주문 내역을 목록 조회한다.
+  // 나의 주문 수락 내역을 목록 조회한다.
   const [responseDTOList, setResponseDTOList] = useState([]);
   const navigate = useNavigate();
   const memberTag = useSelector((state) => state.member.tag);
   const dispatch = useDispatch();
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.pageYOffset < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const requestData = {
@@ -145,7 +155,14 @@ const GetMyAcceptedDeliveryHistoryList = () => {
           </DetailRow>
         </CardBox>
       ))}
-      <OrderButton onClick={handleGetShortestWay}>추천경로 조회</OrderButton>
+      {isVisible && (
+        <OrderButton
+          style={{ transition: "opacity 0.5s", opacity: 1 }}
+          onClick={handleGetShortestWay}
+        >
+          추천경로 조회
+        </OrderButton>
+      )}
     </div>
   );
 };
