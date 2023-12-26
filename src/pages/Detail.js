@@ -5,7 +5,7 @@ import { MdOutlineIosShare } from 'react-icons/md';
 import { FiMoreVertical } from 'react-icons/fi';
 // 이모티콘
 import styled from 'styled-components';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { carrotGetPost, deletePost, postUnLike, postLike } from '../redux/modules/post';
@@ -67,8 +67,9 @@ function Detail() {
     };
 
     const handleReportClick = () => {
+        const currentUrl = window.location.pathname;
         // 신고 버튼이 클릭되었을 때, Report 페이지로 이동
-        navigate(`/report/product/${postId}`);
+        navigate(`/report/product/${postId}`, { state: { currentUrl } });
     };
 
     return (
