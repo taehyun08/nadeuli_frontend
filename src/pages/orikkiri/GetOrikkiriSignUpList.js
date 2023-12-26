@@ -118,9 +118,14 @@ export default function GetOrikkiriSignUpList() {
     const handleAddSignUpClick = async (ansQuestionId) => {
         const participant = [{ tag: selectedMember.tag, name: selectedMember.nickname }];
 
+
+        console.log("받은 orikkiriId는 "+orikkiriId)
+        console.log("받은 participant는 "+participant)
+
         const chatReq = {
             orikkiriId: orikkiriId,
             participant:participant,
+            
         };
 
         console.log(ansQuestionId);
