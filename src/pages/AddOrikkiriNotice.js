@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { dongNePost } from "../redux/modules/dongNePost";
+import { useParams } from 'react-router-dom';
 
-function AddOrikkiriNotice({orikkiriId}) {
+function AddOrikkiriNotice() {
+  const { orikkiriId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
@@ -49,7 +51,7 @@ function AddOrikkiriNotice({orikkiriId}) {
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = (category === 0);
+    const postCategory = 0;
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');

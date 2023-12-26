@@ -1,12 +1,13 @@
-
 import React, { useState, useRef, useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { dongNePost } from "../redux/modules/dongNePost";
+import { useParams } from 'react-router-dom';
 
-function AddOrikkiriAlbum({orikkiriId}) {
+function AddOrikkiriAlbum() {
+  const { orikkiriId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const title_ref = useRef();
@@ -44,11 +45,13 @@ function AddOrikkiriAlbum({orikkiriId}) {
     });
   };
 
+  console.log(orikkiriId)
+
   const addDongNePost = () => {
     const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
-    const postCategory = (category === '4');
+    const postCategory = 4;
 
     if (!title) {
       alert('모든 칸을 입력해주세요.');
@@ -62,7 +65,7 @@ function AddOrikkiriAlbum({orikkiriId}) {
       postCategory,
       gu: location,
       dongNe: getMember.dongNe,
-      writer: writer
+      writer: writer,
     };
 
     formData.append('postDTO', new Blob([JSON.stringify(postDTOData)], { type: "application/json" }));

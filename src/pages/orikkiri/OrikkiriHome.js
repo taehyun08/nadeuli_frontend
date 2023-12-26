@@ -21,9 +21,7 @@ function OrikkiriHome() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const orikkiriDetail = useSelector((state) => state.orikkiri.orikkiri);
-  const params = useParams();
   const member = useSelector((state) => state.member); // 유저 정보
-  const [getOrikkiriId, setOrikkiriId] = useState(null);
   const [selectedContent, setSelectedContent] = useState('home');
   const handleOrikkiriHome = () => setSelectedContent('home');
   const handleOrikkirPost = () => setSelectedContent('post');
@@ -63,7 +61,7 @@ function OrikkiriHome() {
 
     // 우리끼리 회원 리스트 이동
   const handleMemberList = () => {
-      navigate('/dongNeHome');
+      navigate(`/orikkiriMemberList/${orikkiriId}`);
   };
 
     // 우리끼리 업데이트 확인

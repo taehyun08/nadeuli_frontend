@@ -51,6 +51,7 @@ import AddOrikkiriPost from "./pages/AddOrikkiriPost";
 import AddOrikkiriAlbum from "./pages/AddOrikkiriAlbum";
 import AddOrikkiriNotice from "./pages/AddOrikkiriNotice";
 import OrikkiriScheduleList from "./pages/orikkiri/OrikkiriScheduleList";
+import OrikkiriMemberList from "./pages/OrikkiriMemberList";
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
 
@@ -73,9 +74,6 @@ function Router() {
           element={<AddOrikkiriSignUp />}
         />
         <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
-        <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
-        <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
-        <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
         <Route
           path="/orikkiriScheduleList/:orikkiriId"
           element={<OrikkiriScheduleList />}
@@ -91,6 +89,10 @@ function Router() {
         <Route
           path="/addOrikkiriNotice/:orikkiriId"
           element={<AddOrikkiriNotice />}
+        />
+        <Route
+          path="/orikkiriMemberList/:orikkiriId"
+          element={<OrikkiriMemberList />}
         />
 
         <Route
