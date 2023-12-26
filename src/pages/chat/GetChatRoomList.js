@@ -17,7 +17,6 @@ const GetChatRoomList = () => {
       const result = await chatGet(`/api/chatRoom/${member.tag}`);
       const updatedChatRooms = await Promise.all(
         result.map(async (item) => {
-          socket.emit('joinRoom', {"roomId": item._id});
           if (item.orikkiriId === 0) {
             const filteredParticipants = item.participants.filter(
               (participant) => participant.tag !== member.tag
@@ -25,10 +24,17 @@ const GetChatRoomList = () => {
             const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
             item.picture = res.picture;
             item.roomName = res.nickname;
-          } else {
+          } else if(item.productId === 0) {
             const res = await get(`/orikkiriManage/getOrikkiri/${item.orikkiriId}`);
             item.picture = res.orikkiriPicture;
             item.roomName = res.orikkiriName;
+          } else {
+            const filteredParticipants = item.participants.filter(
+              (participant) => participant.tag !== member.tag
+            );
+            const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
+            item.picture = res.picture;
+            item.roomName = res.nickname;
           }
           return item;
         })

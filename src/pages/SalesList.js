@@ -46,8 +46,6 @@ function SalesList() {
   };
 
   const handleSellComplete = (productId) => {
-    const formData = new FormData();
-    formData.append('productId', productId);
     console.log(productId);
     post('/product/saleCompleted', {'productId': productId})
     .then(()=>{

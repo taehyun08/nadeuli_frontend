@@ -21,7 +21,7 @@ const ChatRoomList = (probs) => {
                                         className="p-2 border-bottom"
                                         style={{ backgroundColor: '#eee' }}
                                     >
-                                         <Link to={`/chat/chatting/${chatRoom._id}${chatRoom.orikkiriId !== 0 ? `/${chatRoom.orikkiriId}/0` : `/${chatRoom.productId}/1`}`} className="d-flex justify-content-between">
+                                         <Link to={`/chat/chatting/${chatRoom._id}${chatRoom.productId !== 0 ? `/${chatRoom.productId}/1` : `/${chatRoom.orikkiriId}/0`}`} className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
                                                 <img
                                                     src={chatRoom.picture}

@@ -71,7 +71,9 @@ function Chatting(){
       const fetchData = async () => {
         try {
           const result = await chatGet(`/api/chatRoom/${params.chatRoomId}/${member.tag}`);
+          socket.emit('joinRoom', {"roomId": roomId});
           if(params.isProduct === '1'){
+            console.log('2');
             const res = await get(`/product/getProduct/${params.id}/${member.tag}`);
             setTitle(res.title);
             setPrice(res.price);
@@ -79,9 +81,13 @@ function Chatting(){
             setIsSolde(res.isSold);
             setProductId(res.productId);
             console.log(res);
-          } else{
+          } else if(params.id !== '0'){
+            console.log('1');
             const res = await get(`/orikkiriManage/getOrikkiri/${params.id}`);
             setTitle(res.orikkiriName);
+          } else {
+            console.log('result는 : ', result?.[0].sender.name);
+            setTitle(result?.[0].sender.name);
           }
           const updatedChat = await Promise.all(
             result.map(async (item) => {
