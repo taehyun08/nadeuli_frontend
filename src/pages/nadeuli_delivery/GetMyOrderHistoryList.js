@@ -89,13 +89,13 @@ const GetMyOrderHistoryList = () => {
                 {truncateTitle(responseDTO.title)}
               </DetailLabel>
               <OrderInfo>
-                구매금액: {formatCurrency(responseDTO.productPrice)}원
+                구매금액 {formatCurrency(responseDTO.productPrice)}원
               </OrderInfo>
               <OrderInfo>
-                부름비: {formatCurrency(responseDTO.deliveryFee)}원
+                부름비 {formatCurrency(responseDTO.deliveryFee)}원
               </OrderInfo>
               <OrderInfo>
-                보증금: {formatCurrency(responseDTO.deposit)}원
+                보증금 {formatCurrency(responseDTO.deposit)}원
               </OrderInfo>
             </DetailColumn>
             <DetailColumn>
