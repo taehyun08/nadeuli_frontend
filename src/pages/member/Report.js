@@ -30,7 +30,7 @@ export default function Report() {
             await addReport(reportData);
 
             // 신고 내용을 관리자에게 채팅으로 전송
-            const reportMessage = `[${member.tag}] ${member.nickname}님이 신고했습니다: ${content}(바로가기)https://www.nadeuli.kr${currentUrl}`;
+            const reportMessage = `[${member.tag}] ${member.nickname}님이 신고했습니다: ${content}\n URL:https://www.nadeuli.kr${currentUrl}`;
             const chatReq = {
                 tag: '51eR',
                 nickname: '신고접수봇', // 표시할 멤버닉네임이지만 "신고채팅봇"으로 할 예정
