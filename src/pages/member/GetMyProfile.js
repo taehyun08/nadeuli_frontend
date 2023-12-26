@@ -31,6 +31,7 @@ import { getCurrentPosition } from '../../util/Location';
 import HeaderBack from '../../components/HeaderBack';
 import styled from 'styled-components';
 import TopDropdownMenu from '../../components/TopDropdownMenu';
+import "./input.css"
 import { FaLocationDot } from 'react-icons/fa6';
 import {
     checkAuthNum,
@@ -682,7 +683,7 @@ export default function GetMyProfile() {
                                         </MDBCardText>
                                     </MDBCol>
                                     <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{member.email}</MDBCardText>
+                                        <MDBCardText className="text-muted" style={{paddingTop:'10px'}}>{member.email}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
                                 <hr />
@@ -705,13 +706,13 @@ export default function GetMyProfile() {
                                         </MDBCardText>
                                     </MDBCol>
                                     <MDBCol sm="9">
-                                        <MDBCardText className="text-muted">{formattedPhoneNumber}</MDBCardText>
+                                        <MDBCardText className="text-muted" style={{paddingTop:'10px'}}>{formattedPhoneNumber}</MDBCardText>
                                     </MDBCol>
                                 </MDBRow>
                                 <hr />
                                 <MDBRow>
                                     <MDBCol sm="3">
-                                        <MDBCardText style={{position:'relative'}}>
+                                        <MDBCardText style={{ position: 'relative' }}>
                                             <MDBBadge
                                                 color="info"
                                                 light
@@ -720,7 +721,7 @@ export default function GetMyProfile() {
                                                 대표 계좌
                                             </MDBBadge>
                                             {showForm && (
-                                                <Box sx={{ textAlign: 'center', fontSize: '25px', position:'absolute', top:"-5px", left:'95px'}}>
+                                                <Box sx={{ textAlign: 'center', fontSize: '25px', position: 'absolute', top: '-5px', left: '95px' }}>
                                                     <i
                                                         className="far fa-square-plus"
                                                         style={{ cursor: 'pointer' }}
@@ -728,17 +729,24 @@ export default function GetMyProfile() {
                                                     ></i>
                                                 </Box>
                                             )}
+                                            {!showForm && (
+                                                <MDBIcon
+                                                    far
+                                                    icon="edit"
+                                                    style={{
+                                                        fontSize: '20px',
+                                                        marginLeft: '10px',
+                                                        cursor: 'pointer',
+                                                        position: 'absolute',
+                                                        top: '0',
+                                                        left: '85px',
+                                                    }}
+                                                    onClick={deleteBankAccount}
+                                                />
+                                            )}
                                         </MDBCardText>
                                     </MDBCol>
                                     <MDBCol sm="9">
-                                        {!showForm && (
-                                            <MDBIcon
-                                                far
-                                                icon="edit"
-                                                style={{ fontSize: '20px', marginLeft: '10px', cursor: 'pointer' }}
-                                                onClick={deleteBankAccount}
-                                            />
-                                        )}
                                         {showForm && (
                                             <Box
                                                 component="form"
@@ -802,7 +810,7 @@ export default function GetMyProfile() {
                                             </Box>
                                         )}
                                         {!showForm && (
-                                            <p>
+                                            <p  style={{paddingTop:'10px'}}>
                                                 {getBankNameByCode(member.bankName)} {member.bankAccountNum}{' '}
                                             </p>
                                         )}
@@ -934,18 +942,18 @@ export default function GetMyProfile() {
                                         const numericValue = inputValue.replace(/[^0-9]/g, ''); // 숫자 이외의 문자 모두 제거
                                         setCellphone(numericValue);
                                     }}
-                                    label="휴대폰 번호 (- 없이 숫자만 입력)"
+                                    label="휴대폰 번호는 숫자만 입력"
                                     id="cellphone"
                                     type="text"
                                     maxLength={11}
                                     minLength={11}
-                                    style={{ position: 'relative' }}
+                                    style={{ position: 'relative', padding: '0.22rem 0.5rem'  }}
                                     disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
+                                        style={{ position: 'absolute', top: '0', right: '-40%', padding: '0.32rem' }}
                                         onClick={handleReceiveAuthNum}
                                         disabled={isAuthNumReceived || isAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -964,13 +972,13 @@ export default function GetMyProfile() {
                                     id="cellphone"
                                     type="text"
                                     maxLength={5}
-                                    style={{ marginTop: '20px', position: 'relative' }}
+                                    style={{ marginTop: '20px', position: 'relative', padding: '0.22rem 0.5rem'  }}
                                     disabled={!isAuthNumReceived || isAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
+                                        style={{ position: 'absolute', top: '0', right: '-40%', padding: '0.32rem' }}
                                         disabled={!isAuthNumReceived || isAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckAuthNum}
                                     >
@@ -1018,13 +1026,13 @@ export default function GetMyProfile() {
                                     label="이메일 입력"
                                     id="email"
                                     type="text"
-                                    style={{ position: 'relative' }}
+                                    style={{ position: 'relative', padding: '0.22rem 0.5rem' }}
                                     disabled={isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
+                                        style={{ position: 'absolute', top: '0', right: '-40%', padding: '0.32rem' }}
                                         onClick={handleReceiveEmailAuthNum}
                                         disabled={isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받거나 확인한 경우 비활성화
                                     >
@@ -1043,13 +1051,13 @@ export default function GetMyProfile() {
                                     id="email"
                                     type="text"
                                     maxLength={5}
-                                    style={{ marginTop: '20px', position: 'relative' }}
+                                    style={{ marginTop: '20px', position: 'relative', padding: '0.22rem 0.5rem'  }}
                                     disabled={!isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                 >
                                     <MDBBtn
                                         outline
                                         className="ms-1"
-                                        style={{ position: 'absolute', top: '0', right: '-35%', padding: '0.32rem' }}
+                                        style={{ position: 'absolute', top: '0', right: '-40%', padding: '0.32rem' }}
                                         disabled={!isEmailAuthNumReceived || isEmailAuthNumCheck} // 인증번호를 받지 않았거나 이미 확인한 경우 비활성화
                                         onClick={handleCheckEmailAuthNum}
                                     >
