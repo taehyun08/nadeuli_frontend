@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { postMultipart } from "../../util/postMultipart";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setMember } from "../../redux/modules/member";
+import SearchBar from "./SearchBar";
+import WebCrawler from "./WebCrawler";
 
 const AddDeliveryOrder = () => {
   const [orderData, setOrderData] = useState({});
@@ -32,10 +34,28 @@ const AddDeliveryOrder = () => {
   const [productDetails, setProductDetails] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const [files, setFiles] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const member = useSelector((state) => state.member);
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  // 웹크롤링으로 불러올 가격을 상품 키워드로 검색한다.
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      productName: query,
+    }));
+  };
+
+  // 검색으로 가져온 평균 가격을 상품 가격에 설정한다.
+  const handleAveragePriceChange = (newAveragePrice) => {
+    setOrderData((prevOrderData) => ({
+      ...prevOrderData,
+      productPrice: newAveragePrice,
+    }));
+  };
 
   // 출발지 설정 함수
   const handleSetLocation = () => {
@@ -352,6 +372,11 @@ const AddDeliveryOrder = () => {
                 </>
               ) : (
                 <>
+                  <SearchBar onSearch={handleSearch} />
+                  <WebCrawler
+                    searchQuery={searchQuery}
+                    onAveragePriceChange={handleAveragePriceChange}
+                  />
                   <FormRow>
                     <StyledLabel
                       style={{ textAlign: "right" }}

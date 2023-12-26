@@ -8,11 +8,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import Modal from "../components/Modal";
-import { deletePost, loadSalesposts } from "../redux/modules/post";
+import { deletePost, loadSalesposts, reloadSalesposts, carrotGetPost } from "../redux/modules/post";
+import HeaderBack from "../components/HeaderBack";
+import { post } from "../util/axios";
 
 function SalesList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [productId, setProductId] = useState(0);
   // const [boardList, setBoardList] = useState();
 
   const postList = useSelector((state) => state.post.postList);
@@ -33,16 +36,30 @@ function SalesList() {
   }, [postList]);
 
   const [modalOpen, setModalOpen] = useState(false);
-  const openModal = () => {
+  const openModal = (productId) => {
+    setProductId(productId);
     setModalOpen(true);
   };
   const closeModal = () => {
     setModalOpen(false);
+    setProductId(null);
+  };
+
+  const handleSellComplete = (productId) => {
+    const formData = new FormData();
+    formData.append('productId', productId);
+    console.log(productId);
+    post('/product/saleCompleted', {'productId': productId})
+    .then(()=>{
+      dispatch(loadSalesposts(member.tag, tab));
+      closeModal();
+    })
+    
   };
 
   return (
     <div>
-      <SubTitle>판매 내역</SubTitle>
+      <HeaderBack title="판매 내역" />
       <SellMenu active={tab}>
         <button
           onClick={() => {
@@ -108,12 +125,16 @@ function SalesList() {
                       {Number(list.price).toLocaleString("ko-KR")}원
                     </div>
                   </TextArea>
+                
+                <div style={{ marginLeft: "auto" }}>
+                  <FiMoreVertical
+                    style={{ marginTop: "5px" }}
+                    onClick={() => {
+                      openModal(list.productId);
+                    }}
+                  />
                 </div>
-
-                <FiMoreVertical
-                  style={{ marginTop: "5px" }}
-                  onClick={openModal}
-                />
+                </div>
                 {/* 거래완료 API */}
               </CardBox>
               <CardButton>
@@ -149,10 +170,18 @@ function SalesList() {
                 <ButtonWrap>
                   <ButtonModify
                     onClick={() => {
-                      navigate("/modify/" + list.postId);
+                      dispatch(carrotGetPost(member.tag, productId))
+                      navigate("/modify/" + productId);
                     }}
                   >
                     수정
+                  </ButtonModify>
+                  <ButtonModify
+                    onClick={() => {
+                      handleSellComplete(productId);
+                    }}
+                  >
+                    판매완료
                   </ButtonModify>
                   <ButtonDelete
                     onClick={() => {
@@ -162,6 +191,7 @@ function SalesList() {
                   >
                     삭제
                   </ButtonDelete>
+
                 </ButtonWrap>
               </Modal>
             </Card>

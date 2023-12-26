@@ -58,7 +58,38 @@ export const getOrikkrirSignupList = async (orikkiriId) => {
     return await instance.get(`/orikkiriManage/getOrikkrirSignupList/${orikkiriId}`);
 };
 
-//우리끼리 가져오기 함수getOrikkiri
+//우리끼리 가져오기 함수
 export const getOrikkiri = async (orikkiriId) => {
     return await instance.get(`/orikkiriManage/getOrikkiri/${orikkiriId}`);
+};
+
+//우리끼리 가입신청 수락 함수
+export const addSignUp = async (ansQuestionId) => {
+    return await instance.get(`/orikkiriManage/addSignUp/${ansQuestionId}`);
+};
+
+//우리끼리 가입신청 거절 함수
+export const deleteSignUp = async (oriScheMemChatFavId) => {
+    return await instance.get(`/orikkiriManage/deleteSignUp/${oriScheMemChatFavId}`);
+};
+
+// 우리끼리 일정 추가 함수
+export const addOrikkiriSchedule = async (orikkiriScheduleDTO) => {
+    console.log(orikkiriScheduleDTO);
+    return await instance.post('/orikkiri/addOrikkiriSchedule', { orikkiriScheduleDTO });
+};
+
+//우리끼리 일정 목록 조회 함수
+export const getOrikkiriScheduleList = async (orikkiriId) => {
+    return await instance.get(`/orikkiri/getOrikkiriScheduleList/${orikkiriId}`);
+};
+
+//우리끼리 일정 목록 조회 함수
+export const getOrikkiriSchedule = async (orikkirischeduleId) => {
+    return await instance.get(`/orikkiri/getOrikkiriSchedule/${orikkirischeduleId}`);
+};
+
+//우리끼리 일정 삭제 함수
+export const deleteOrikkiriSchedule = async (orikkirischeduleId) => {
+    return await instance.get(`/orikkiri/deleteOrikkiriSchedule/${orikkirischeduleId}`);
 };
