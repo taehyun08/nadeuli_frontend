@@ -7,6 +7,8 @@ import Modal from '../../components/Modal';
 import { createliveChannel, getChannelDetail, getChannelUrl } from '../../redux/modules/streaming';
 import { getOrikkiriList } from '../../redux/modules/orikkiri';
 import { dongNePost } from "../../redux/modules/dongNePost";
+import { IoCopyOutline } from "react-icons/io5";
+
 
 function AddStreaming() {
   const navigate = useNavigate();
@@ -20,9 +22,29 @@ function AddStreaming() {
   const location = useSelector((state) => state.member.gu);
   const member = useSelector((state) => state.member);
   const [channelTitle, setChannelTitle] = useState('');
+  const [titleError, setTitleError] = useState(''); // New state for title validation error
 
   const streaming = useSelector((state) => state.streaming.channel);
   const [justAdded, setJustAdded] = useState(false); // 추가한 채널 추적을 위한 새로운 상태 변수
+
+  const validateTitle = (title) => {
+    const regex = /^[가-힣a-zA-Z0-9_]{3,20}$/; // 3-20 글자, 한글, 영문자, 숫자 및 밑줄 허용
+    if (title.length < 3 || title.length > 20) {
+      return "제목은 3글자 이상 20글자 이하여야 합니다.";
+    } else if (!regex.test(title)) {
+      return "한글, 영문자, 숫자, 밑줄(_)만 사용 가능합니다.";
+    } else {
+      return "";
+    }
+  };
+
+  const handleTitleChange = (e) => {
+    const newTitle = e.target.value;
+    const validationResult = validateTitle(newTitle);
+    setTitleError(validationResult); // 유효성 검사 오류 메시지 설정
+    setChannelTitle(newTitle); // 제목 업데이트
+  };
+
 
   useEffect(() => {
     if (streaming && streaming.channelId) {
@@ -49,12 +71,19 @@ function AddStreaming() {
   
 
   const handleNextStep = () => {
-    if (step === 1) {
-      addStreaming();
+    if (titleError) {
+      // titleError가 존재한다면 경고 메시지를 표시하고 다음 단계로 진행하지 않습니다.
+      alert("제목을 확인해주세요. " + titleError);
     } else {
-      // 다음 단계로 진행할 추가 로직
+      // 유효성 검사를 통과했다면 다음 단계로 진행합니다.
+      if (step === 1) {
+        addStreaming();
+      } else {
+        // 다음 단계로 진행할 추가 로직
+      }
     }
   };
+
 
   const addDongNePost = () => {
     console.log(title_ref.current);
@@ -84,16 +113,22 @@ function AddStreaming() {
   };
 
 
-  const copyToClipboard = () => {
-    if (streaming?.streamKey) {
-      navigator.clipboard.writeText(streamKey)
-        .then(() => {
-          alert("스트림 키가 클립보드에 복사되었습니다.");
-        })
-        .catch(err => {
-          console.error("복사 실패:", err);
-        });
-    }
+  const copyStreamKey = () => {
+    navigator.clipboard.writeText(streamKey)
+      .then(() => alert("스트림 키가 복사되었습니다."))
+      .catch(err => console.error("복사 실패:", err));
+  };
+
+  const copyGlobalRTMP = () => {
+    navigator.clipboard.writeText(streaming?.globalRtmpUrl)
+      .then(() => alert("Global RTMP 주소가 복사되었습니다."))
+      .catch(err => console.error("복사 실패:", err));
+  };
+
+  const copyRTMP = () => {
+    navigator.clipboard.writeText(streaming?.rtmpUrl)
+      .then(() => alert("RTMP 주소가 복사되었습니다."))
+      .catch(err => console.error("복사 실패:", err));
   };
 
   const addStreaming = async () => {
@@ -127,11 +162,12 @@ function AddStreaming() {
   const renderCreateChannel = () => (
     <div>
       <Title>
-      <input
-        placeholder="채널 제목을 입력해주세요."
-        value={channelTitle}
-        onChange={(e) => setChannelTitle(e.target.value)}
-      />
+        <input
+          placeholder="채널 제목을 입력해주세요."
+          value={channelTitle}
+          onChange={handleTitleChange} // 핸들러를 새로운 함수로 업데이트
+        />
+        {titleError && <p style={{ color: "red" }}>{titleError}</p>}
       </Title>
       <Button onClick={handleNextStep}>
         {isSubmitting ? '처리 중...' : '다음'}
@@ -140,20 +176,30 @@ function AddStreaming() {
   );
 
   const renderChannelDetails = () => (
-    <div>
-      <p>채널 ID: {streaming?.channelId}</p>
-      <p>스트림 키: {streaming?.streamKey}
-        <CopyButton onClick={copyToClipboard}>복사</CopyButton>
-      </p>
+    <DetailContainer>
+      <p>채널 이름: {streaming?.channelName}</p>
+      <DetailRow>
+        <p>스트림 키: {streaming?.streamKey}</p>
+        <CopyButton onClick={copyStreamKey}><IoCopyOutline size="20" /></CopyButton>
+      </DetailRow>
+      <DetailRow>
+        <p>Global RTMP: {streaming?.globalRtmpUrl}</p>
+        <CopyButton onClick={copyGlobalRTMP}><IoCopyOutline size="20" /></CopyButton>
+      </DetailRow>
+      <DetailRow>
+        <p>RTMP: {streaming?.rtmpUrl}</p>
+        <CopyButton onClick={copyRTMP}><IoCopyOutline size="20" /></CopyButton>
+      </DetailRow>
       <Button onClick={checkStreaming}>다음</Button>
-    </div>
+    </DetailContainer>
   );
 
   const renderAddStreamingPost = () => (
     <div>
-      <p>채널 ID: {channelId}</p>
-      <p>스트림 키: {streamKey}</p>
-      <p>URL: {streamingUrl}</p>
+      <p>채널 이름: {streaming?.channelName}</p>
+      <p>스트림 키: {streaming?.streamKey}</p>
+      <p></p>
+      <p>위 정보로 스트리밍을 시작합니다.</p>
       <Button onClick={addDongNePost}>완료</Button>
     </div>
   );
@@ -176,65 +222,83 @@ function AddStreaming() {
 
 // Styled components
 const Wrap = styled.div`
-  box-sizing: border-box;
   font-size: 18px;
   max-width: 100%;
+  background: #f5f5f5; // 밝은 배경색 추가
 `;
 
 const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 25px 25px;
-  border-bottom: 1px solid #dadada;
+  padding: 15px 20px; // 패딩 조정
+  border-bottom: 1px solid #eaeaea; // 경계선 색상 변경
 
   h4 {
-    font-weight: bold;
-    font-size: 20px;
+    font-weight: 600; // 글자 굵기 변경
+    color: #333; // 글자색 변경
   }
 `;
 
 const Container = styled.div`
-  padding: 0 16px;
+  padding: 20px; // 패딩 조정
 `;
 
 const Title = styled.div`
-  padding: 25px 0px;
-  border-bottom: 1px solid #dadada;
+  margin-bottom: 20px; // 마진 조정
 
   input {
-    border: none;
-    outline: none;
-    font-size: 25px;
+    border: 2px solid #508BFC; // 테두리 색상 변경
+    border-radius: 8px; // 테두리 둥글게
+    font-size: 18px; // 글자 크기 조정
     width: 100%;
-    padding: 10px;
+    padding: 12px; // 패딩 조정
+    margin-top: 10px; // 마진 추가
 
     ::placeholder {
-      color: #dadada;
-      font-size: 25px;
+      color: #aaa; // 플레이스홀더 색상 변경
     }
   }
 `;
 
 const Button = styled.button`
-  margin-top: 20px;
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  display: block;
+  width: 100%;
+  padding: 10px 0; // 패딩 조정
+  background-color: #508BFC; // 기본 버튼 색상
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px; // 둥글게 처리
   cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // 그림자 효과 추가
+
+  &:hover {
+    background-color: #4071f4; // 호버시 색상 변경
+  }
+`;
+
+const DetailContainer = styled.div`
+  // 컨테이너 내부 스타일링
+`;
+
+const DetailRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px; // 각 세부 사항 사이의 간격 조정
 `;
 
 const CopyButton = styled.button`
-  margin-left: 10px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: transparent;
   border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
   cursor: pointer;
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #508BFC; // 색상 변경
+  &:hover {
+    color: #4071f4;
+  }
 `;
 
 export default AddStreaming;
