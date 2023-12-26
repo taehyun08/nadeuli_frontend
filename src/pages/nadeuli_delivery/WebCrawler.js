@@ -21,7 +21,11 @@ const WebCrawler = ({ searchQuery, onAveragePriceChange }) => {
 
           // 평균 가격의 3분의 1 계산
           const oneThirdOfAverage = Math.floor(average / 3);
-          onAveragePriceChange(oneThirdOfAverage);
+
+          // 100원 단위로 올림
+          const roundedPrice = Math.ceil(oneThirdOfAverage / 100) * 100;
+
+          onAveragePriceChange(roundedPrice);
           // 가격 계산이 완료됨을 표시
           setIsPriceCalculated(true);
         })
