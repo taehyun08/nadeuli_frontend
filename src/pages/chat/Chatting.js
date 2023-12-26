@@ -59,7 +59,6 @@ function Chatting(){
         createdAt : createdAt
       }
       setChat((chat)=> chat.concat(addChat));
-      setBuyerTag(sender.tag);
       console.log('메세지 받아옴');
     });
 

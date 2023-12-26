@@ -47,27 +47,18 @@ function MainItemList() {
                                                 whiteSpace: 'nowrap',
                                             }}
                                         >
-                                            {list.title}
+                                            {list?.title}
                                         </span>
                                         <span
-                                            style={{
-                                                fontSize: '12px',
-                                                padding: '5px',
-                                                color: '#AAAAAA',
-                                            }}
-                                        >
-                                            {list.userLocation}
+                                                        style={{
+                                                            fontSize: '13px',
+                                                            padding: '0 5px',
+                                                            fontWeight: 'bold',
+                                                        }}
+                                                    >
+                                                        {list?.seller?.dongNe?.split(' ')[2]} &nbsp;{list?.timeAgo}
                                         </span>
                                         <TradeState>
-                                            <span>
-                                                {list.tradeState === '1' ? (
-                                                    <Book>예약중</Book>
-                                                ) : list.tradeState === '2' ? (
-                                                    <SoldOut>거래완료</SoldOut>
-                                                ) : (
-                                                    ''
-                                                )}
-                                            </span>
                                             <span
                                                 style={{
                                                     fontSize: '13px',
@@ -78,6 +69,27 @@ function MainItemList() {
                                                 {Number(list.price).toLocaleString('ko-KR')}원
                                             </span>
                                         </TradeState>
+                                        {list?.isBargain ? (
+                                                        <span style={{ color: 'blue', marginLeft: '5px' }}>가격 흥정 가능</span>
+                                                    ) : (
+                                                        <span style={{ color: 'gray', marginLeft: '5px' }}>가격 흥정 불가능</span>
+                                                    )}
+                                                    {/* 프리미엄 텍스트 추가 */}
+                                                    {list?.isPremium && (
+                                                        <span
+                                                            style={{
+                                                                color: 'red',
+                                                                position: 'absolute',
+                                                                top: 0,
+                                                                right: 0,
+                                                                fontSize: '12px',
+                                                                padding: '5px',
+                                                                fontWeight: 'bold',
+                                                            }}
+                                                        >
+                                                            프리미엄
+                                                        </span>
+                                                    )}
                                     </TextArea>
                                 </div>
                                 <div
