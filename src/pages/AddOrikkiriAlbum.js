@@ -75,7 +75,7 @@ function AddOrikkiriAlbum() {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    dispatch(dongNePost(formData, navigate));
+    dispatch(dongNePost(formData, navigate, `/orikkriHome/${orikkiriId}`));
   };
 
   return (
