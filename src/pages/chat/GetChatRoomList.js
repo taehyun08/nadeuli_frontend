@@ -17,14 +17,20 @@ const GetChatRoomList = () => {
       const result = await chatGet(`/api/chatRoom/${member.tag}`);
       const updatedChatRooms = await Promise.all(
         result.map(async (item) => {
-          if (item.orikkiriId === 0) {
+          if (item.productId !== 0) {
             const filteredParticipants = item.participants.filter(
               (participant) => participant.tag !== member.tag
             );
-            const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
-            item.picture = res.picture;
-            item.roomName = res.nickname;
-          } else if(item.productId === 0) {
+            console.log('result',filteredParticipants);
+            if (filteredParticipants.length > 0) {
+              const res = await get(`/member/getOtherMember/${filteredParticipants[0].tag}`);
+              item.picture = res.picture;
+              item.roomName = res.nickname;
+            } else {
+              // 필터된 참가자가 없을 때의 처리
+              console.log("No filtered participants found");
+            }
+          } else if(item.orikkiriId !== 0) {
             const res = await get(`/orikkiriManage/getOrikkiri/${item.orikkiriId}`);
             item.picture = res.orikkiriPicture;
             item.roomName = res.orikkiriName;
