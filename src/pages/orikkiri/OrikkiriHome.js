@@ -180,7 +180,7 @@ function OrikkiriHome() {
       
       </Container>
       <Footer>
-        <BottomBar />
+        <BottomBar selected='dongNeHome'/>
       </Footer>
 
       <AlertDialog

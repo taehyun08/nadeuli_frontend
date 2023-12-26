@@ -17,7 +17,7 @@ function DongNeHome() {
         <MyOrikkiriList/>
         <DongNePostList searchQuery={searchQuery}/>
       </div>
-      <BottomBar />
+      <BottomBar selected = 'dongNeHome'/>
     </div>
   );
 }
