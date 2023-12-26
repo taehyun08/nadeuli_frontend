@@ -177,12 +177,14 @@ const GetDeliveryOrder = () => {
             {formatCurrency(nadeuliDeliveryDTO.productPrice)} 원
           </DetailInfo>
         </DetailContainer>
-        <DetailContainer>
-          <DetailLabel>상품 수량</DetailLabel>
-          <DetailInfo>
-            {formatCurrency(nadeuliDeliveryDTO.productNum)} 개
-          </DetailInfo>
-        </DetailContainer>
+        {nadeuliDeliveryDTO.productNum > 0 && (
+          <DetailContainer>
+            <DetailLabel>상품 수량</DetailLabel>
+            <DetailInfo>
+              {formatCurrency(nadeuliDeliveryDTO.productNum)} 개
+            </DetailInfo>
+          </DetailContainer>
+        )}
         <DetailContainer>
           <DetailLabel>배달비</DetailLabel>
           <DetailInfo>

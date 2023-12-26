@@ -49,7 +49,7 @@ const GetMyOrderHistoryList = () => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 10;
+  const maxLength = 9;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -84,13 +84,18 @@ const GetMyOrderHistoryList = () => {
             <DetailColumn>
               <OrderImage src={responseDTO.images[0]} alt="이미지" />
             </DetailColumn>
-            <DetailColumn style={{ marginRight: "30px" }}>
+            <DetailColumn>
               <DetailLabel style={{ fontWeight: "bold" }}>
                 {truncateTitle(responseDTO.title)}
               </DetailLabel>
               <OrderInfo>
                 구매금액 {formatCurrency(responseDTO.productPrice)}원
               </OrderInfo>
+              {responseDTO.productNum > 0 && (
+                <OrderInfo>
+                  수량 {formatCurrency(responseDTO.productNum)}개
+                </OrderInfo>
+              )}
               <OrderInfo>
                 부름비 {formatCurrency(responseDTO.deliveryFee)}원
               </OrderInfo>

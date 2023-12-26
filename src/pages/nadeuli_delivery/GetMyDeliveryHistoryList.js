@@ -49,7 +49,7 @@ const GetMyDeliveryHistoryList = () => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 10;
+  const maxLength = 9;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -90,6 +90,11 @@ const GetMyDeliveryHistoryList = () => {
               <OrderInfo>
                 구매금액 {formatCurrency(responseDTO.productPrice)}원
               </OrderInfo>
+              {responseDTO.productNum > 0 && (
+                <OrderInfo>
+                  수량 {formatCurrency(responseDTO.productNum)}개
+                </OrderInfo>
+              )}
               <OrderInfo>
                 부름비 {formatCurrency(responseDTO.deliveryFee)}원
               </OrderInfo>
