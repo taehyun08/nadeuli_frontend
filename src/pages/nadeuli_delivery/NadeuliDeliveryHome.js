@@ -22,6 +22,16 @@ const NadeuliDeliveryHome = () => {
   const navigate = useNavigate();
   const memberGu = useSelector((state) => state.member.gu);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.pageYOffset < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSearch = (query) => {
     setSearchQuery(query); // 검색 쿼리 업데이트
@@ -137,12 +147,22 @@ const NadeuliDeliveryHome = () => {
         </div>
       ))}
       <Box style={{ marginTop: "20px" }}></Box>
-      <GetMyAcceptedDeliveryHistoryListButton
-        onClick={handleNavigateMyAcceptedDeliveryHistoryList}
-      >
-        주문수락 목록
-      </GetMyAcceptedDeliveryHistoryListButton>
-      <OrderButton onClick={handleAddDeliveryOrder}>배달 주문하기</OrderButton>
+      {isVisible && (
+        <>
+          <GetMyAcceptedDeliveryHistoryListButton
+            style={{ transition: "opacity 0.5s", opacity: 1 }}
+            onClick={handleNavigateMyAcceptedDeliveryHistoryList}
+          >
+            주문수락 목록
+          </GetMyAcceptedDeliveryHistoryListButton>
+          <OrderButton
+            style={{ transition: "opacity 0.5s", opacity: 1 }}
+            onClick={handleAddDeliveryOrder}
+          >
+            배달 주문하기
+          </OrderButton>
+        </>
+      )}
       <BottomBar />
     </div>
   );
