@@ -94,7 +94,7 @@ function MainItemList() {
                                 >
                                     <div style={{ position: 'absolute', right: '20px', bottom: '20px' }}>
                                         <BsHeart size="18" />
-                                        {list.likeNum}
+                                        {' '}{list.likeNum !== null ? list.likeNum : 0}
                                     </div>
                                 </div>
                             </CardBox>
