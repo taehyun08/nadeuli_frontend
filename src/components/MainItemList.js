@@ -135,7 +135,7 @@ const FixedButton = styled.div`
     width: 70px;
     height: 70px;
     font-size: 30px;
-    background-color: ${(props) => props.theme.color.orange};
+    background-color: #40C4FF;
     color: ${(props) => props.theme.color.white};
     border-radius: 50%;
     justify-content: center;
