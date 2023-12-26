@@ -32,7 +32,7 @@ export default function Report() {
             const chatReq = {
                 tag: member.tag,
                 nickname: member.nickname, // 표시할 멤버닉네임이지만 "신고채팅봇"으로 할 예정
-                roomId: '6588a4122a0ac9acb5556e27', // 고정된 채팅방 아이디
+                roomId: '658988682f1015459a0681ef', // 고정된 채팅방 아이디
                 message: reportMessage,
             };
             // post('/api/chatRoom/sendMessage', chatReq);
