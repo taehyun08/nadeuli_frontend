@@ -299,7 +299,7 @@ const OrikkiriScheduleList = ({ orikkiriId }) => {
         // 일정 추가 버튼 클릭 시 호출되는 함수
         // 여기서 서버로 데이터 전송 및 등록 로직 추가
         if (!eventTitle || !selectedDate) {
-            console.error('일정 제목 또는 날짜가 유효하지 않습니다.');
+            alert('일정 제목 또는 날짜를 입력해주세요.');
             return;
         }
 

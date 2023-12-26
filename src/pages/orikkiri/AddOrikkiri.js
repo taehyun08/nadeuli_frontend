@@ -21,6 +21,8 @@ import { useSelector } from 'react-redux';
 import { addAnsQuestion, addOrikkiri } from '../../util/orikkiriManageAxios';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import socket from '../../util/socket';
+import { post } from '../../util/axios';
 
 const AddOrikkiri = () => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -129,6 +131,17 @@ const AddOrikkiri = () => {
                     'Content-Type': 'multipart/form-data', // 변경된 부분
                 },
             });
+            const participants = [
+                { tag: member.tag, name: member.nickname },
+            ];
+            const chatReq = {
+                tag: member.tag,
+                roomName: "", 
+                orikkiriId:orikkiriId,
+                participants,
+            };
+
+            await post('/api/chatRoom/findOrCreate', chatReq);
             navigate(`/orikkiriHome/${orikkiriId}`);
             // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
         } catch (error) {
