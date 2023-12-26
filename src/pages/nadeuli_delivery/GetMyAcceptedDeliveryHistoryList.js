@@ -6,6 +6,7 @@ import {
   DetailColumn,
   DetailLabel,
   DetailRow,
+  DetailTimeAgoColumn,
   HeaderContainer,
   InfoText,
   OrderButton,
@@ -19,11 +20,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDeliveryLocations } from "../../redux/modules/nadeuliDelivery";
 
 const GetMyAcceptedDeliveryHistoryList = () => {
-  // 나의 주문 내역을 목록 조회한다.
+  // 나의 주문 수락 내역을 목록 조회한다.
   const [responseDTOList, setResponseDTOList] = useState([]);
   const navigate = useNavigate();
   const memberTag = useSelector((state) => state.member.tag);
   const dispatch = useDispatch();
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     const requestData = {
@@ -61,7 +72,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 10;
+  const maxLength = 9;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -110,6 +121,11 @@ const GetMyAcceptedDeliveryHistoryList = () => {
               <OrderInfo>
                 구매금액 {formatCurrency(responseDTO.productPrice)}원
               </OrderInfo>
+              {responseDTO.productNum > 0 && (
+                <OrderInfo>
+                  수량 {formatCurrency(responseDTO.productNum)}개
+                </OrderInfo>
+              )}
               <OrderInfo>
                 부름비 {formatCurrency(responseDTO.deliveryFee)}원
               </OrderInfo>
@@ -117,7 +133,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
                 보증금 {formatCurrency(responseDTO.deposit)}원
               </OrderInfo>
             </DetailColumn>
-            <DetailColumn>
+            <DetailTimeAgoColumn>
               {responseDTO.deliveryState === "DELIVERY_ORDER" && (
                 <DetailLabel>주문 등록</DetailLabel>
               )}
@@ -133,14 +149,19 @@ const GetMyAcceptedDeliveryHistoryList = () => {
               {responseDTO.deliveryState === "COMPLETE_DELIVERY" && (
                 <DetailLabel>배달 완료</DetailLabel>
               )}
-              <DetailLabel style={{ marginLeft: "10px" }}>
-                {responseDTO.timeAgo}
-              </DetailLabel>
-            </DetailColumn>
+              <DetailLabel>{responseDTO.timeAgo}</DetailLabel>
+            </DetailTimeAgoColumn>
           </DetailRow>
         </CardBox>
       ))}
-      <OrderButton onClick={handleGetShortestWay}>추천경로 조회</OrderButton>
+      {isVisible && (
+        <OrderButton
+          style={{ transition: "opacity 0.5s", opacity: 1 }}
+          onClick={handleGetShortestWay}
+        >
+          추천경로 조회
+        </OrderButton>
+      )}
     </div>
   );
 };

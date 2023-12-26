@@ -17,6 +17,7 @@ function GetDongNePost() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const getDongNePost = useSelector((state) => state.dongNePost.dongNePost);
+  const member = useSelector((state) => state.member);
   const params = useParams();
   const postId = params.postId;
   const videoRef = useRef([]);
@@ -77,19 +78,29 @@ function GetDongNePost() {
   };
 
   const handleupdate = async () => {
-
+    setPendingAction(() => () => {
+      navigate(`/UpdateDongNePost/${postId}`);
+    });
+    setDialogTitle("수정 확인");
+    setDialogDescription("이 게시물을 수정하시겠습니까?");
+    setDialogAgreeText("수정");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
   }
 
   const dropdownMenus1 = [
     { label: '수정', onClick: handleupdate },
     { label: '삭제', onClick: openDeleteDialog },
-    { label: '신고', onClick: openReportDialog }
     // 원하는 만큼 추가
   ];
 
   const dropdownMenus2 = [
     { label: '수정', onClick: handleupdate },
     { label: '종료', onClick: openShutdownDialog },
+    // 원하는 만큼 추가
+  ];
+
+  const dropdownMenus3 = [
     { label: '신고', onClick: openReportDialog }
     // 원하는 만큼 추가
   ];
@@ -115,14 +126,25 @@ function GetDongNePost() {
       <Header>
         <TopArrowLeft/>
         {
-           getDongNePost.streaming ? <TopDropdownMenu dropdownMenus={dropdownMenus2}/> : <TopDropdownMenu dropdownMenus={dropdownMenus1}/>
+          member?.tag !== getDongNePost?.writer?.tag ? 
+            <TopDropdownMenu dropdownMenus={dropdownMenus3}/> :
+            (getDongNePost.streaming ? 
+              <TopDropdownMenu dropdownMenus={dropdownMenus2}/> : 
+              <TopDropdownMenu dropdownMenus={dropdownMenus1}/>
+            )
         }
       </Header>
 
       <Container>
         <div>
           <PostInfo
-            text={getDongNePost.postCategory === 1 ? "잡담" : "홍보"}
+           text={
+            getDongNePost.postCategory === 0 ? "공지사항" :
+            getDongNePost.postCategory === 1 ? "잡담" :
+            getDongNePost.postCategory === 2 ? "홍보" :
+            getDongNePost.postCategory === 3 ? "스트리밍" :
+            getDongNePost.postCategory === 4 ? "앨범" : "기타"
+          }
             writerPicture={getDongNePost?.writer?.picture}
             writerNickName={getDongNePost?.writer?.nickname}
             writerDongNe={getDongNePost?.writer?.dongNe}
@@ -162,15 +184,16 @@ function GetDongNePost() {
             })}
           </File>
         )}
-
-
           <Content>
             <p>{getDongNePost.content}</p>
           </Content>
         </div>
         
-        <Comment postId={getDongNePost.postId}>
-        </Comment>
+        {
+          ![0, 3, 4].includes(getDongNePost.postCategory) && 
+            <Comment postId={getDongNePost.postId}></Comment>
+        }
+
       </Container>
       <AlertDialog
         open={dialogOpen}

@@ -1,27 +1,48 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
-import { dongNePost } from "../redux/modules/dongNePost";
-import { useParams } from 'react-router-dom';
+import { modifyDongNePost,GetDongNePostDetail } from "../../redux/modules/dongNePost";
 
-function AddOrikkiriPost() {
-  const { orikkiriId } = useParams();
+function UpdateDongNePost() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const title_ref = useRef();
-  const content_ref = useRef();
+  const params = useParams();
+  const postId = params.postId;
+  const getDongNePost = useSelector((state) => state.dongNePost.dongNePost);
+  const title_ref = useRef(null);
+  const content_ref = useRef(null);
   const [category, setCategory] = useState();
   const fileInput = useRef(); // 하나의 file input으로 모든 파일 처리
   const [previewImages, setPreviewImages] = useState([]);
+  const getMember = useSelector((state) => state.member);
   const location = useSelector((state) => state.member.gu);
   const member = useSelector((state) => state.member);
 
   useEffect(() => {
     console.log(member);
   }, [member]);
+
+  useEffect(() => {
+    dispatch(GetDongNePostDetail(postId));
+  }, [postId]);
+
+  useEffect(() => {
+    // 게시물 데이터가 로드되면 input 참조에 값을 할당
+    if (getDongNePost) {
+      title_ref.current.value = getDongNePost.title;
+      content_ref.current.value = getDongNePost.content;
+      setCategory(getDongNePost.category);  // 카테고리 상태도 업데이트
+      // 이미지 미리보기나 다른 상태를 업데이트할 수도 있음
+    }
+  }, [getDongNePost]);  // getDongNePost가 변경될 때마다 실행
+
+
+  const changeCategory = (e) => {
+    setCategory(e.target.value);
+  };
 
   // 파일 업로드 및 미리보기 생성
   const selectFile = (e) => {
@@ -42,26 +63,27 @@ function AddOrikkiriPost() {
   };
 
   const addDongNePost = () => {
-    console.log(orikkiriId);
-    const orikkiri = {orikkiriId: orikkiriId };
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = 1;
+    const postCategory = (category === "잡담" ? 1 : 2);
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');
       return;
     }
 
+    if (!category || category === "none") {
+      alert("게시물 카테고리를 선택해주세요!");
+      return;
+    }
     const formData = new FormData();
     const postDTOData = {
-      orikkiri: orikkiri,
       title,
       content,
-      postCategory: postCategory,
+      postCategory,
       gu: location,
-      dongNe: member.dongNe,
+      dongNe: getMember.dongNe,
       writer: writer
     };
 
@@ -72,7 +94,7 @@ function AddOrikkiriPost() {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    dispatch(dongNePost(formData, navigate, `/orikkriHome/${orikkiriId}`));
+    dispatch(modifyDongNePost(formData, navigate, `/GetDongNePost/${postId}`));
   };
 
   return (
@@ -80,9 +102,9 @@ function AddOrikkiriPost() {
       <Header>
         <IoIosClose
           size="30"
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/dongNeHome")}
         />
-        <h4>우리끼리 글쓰기</h4>
+        <h4>동네나드리 글쓰기</h4>
         <h5 onClick={addDongNePost}>완료</h5>
       </Header>
 
@@ -92,6 +114,13 @@ function AddOrikkiriPost() {
             <input placeholder="제목을 입력하세요" ref={title_ref} />
           </Title>
 
+          <Categorie>
+            <select name="category" id="category" onChange={changeCategory}>
+              <option value="none">게시물 카테고리를 선택해주세요.</option>
+              <option value="잡담">잡담</option>
+              <option value="홍보">홍보</option>
+            </select>
+          </Categorie>
         </div>
 
         <textarea
@@ -224,4 +253,4 @@ select {
 `;
 
 
-export default AddOrikkiriPost;
+export default UpdateDongNePost;

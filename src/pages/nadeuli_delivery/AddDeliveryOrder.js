@@ -407,11 +407,15 @@ const AddDeliveryOrder = () => {
                 </>
               ) : (
                 <>
-                  <SearchBar onSearch={handleSearch} />
-                  <WebCrawler
-                    searchQuery={searchQuery}
-                    onAveragePriceChange={handleAveragePriceChange}
-                  />
+                  {productType === "new" && (
+                    <>
+                      <SearchBar onSearch={handleSearch} />
+                      <WebCrawler
+                        searchQuery={searchQuery}
+                        onAveragePriceChange={handleAveragePriceChange}
+                      />
+                    </>
+                  )}
                   <FormRow>
                     <StyledLabel
                       style={{ textAlign: "right" }}

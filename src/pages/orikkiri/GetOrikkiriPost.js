@@ -94,7 +94,6 @@ function GetDongNePost() {
         </div>
         
         <Comment postId={getDongNePost.postId}>
-          <p>댓글 위치</p>
         </Comment>
       </Container>
     </Wrap>

@@ -59,6 +59,8 @@ export const getOrikkiriDetail = (orikkiriId) => {
 };
 
 
+
+
 // 동네나드리 홈 우리끼리 목록 조회
 export const getOrikkiriList= (tag, currentPage) => {
     return async function (dispatch, getState) {
@@ -107,9 +109,26 @@ export const deleteOrikkiri = (orikkiriId, navigate) => {
   };
 };
 
+export const getOrikkiriMemberList= (orikkiriId) => {
+  return async function (dispatch, getState) {
+    await get(`/orikkiri/getOrikkiriMemberList/${orikkiriId}`)
+      .then((res) => {
+        console.log(res);
+        dispatch(loadMyOrikkiriMembers(res));
+        const currentState = getState();
+        console.log('Current state:', currentState);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+};
+
 const orikkiriSlice = createSlice({
   name: "orikkiri",
   initialState: {
+    orikkiriMemberList: [],
+    orikkiriMember: {},
     myOrikkiriList: [],
     orikkiriList: [],
     orikkiri: {},
@@ -130,6 +149,9 @@ const orikkiriSlice = createSlice({
     loadMyOrikkiris: (state, action) => {
       state.myOrikkiriList = action.payload;
     },
+    loadMyOrikkiriMembers: (state, action) => {
+      state.orikkiriMemberList = action.payload;
+    },
     updateOrikkiri: (state, action) => {
       state.orikkiri = action.payload;
     },
@@ -141,6 +163,6 @@ const orikkiriSlice = createSlice({
   },
 });
 
-const { addOrikkiri, addMyOrikkiri, getLoadOrikkiri, loadOrikkiris, loadMyOrikkiris, updateOrikkiri, deletOrikkiri } =
+const { addOrikkiri, addMyOrikkiri, getLoadOrikkiri, loadOrikkiris, loadMyOrikkiriMembers, loadMyOrikkiris, updateOrikkiri, deletOrikkiri } =
 orikkiriSlice.actions;
 export default orikkiriSlice.reducer;

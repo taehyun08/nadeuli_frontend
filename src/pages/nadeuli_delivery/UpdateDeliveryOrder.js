@@ -124,18 +124,6 @@ const UpdateDeliveryOrder = () => {
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
 
-  // useEffect(() => {
-  //   if (selectedFiles && selectedFiles.length > 0) {
-  //     const newPreviewImages = selectedFiles.map((file) =>
-  //       URL.createObjectURL(file)
-  //     );
-  //     setPreviewImage(newPreviewImages);
-  //   } else {
-  //     // selectedFiles가 비어있는 경우, 미리보기 이미지 상태를 초기화
-  //     setPreviewImage([]);
-  //   }
-  // }, [selectedFiles]);
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -422,11 +410,15 @@ const UpdateDeliveryOrder = () => {
                 </>
               ) : (
                 <>
-                  <SearchBar onSearch={handleSearch} />
-                  <WebCrawler
-                    searchQuery={searchQuery}
-                    onAveragePriceChange={handleAveragePriceChange}
-                  />
+                  {productType === "new" && (
+                    <>
+                      <SearchBar onSearch={handleSearch} />
+                      <WebCrawler
+                        searchQuery={searchQuery}
+                        onAveragePriceChange={handleAveragePriceChange}
+                      />
+                    </>
+                  )}
                   <FormRow>
                     <StyledLabel
                       style={{ textAlign: "right" }}

@@ -63,8 +63,8 @@ export const OrderInfo = styled.span`
   text-overflow: ellipsis; // 내용이 넘칠 경우 말줄임표 사용
   display: flex;
   font-size: 14px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   align-items: center;
   text-align: flex-start;
   justify-content: space-between;
@@ -83,6 +83,13 @@ export const DetailColumn = styled.div`
   flex-direction: column;
   align-items: flex-start;
   text-align: flex-start;
+`;
+
+export const DetailTimeAgoColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 `;
 
 export const StyledForm = styled.form`
@@ -123,7 +130,7 @@ export const StyledLabel = styled.label`
 
 export const StyledInput = styled.input`
   flex-basis: 100%;
-  margin-right: 10px;
+  margin-right: 5px;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;
   line-height: 1.5;
@@ -341,6 +348,7 @@ export const DetailLabel = styled.span`
   margin-bottom: 0.5rem;
   justify-content: center;
   align-items: center;
+  text-align: center;
 `;
 
 export const DeliveryState = styled.div`

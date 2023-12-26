@@ -53,7 +53,7 @@ export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
 };
 
 // 게시물 수정
-export const modifyDongNePost = (formData, navigate) => {
+export const modifyDongNePost = (formData, navigate, redirectPath) => {
   return async function (dispatch) {
     try {
       const res = await axios.orikkiri(`${BASE_URL}/dongNe/updatePost`, formData, {

@@ -6,6 +6,7 @@ import {
   DetailColumn,
   DetailLabel,
   DetailRow,
+  DetailTimeAgoColumn,
   HeaderContainer,
   OrderImage,
   OrderInfo,
@@ -49,7 +50,7 @@ const GetMyDeliveryHistoryList = () => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
   };
 
-  const maxLength = 10;
+  const maxLength = 9;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -90,6 +91,11 @@ const GetMyDeliveryHistoryList = () => {
               <OrderInfo>
                 구매금액 {formatCurrency(responseDTO.productPrice)}원
               </OrderInfo>
+              {responseDTO.productNum > 0 && (
+                <OrderInfo>
+                  수량 {formatCurrency(responseDTO.productNum)}개
+                </OrderInfo>
+              )}
               <OrderInfo>
                 부름비 {formatCurrency(responseDTO.deliveryFee)}원
               </OrderInfo>
@@ -97,7 +103,7 @@ const GetMyDeliveryHistoryList = () => {
                 보증금 {formatCurrency(responseDTO.deposit)}원
               </OrderInfo>
             </DetailColumn>
-            <DetailColumn>
+            <DetailTimeAgoColumn>
               {responseDTO.deliveryState === "DELIVERY_ORDER" && (
                 <DetailLabel>주문 등록</DetailLabel>
               )}
@@ -113,10 +119,8 @@ const GetMyDeliveryHistoryList = () => {
               {responseDTO.deliveryState === "COMPLETE_DELIVERY" && (
                 <DetailLabel>배달 완료</DetailLabel>
               )}
-              <DetailLabel style={{ marginLeft: "10px" }}>
-                {responseDTO.timeAgo}
-              </DetailLabel>
-            </DetailColumn>
+              <DetailLabel>{responseDTO.timeAgo}</DetailLabel>
+            </DetailTimeAgoColumn>
           </DetailRow>
         </CardBox>
       ))}

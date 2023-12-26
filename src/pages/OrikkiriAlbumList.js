@@ -13,7 +13,7 @@ import { FaRegComment } from "react-icons/fa";
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 
-export default function OrikkiriAlbumList(orikkiriId) {
+export function OrikkiriAlbumList({orikkiriId}) {
 
   const checkOrikkiriId = orikkiriId;
   const location = useSelector((state) => state.member.gu);
@@ -28,18 +28,13 @@ export default function OrikkiriAlbumList(orikkiriId) {
 
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
+  console.log(orikkiriId)
+
   
   const filteredDongNePostList = dongNePostList.filter(dongNePost => {
     if (selectedCategory !== null && dongNePost.postCategory !== selectedCategory) {
       return false;
     }
-    // if (dongNePost.images && dongNePost.images.length > 0) {
-    //   const extension = dongNePost.images[0].split('.').pop().toLowerCase();
-    //   if (extension === 'mp4') {
-    //     return false;
-    //   }
-    // }
-    // console.log(dongNePost?.orikkiri?.orikkiriId)
     if (dongNePost.orikkiri?.orikkiriId != checkOrikkiriId) {
       return false;
     }
@@ -57,30 +52,22 @@ export default function OrikkiriAlbumList(orikkiriId) {
       <ImageListItem key="Subheader" cols={2}>
         <ListSubheader component="div">December</ListSubheader>
       </ImageListItem>
-      {itemData.map((item) => (
-        <ImageListItem key={item.img}>
+      {filteredDongNePostList.map((dongNePost) => (
+        <ImageListItem key={dongNePost.images[0]}>
           <img
-            srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
-            src={`${item.img}?w=248&fit=crop&auto=format`}
-            alt={item.title}
+            srcSet={`${dongNePost.images[0]}?w=248&fit=crop&auto=format&dpr=2 2x`}
+            src={`${dongNePost.images[0]}?w=248&fit=crop&auto=format`}
+            alt={dongNePost.title}
             loading="lazy"
           />
           <ImageListItemBar
-            title={item.title}
-            subtitle={item.author}
-            // actionIcon={
-            //   <IconButton
-            //     sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
-            //     aria-label={`info about ${item.title}`}
-            //   >
-            //     <InfoIcon />
-            //   </IconButton>
-            // }
+            title={dongNePost?.title}
+            subtitle={dongNePost?.writer?.nickname}
           />
         </ImageListItem>
       ))}
     {selectedCategory === 4 && (
-      <FixedButton2 onClick={() => navigate(`/addOrikkiriAlbum/${checkOrikkiriId}`)}>+ 앨범 추가</FixedButton2>
+      <FixedButton2 onClick={() => navigate(`/addOrikkiriAlbum/${orikkiriId}`)}>+ 앨범 추가</FixedButton2>
     )}
     </ImageList>
   );
@@ -175,3 +162,4 @@ const itemData = [
     cols: 2,
   },
 ];
+export default OrikkiriAlbumList;

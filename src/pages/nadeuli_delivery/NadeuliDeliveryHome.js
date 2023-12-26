@@ -6,6 +6,7 @@ import {
   DetailColumn,
   DetailLabel,
   DetailRow,
+  DetailTimeAgoColumn,
   GetMyAcceptedDeliveryHistoryListButton,
   OrderButton,
   OrderImage,
@@ -22,6 +23,16 @@ const NadeuliDeliveryHome = () => {
   const navigate = useNavigate();
   const memberGu = useSelector((state) => state.member.gu);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isVisible, setIsVisible] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsVisible(window.scrollY < 100);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleSearch = (query) => {
     setSearchQuery(query); // 검색 쿼리 업데이트
@@ -61,7 +72,7 @@ const NadeuliDeliveryHome = () => {
     navigate("/getMyAcceptedDeliveryHistoryList");
   };
 
-  const maxLength = 10;
+  const maxLength = 9;
 
   const truncateTitle = (title) => {
     if (title.length > maxLength) {
@@ -114,6 +125,11 @@ const NadeuliDeliveryHome = () => {
                 <OrderInfo>
                   구매금액 {formatCurrency(responseDTO.productPrice)}원
                 </OrderInfo>
+                {responseDTO.productNum > 0 && (
+                  <OrderInfo>
+                    수량 {formatCurrency(responseDTO.productNum)}개
+                  </OrderInfo>
+                )}
                 <OrderInfo>
                   부름비 {formatCurrency(responseDTO.deliveryFee)}원
                 </OrderInfo>
@@ -121,22 +137,31 @@ const NadeuliDeliveryHome = () => {
                   보증금 {formatCurrency(responseDTO.deposit)}원
                 </OrderInfo>
               </DetailColumn>
-              <DetailColumn>
+              <DetailTimeAgoColumn>
                 <DetailLabel>주문 등록</DetailLabel>
-                <DetailLabel style={{ marginLeft: "10px" }}>
-                  {responseDTO.timeAgo}
-                </DetailLabel>
-              </DetailColumn>
+                <DetailLabel>{responseDTO.timeAgo}</DetailLabel>
+              </DetailTimeAgoColumn>
             </DetailRow>
           </CardBox>
         </div>
       ))}
-      <GetMyAcceptedDeliveryHistoryListButton
-        onClick={handleNavigateMyAcceptedDeliveryHistoryList}
-      >
-        주문수락 목록
-      </GetMyAcceptedDeliveryHistoryListButton>
-      <OrderButton onClick={handleAddDeliveryOrder}>배달 주문하기</OrderButton>
+      <Box style={{ marginTop: "20px" }}></Box>
+      {isVisible && (
+        <>
+          <GetMyAcceptedDeliveryHistoryListButton
+            style={{ transition: "opacity 0.5s", opacity: 1 }}
+            onClick={handleNavigateMyAcceptedDeliveryHistoryList}
+          >
+            주문수락 목록
+          </GetMyAcceptedDeliveryHistoryListButton>
+          <OrderButton
+            style={{ transition: "opacity 0.5s", opacity: 1 }}
+            onClick={handleAddDeliveryOrder}
+          >
+            배달 주문하기
+          </OrderButton>
+        </>
+      )}
       <BottomBar />
     </div>
   );

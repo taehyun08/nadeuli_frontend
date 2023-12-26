@@ -49,6 +49,11 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
           };
           dispatch(setMember(newMemberData));
           setIsNadeuliDeliveryEnabled(newIsNadeuliDeliveryStatus);
+          if (newIsNadeuliDeliveryStatus === true) {
+            alert("부름 알림을 켰습니다.");
+          } else {
+            alert("부름 알림 차단 완료.");
+          }
         } else {
           console.error("Failed to update NadeuliDelivery status");
           setIsNadeuliDeliveryEnabled(!newIsNadeuliDeliveryStatus);
@@ -182,14 +187,17 @@ const NadeuliDeliveryHomeTopBar = ({ onSearch }) => {
         <span className="location">{location}</span>
       </div>
       <div className="right-group">
-        <label className="switch" style={{ marginRight: "10px" }}>
-          <input
-            type="checkbox"
-            checked={isNadeuliDeliveryEnabled || false}
-            onChange={handleNotificationToggle}
-          />
-          <span className="slider"></span>
-        </label>
+        <div className="switch-group">
+          <span style={{ fontSize: "12px" }}>알림 상태</span>
+          <label className="switch">
+            <input
+              type="checkbox"
+              checked={isNadeuliDeliveryEnabled || false}
+              onChange={handleNotificationToggle}
+            />
+            <span className="slider"></span>
+          </label>
+        </div>
         <IoIosNotifications
           style={{ fontSize: "30px", marginRight: "20px" }}
           onClick={handleNotificationsClick}

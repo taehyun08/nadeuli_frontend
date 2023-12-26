@@ -892,11 +892,12 @@ export default function GetMyProfile() {
                                                     flexDirection: 'column',
                                                     textAlign: 'left',
                                                     width: '50px',
-                                                    fontSize: '14px',
+                                                    fontSize: '16px',
+                                                    height:'100%'
                                                 }}
                                             >
-                                                <div>
-                                                    <BsHeart size="15" />
+                                                <div style={{position:'absolute', right:'20px', bottom:'20px'}}>
+                                                    <BsHeart size="18" />
                                                     &nbsp;{list?.product?.likeNum}
                                                 </div>
                                             </div>
