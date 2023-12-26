@@ -129,7 +129,7 @@ export const StyledLabel = styled.label`
 `;
 
 export const StyledInput = styled.input`
-  flex-basis: 60%;
+  flex-basis: 100%;
   margin-right: 5px;
   padding: 0.375rem 0.75rem;
   font-size: 1rem;

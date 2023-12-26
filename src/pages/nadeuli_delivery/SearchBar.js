@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {
+  FormRow,
   StyledInput,
   StyledLabel,
   StyledQueryButton,
@@ -22,7 +23,11 @@ const SearchBar = ({ onSearch }) => {
     <>
       <br />
       <StyledLabel style={{ textAlign: "right" }}>보증금 견적받기</StyledLabel>
-      <form className="query-container" onClick={handleSearch}>
+      <FormRow
+        className="query-container"
+        onClick={handleSearch}
+        style={{ marginBottom: "0rem" }}
+      >
         <StyledInput
           type="text"
           value={searchTerm}
@@ -30,7 +35,7 @@ const SearchBar = ({ onSearch }) => {
           placeholder="검색어를 입력하세요"
         />
         <StyledQueryButton type="submit">검색</StyledQueryButton>
-      </form>
+      </FormRow>
       <p>상품 키워드를 검색하면 구매 금액을 정해줍니다.</p>
     </>
   );
