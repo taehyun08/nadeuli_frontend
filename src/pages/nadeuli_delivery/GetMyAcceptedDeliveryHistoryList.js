@@ -28,7 +28,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsVisible(window.pageYOffset < 100);
+      setIsVisible(window.scrollY < 100);
     };
 
     window.addEventListener("scroll", handleScroll);
