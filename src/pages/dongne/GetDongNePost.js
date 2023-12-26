@@ -163,8 +163,10 @@ function GetDongNePost() {
             {getDongNePost.streaming && (
                           <ReactHlsPlayer
                           src={getDongNePost.streaming}
-                          autoPlay={true}
-                          controls={true}
+                          autoPlay
+                          controls
+                          playsInline
+                          muted
                           width="100%"
                           height="auto"
                         />
