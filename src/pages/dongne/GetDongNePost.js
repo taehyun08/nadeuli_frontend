@@ -79,7 +79,7 @@ function GetDongNePost() {
 
   const handleupdate = async () => {
     setPendingAction(() => () => {
-      navigate(`/UpdateDongNePost/${postId}`);
+      navigate(`/updateDongNePost/${postId}`);
     });
     setDialogTitle("수정 확인");
     setDialogDescription("이 게시물을 수정하시겠습니까?");

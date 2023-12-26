@@ -6,12 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {dongNePost, modifyDongNePost,GetDongNePostDetail } from "../../redux/modules/dongNePost";
 
-function UpdateDongNePost() {
+function UpdateOrikkiriPost() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
   const postId = params.postId;
   const getDongNePost = useSelector((state) => state.dongNePost.dongNePost);
+  const getOrikkiriId = getDongNePost?.orikkiri?.orikkiriId
   const title_ref = useRef(null);
   const content_ref = useRef(null);
   const [category, setCategory] = useState();
@@ -62,30 +63,27 @@ function UpdateDongNePost() {
     });
   };
 
-  console.log(postId)
+  // console.log(getOrikkiriId)
 
   const addDongNePost = () => {
-    // const orikkiri = {orikkiriId: }
+    const orikkiri = {orikkiriId: getOrikkiriId}
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
     const content = content_ref.current.value;
-    const postCategory = (category === "잡담" ? 1 : 2);
+    const postCategory = getDongNePost.postCategory;
 
     if (!title || !content) {
       alert('모든 칸을 입력해주세요.');
       return;
     }
 
-    if (!category || category === "none") {
-      alert("게시물 카테고리를 선택해주세요!");
-      return;
-    }
     const formData = new FormData();
     const postDTOData = {
       postId: postId,
+      orikkiri: orikkiri,
       title,
       content,
-      postCategory,
+      postCategory: postCategory,
       gu: location,
       dongNe: getMember.dongNe,
       writer: writer
@@ -98,7 +96,7 @@ function UpdateDongNePost() {
     for (let i = 0; i < files.length; i++) {
       formData.append('images', files[i]);
     }
-    dispatch(modifyDongNePost(formData, navigate, `/GetDongNePost/${postId}`));
+    dispatch(modifyDongNePost(formData, navigate, `/getOrikkiriPost/${postId}`));
   };
 
   return (
@@ -108,7 +106,7 @@ function UpdateDongNePost() {
           size="30"
           onClick={() => navigate("/dongNeHome")}
         />
-        <h4>동네나드리 수정</h4>
+        <h4>우리끼리 수정</h4>
         <h5 onClick={addDongNePost}>완료</h5>
       </Header>
 
@@ -118,13 +116,6 @@ function UpdateDongNePost() {
             <input placeholder="제목을 입력하세요" ref={title_ref} />
           </Title>
 
-          <Categorie>
-            <select name="category" id="category" onChange={changeCategory}>
-              <option value="none">게시물 카테고리를 선택해주세요.</option>
-              <option value="잡담">잡담</option>
-              <option value="홍보">홍보</option>
-            </select>
-          </Categorie>
         </div>
 
         <textarea
@@ -257,4 +248,4 @@ select {
 `;
 
 
-export default UpdateDongNePost;
+export default UpdateOrikkiriPost;
