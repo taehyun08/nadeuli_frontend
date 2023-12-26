@@ -77,7 +77,14 @@ function GetDongNePost() {
   };
 
   const handleupdate = async () => {
-
+    setPendingAction(() => () => {
+      navigate(`/UpdateDongNePost/${postId}`);
+    });
+    setDialogTitle("수정 확인");
+    setDialogDescription("이 게시물을 수정하시겠습니까?");
+    setDialogAgreeText("수정");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
   }
 
   const dropdownMenus1 = [
@@ -162,8 +169,6 @@ function GetDongNePost() {
             })}
           </File>
         )}
-
-
           <Content>
             <p>{getDongNePost.content}</p>
           </Content>
