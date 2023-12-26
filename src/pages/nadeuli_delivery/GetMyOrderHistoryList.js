@@ -6,6 +6,7 @@ import {
   DetailColumn,
   DetailLabel,
   DetailRow,
+  DetailTimeAgoColumn,
   HeaderContainer,
   OrderImage,
   OrderInfo,
@@ -103,7 +104,7 @@ const GetMyOrderHistoryList = () => {
                 보증금 {formatCurrency(responseDTO.deposit)}원
               </OrderInfo>
             </DetailColumn>
-            <DetailColumn>
+            <DetailTimeAgoColumn>
               {responseDTO.deliveryState === "DELIVERY_ORDER" && (
                 <DetailLabel>주문 등록</DetailLabel>
               )}
@@ -119,10 +120,8 @@ const GetMyOrderHistoryList = () => {
               {responseDTO.deliveryState === "COMPLETE_DELIVERY" && (
                 <DetailLabel>배달 완료</DetailLabel>
               )}
-              <DetailLabel style={{ marginLeft: "10px" }}>
-                {responseDTO.timeAgo}
-              </DetailLabel>
-            </DetailColumn>
+              <DetailLabel>{responseDTO.timeAgo}</DetailLabel>
+            </DetailTimeAgoColumn>
           </DetailRow>
         </CardBox>
       ))}

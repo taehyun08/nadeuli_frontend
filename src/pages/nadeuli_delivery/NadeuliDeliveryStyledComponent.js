@@ -85,6 +85,13 @@ export const DetailColumn = styled.div`
   text-align: flex-start;
 `;
 
+export const DetailTimeAgoColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+`;
+
 export const StyledForm = styled.form`
   display: flex;
   flex-direction: column;

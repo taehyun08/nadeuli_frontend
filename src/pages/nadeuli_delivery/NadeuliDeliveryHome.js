@@ -6,6 +6,7 @@ import {
   DetailColumn,
   DetailLabel,
   DetailRow,
+  DetailTimeAgoColumn,
   GetMyAcceptedDeliveryHistoryListButton,
   OrderButton,
   OrderImage,
@@ -136,12 +137,10 @@ const NadeuliDeliveryHome = () => {
                   보증금 {formatCurrency(responseDTO.deposit)}원
                 </OrderInfo>
               </DetailColumn>
-              <DetailColumn>
+              <DetailTimeAgoColumn>
                 <DetailLabel>주문 등록</DetailLabel>
-                <DetailLabel style={{ marginLeft: "10px" }}>
-                  {responseDTO.timeAgo}
-                </DetailLabel>
-              </DetailColumn>
+                <DetailLabel>{responseDTO.timeAgo}</DetailLabel>
+              </DetailTimeAgoColumn>
             </DetailRow>
           </CardBox>
         </div>
