@@ -41,6 +41,18 @@ const UpdateDeliveryOrder = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  // 이미지 업로드가 없을 시 기본 이미지로 업로드
+  async function fetchDefaultImage() {
+    const defaultImageUrl =
+      "https://kr.object.ncloudstorage.com/nadeuli/image/nadeuli20231222062712988.png";
+    try {
+      const response = await fetch(defaultImageUrl);
+      return await response.blob();
+    } catch (error) {
+      console.error("Error fetching default image:", error);
+    }
+  }
+
   // 웹크롤링으로 불러올 가격을 상품 키워드로 검색한다.
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -124,7 +136,7 @@ const UpdateDeliveryOrder = () => {
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // 나드리페이 보증금 계산
@@ -161,9 +173,17 @@ const UpdateDeliveryOrder = () => {
       })
     );
 
-    // 파일을 formData에 추가
-    for (const file of files) {
-      formData.append("images", file);
+    // 파일이 업로드되었는지 확인
+    if (files.length > 0) {
+      for (const file of files) {
+        formData.append("images", file);
+      }
+    } else {
+      // 파일이 업로드되지 않았다면 기본 이미지를 추가
+      const defaultImageBlob = await fetchDefaultImage();
+      if (defaultImageBlob) {
+        formData.append("images", defaultImageBlob, "defaultImage.png");
+      }
     }
 
     // axios를 사용하여 데이터 전송
