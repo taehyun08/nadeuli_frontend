@@ -2,7 +2,7 @@ import React from 'react';
 import '../style/css/postInfo.css';
 
 const PostInfo = ({ text, writerPicture, writerNickName, writerDongNe, timeAgo }) => {
-  console.log(writerPicture)
+  // console.log(writerPicture)
   return (
     <div>
       <div className="rectangle-container">

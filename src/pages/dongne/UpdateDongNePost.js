@@ -32,9 +32,9 @@ function UpdateDongNePost() {
   useEffect(() => {
     // 게시물 데이터가 로드되면 input 참조에 값을 할당
     if (getDongNePost) {
-      title_ref.current.value = getDongNePost.title;
-      content_ref.current.value = getDongNePost.content;
-      setCategory(getDongNePost.category);  // 카테고리 상태도 업데이트
+      title_ref.current.value = getDongNePost?.title;
+      content_ref.current.value = getDongNePost?.content;
+      setCategory(getDongNePost?.category);  // 카테고리 상태도 업데이트
       // 이미지 미리보기나 다른 상태를 업데이트할 수도 있음
     }
   }, [getDongNePost]);  // getDongNePost가 변경될 때마다 실행
