@@ -23,6 +23,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import socket from '../../util/socket';
 import { post } from '../../util/axios';
+import { post as chatPost } from "../../util/chatAxios";
 
 const AddOrikkiri = () => {
     const BASE_URL = process.env.REACT_APP_BASE_URL;
@@ -141,7 +142,7 @@ const AddOrikkiri = () => {
                 participants,
             };
 
-            await post('/api/chatRoom/findOrCreate', chatReq);
+            await chatPost('/api/chatRoom/findOrCreate', chatReq);
             navigate(`/orikkiriHome/${orikkiriId}`);
             // 추가적인 로직 또는 리다이렉션 등을 수행할 수 있음
         } catch (error) {

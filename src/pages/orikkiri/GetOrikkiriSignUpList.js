@@ -30,6 +30,7 @@ import axios from 'axios';
 import { get, post } from '../../util/axios';
 import { useParams } from 'react-router-dom';
 import { addSignUp, deleteSignUp } from '../../util/orikkiriManageAxios';
+import { post as chatPost } from "../../util/chatAxios";
 
 export default function GetOrikkiriSignUpList() {
     const [items, setItems] = useState([]);
@@ -125,7 +126,7 @@ export default function GetOrikkiriSignUpList() {
         console.log(ansQuestionId);
         try {
             await addSignUp(ansQuestionId);
-            await post("/api/chatRoom/joinChatRoom",{chatReq})
+            await chatPost("/api/chatRoom/joinChatRoom",chatReq)
             toggleOpen();
             getItems(); // 데이터 재로딩
         } catch (error) {
