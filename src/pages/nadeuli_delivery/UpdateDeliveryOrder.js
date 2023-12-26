@@ -124,7 +124,7 @@ const UpdateDeliveryOrder = () => {
       .catch((error) => console.error("미리보기 생성 오류", error));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     // 나드리페이 보증금 계산
@@ -161,7 +161,7 @@ const UpdateDeliveryOrder = () => {
       })
     );
 
-    // 파일을 formData에 추가
+    // 파일이 업로드되었는지 확인
     for (const file of files) {
       formData.append("images", file);
     }

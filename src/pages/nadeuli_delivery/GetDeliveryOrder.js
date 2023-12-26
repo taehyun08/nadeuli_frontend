@@ -18,15 +18,18 @@ import {
   StyledContainer,
 } from "./NadeuliDeliveryStyledComponent";
 import HeaderBack from "../../components/HeaderBack";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setMember } from "../../redux/modules/member";
 
 const GetDeliveryOrder = () => {
   // 배달 주문을 조회한다.
   const { nadeuliDeliveryId } = useParams();
   const [nadeuliDeliveryDTO, setNadeuliDeliveryDTO] = useState({});
   const navigate = useNavigate();
-  const memberTag = useSelector((state) => state.member.tag);
-  const memberNickName = useSelector((state) => state.member.nickname);
+  // const memberTag = useSelector((state) => state.member.tag);
+  // const memberNickName = useSelector((state) => state.member.nickname);
+  const member = useSelector((state) => state.member);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
@@ -46,9 +49,32 @@ const GetDeliveryOrder = () => {
   const handleCancelDeliveryOrder = () => {
     get(`/nadeulidelivery/cancelDeliveryOrder/${nadeuliDeliveryId}`)
       .then((response) => {
+        const balance = Number(member.nadeuliPayBalance);
+        const depositAmount = Number(nadeuliDeliveryDTO.deposit);
+        console.log("계산 할 나드리페이 잔액 : " + balance);
+        console.log("주문 취소 후 더할 보증금 : " + depositAmount);
+
+        if (!isNaN(balance) && !isNaN(depositAmount)) {
+          // 계산된 새로운 잔액을 계산합니다.
+          const newBalance = balance + depositAmount;
+
+          if (!isNaN(newBalance)) {
+            // 새로운 잔액으로 member 객체를 업데이트합니다.
+            const updatedMember = {
+              ...member,
+              nadeuliPayBalance: newBalance,
+            };
+
+            // 업데이트된 member 객체로 상태를 업데이트합니다.
+            dispatch(setMember(updatedMember));
+          }
+
+          console.log("갱신된 나드리페이 잔액 : " + member.nadeuliPayBalance);
+        }
+
         console.log(response);
         alert("주문 취소 완료!");
-        navigate("/getMyOrderHistoryList");
+        navigate("/nadeuliDeliveryHome");
       })
       .catch((error) => {
         console.error("주문 취소 처리 에러", error);
@@ -60,8 +86,8 @@ const GetDeliveryOrder = () => {
     const updatedDeliveryDTO = {
       ...nadeuliDeliveryDTO,
       deliveryPerson: {
-        tag: memberTag, // 전역 상태에서 가져온 tag
-        nickname: memberNickName, // 전역 상태에서 가져온 nickname
+        tag: member.tag, // 전역 상태에서 가져온 tag
+        nickname: member.nickname, // 전역 상태에서 가져온 nickname
       },
     };
     post(`/nadeulidelivery/acceptDeliveryOrder`, updatedDeliveryDTO)
@@ -238,7 +264,7 @@ const GetDeliveryOrder = () => {
           )}
         </DetailContainer>
         <ButtonContainer>
-          {memberTag === nadeuliDeliveryDTO.buyer?.tag &&
+          {member.tag === nadeuliDeliveryDTO.buyer?.tag &&
           nadeuliDeliveryDTO.deliveryState === "DELIVERY_ORDER" ? (
             <>
               <StyledButton onClick={handleUpdateDeliveryOrder}>
@@ -248,12 +274,12 @@ const GetDeliveryOrder = () => {
                 주문 취소
               </StyledButton>
             </>
-          ) : memberTag !== nadeuliDeliveryDTO.buyer?.tag &&
+          ) : member.tag !== nadeuliDeliveryDTO.buyer?.tag &&
             nadeuliDeliveryDTO.deliveryState === "DELIVERY_ORDER" ? (
             <StyledButton style={{ width: "100%" }} onClick={handleAcceptOrder}>
               주문 수락
             </StyledButton>
-          ) : memberTag === nadeuliDeliveryDTO.deliveryPerson?.tag &&
+          ) : member.tag === nadeuliDeliveryDTO.deliveryPerson?.tag &&
             nadeuliDeliveryDTO.deliveryState === "ACCEPT_ORDER" ? (
             <>
               <StyledButton onClick={handleCancelDelivery}>

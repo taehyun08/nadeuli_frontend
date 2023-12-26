@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { post } from "../../util/axios";
+import { get, post } from "../../util/axios";
 import {
   Box,
   CardBox,
@@ -14,16 +14,39 @@ import {
 } from "./NadeuliDeliveryStyledComponent";
 import BottomBar from "../../components/BottonBar";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import NadeuliDeliveryHomeTopBar from "./NadeuliDeliveryHomeTopBar";
+import { setMember } from "../../redux/modules/member";
 
 const NadeuliDeliveryHome = () => {
   const [responseDTOList, setResponseDTOList] = useState([]);
   const [filteredDTOList, setFilteredDTOList] = useState([]); // 필터링된 리스트를 위한 상태
   const navigate = useNavigate();
-  const memberGu = useSelector((state) => state.member.gu);
+  // const memberGu = useSelector((state) => state.member.gu);
   const [searchQuery, setSearchQuery] = useState("");
   const [isVisible, setIsVisible] = useState(true);
+  const member = useSelector((state) => state.member);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    get(`/member/getMember/${member.tag}`).then((response) => {
+      const balance = Number(member.nadeuliPayBalance);
+      const depositAmount = Number(response.nadeuliPayBalance);
+      console.log("프론트엔드 나드리페이 잔액 : " + balance);
+      console.log("백엔드에서 가져온 보증금 : " + depositAmount);
+
+      // 새로운 잔액으로 member 객체를 업데이트합니다.
+      const updatedMember = {
+        ...member,
+        nadeuliPayBalance: depositAmount,
+      };
+
+      // 업데이트된 member 객체로 상태를 업데이트합니다.
+      dispatch(setMember(updatedMember));
+
+      console.log("갱신된 나드리페이 잔액 : " + member.nadeuliPayBalance);
+    });
+  }, [member, dispatch]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,7 +63,7 @@ const NadeuliDeliveryHome = () => {
 
   useEffect(() => {
     const requestData = {
-      gu: memberGu,
+      gu: member.gu,
     };
 
     post("/nadeulidelivery/getDeliveryOrderList", requestData, {
@@ -58,7 +81,7 @@ const NadeuliDeliveryHome = () => {
       .catch((error) => {
         console.log("getDeliveryOrderList 호출 에러!", error);
       });
-  }, [memberGu]);
+  }, [member.gu]);
 
   const handleNavigateToOrder = (nadeuliDeliveryId) => {
     navigate(`/getDeliveryOrder/${nadeuliDeliveryId}`);
@@ -162,7 +185,7 @@ const NadeuliDeliveryHome = () => {
           </OrderButton>
         </>
       )}
-      <BottomBar />
+      <BottomBar selected="nadeuliDeliveryHome" />
     </div>
   );
 };

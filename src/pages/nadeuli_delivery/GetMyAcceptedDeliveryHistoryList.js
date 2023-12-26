@@ -88,6 +88,10 @@ const GetMyAcceptedDeliveryHistoryList = () => {
   };
 
   const handleGetShortestWay = () => {
+    if (!responseDTOList.length > 0) {
+      alert("주문을 먼저 수락 해주세요.");
+      return;
+    }
     navigate(`/getShortestWay`);
   };
 
@@ -101,8 +105,10 @@ const GetMyAcceptedDeliveryHistoryList = () => {
           </OrderTitle>
         </Box>
       </HeaderContainer>
-      {responseDTOList === null && (
-        <InfoText>주문 수락 목록이 없습니다.</InfoText>
+      {!responseDTOList.length > 0 && (
+        <InfoText style={{ paddingTop: "300px" }}>
+          주문 수락 목록이 없습니다.
+        </InfoText>
       )}
       {responseDTOList.map((responseDTO, index) => (
         <CardBox
@@ -154,7 +160,7 @@ const GetMyAcceptedDeliveryHistoryList = () => {
           </DetailRow>
         </CardBox>
       ))}
-      {isVisible && (
+      {responseDTOList.length > 0 && isVisible && (
         <OrderButton
           style={{ transition: "opacity 0.5s", opacity: 1 }}
           onClick={handleGetShortestWay}
