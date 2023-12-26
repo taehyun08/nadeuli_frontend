@@ -60,7 +60,9 @@ const AddDeliveryOrder = () => {
   // 출발지 설정 함수
   const handleSetLocation = () => {
     // orderData를 상태로 전달하며 목적지 설정 페이지로 이동
-    navigate("/searchLocation", { state: { orderData: orderData } });
+    navigate("/searchLocation", {
+      state: { orderData: orderData, productType: productType },
+    });
   };
 
   useEffect(() => {
@@ -68,10 +70,7 @@ const AddDeliveryOrder = () => {
 
     // 주문 정보와 목적지 정보 불러오기
     if (location.state) {
-      const { orderData, departure, arrival } = location.state;
-
-      // 상품 수량이 있는 경우 'new', 없는 경우 'used'로 productType 결정
-      const determinedProductType = orderData.productNum ? "new" : "used";
+      const { orderData, departure, arrival, productType } = location.state;
 
       // 출발지와 도착지 정보가 존재하는 경우, orderData 상태 업데이트
       if (departure && arrival) {
@@ -86,7 +85,7 @@ const AddDeliveryOrder = () => {
       }
 
       // productType 설정
-      setProductType(determinedProductType);
+      setProductType(productType);
     }
   }, [location.state]);
 
@@ -316,6 +315,42 @@ const AddDeliveryOrder = () => {
           </FormRow>
           {productType ? (
             <>
+              <FormRow>
+                <StyledButton type="button" onClick={handleSetLocation}>
+                  목적지 설정
+                </StyledButton>
+                {/* <StyledButton type="button" onClick={handleSetArrival}>
+                  도착지 설정
+                </StyledButton> */}
+              </FormRow>
+              <FormRow>
+                <StyledLabel htmlFor="departure">출발지</StyledLabel>
+              </FormRow>
+              {/* id="departure" name="departure" */}
+              <FormRow>
+                {orderData.departure || ""}
+                <HiddenInput
+                  type="text"
+                  id="departure"
+                  name="departure"
+                  value={orderData.departure || ""}
+                  onChange={handleChange}
+                />
+              </FormRow>
+              <FormRow>
+                <StyledLabel htmlFor="arrival">도착지</StyledLabel>
+              </FormRow>
+              {/* id="arrival" name="arrival" */}
+              <FormRow>
+                {orderData.arrival || ""}
+                <HiddenInput
+                  type="text"
+                  id="arrival"
+                  name="arrival"
+                  value={orderData.arrival || ""}
+                  onChange={handleChange}
+                />
+              </FormRow>
               {productType === "used" && (
                 <FormRow>
                   <StyledSelect
@@ -481,7 +516,7 @@ const AddDeliveryOrder = () => {
                       type="number"
                       id="productNum"
                       name="productNum"
-                      value={orderData.productNum || ""}
+                      value={orderData.productNum || 1}
                       placeholder="상품 수량"
                       onChange={handleChange}
                     />
@@ -527,42 +562,6 @@ const AddDeliveryOrder = () => {
                   type="number"
                   id="deposit"
                   name="deposit"
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <StyledButton type="button" onClick={handleSetLocation}>
-                  목적지 설정
-                </StyledButton>
-                {/* <StyledButton type="button" onClick={handleSetArrival}>
-                  도착지 설정
-                </StyledButton> */}
-              </FormRow>
-              <FormRow>
-                <StyledLabel htmlFor="departure">출발지</StyledLabel>
-              </FormRow>
-              {/* id="departure" name="departure" */}
-              <FormRow>
-                {orderData.departure || ""}
-                <HiddenInput
-                  type="text"
-                  id="departure"
-                  name="departure"
-                  value={orderData.departure || ""}
-                  onChange={handleChange}
-                />
-              </FormRow>
-              <FormRow>
-                <StyledLabel htmlFor="arrival">도착지</StyledLabel>
-              </FormRow>
-              {/* id="arrival" name="arrival" */}
-              <FormRow>
-                {orderData.arrival || ""}
-                <HiddenInput
-                  type="text"
-                  id="arrival"
-                  name="arrival"
-                  value={orderData.arrival || ""}
                   onChange={handleChange}
                 />
               </FormRow>

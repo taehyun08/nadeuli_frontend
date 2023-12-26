@@ -72,6 +72,7 @@ const OAuth2RedirectHandler = () => {
                     } else {
                         // 사용자가 취소한 경우 로그인 불가능
                         alert('비활성 회원은 로그인할 수 없습니다.');
+                        navigate('/');
                         return;
                     }
                 }

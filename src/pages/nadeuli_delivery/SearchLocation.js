@@ -15,6 +15,7 @@ const SearchLocation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [orderData] = useState(location.state.orderData || {});
+  const [productType] = useState(location.state.productType || {});
   const [selectedAddress, setSelectedAddress] = useState("");
   const [departureAddress, setDepartureAddress] = useState("");
   const [arrivalAddress, setArrivalAddress] = useState("");
@@ -171,7 +172,9 @@ const SearchLocation = () => {
     };
 
     // 변경된 orderData를 상태로 전달하며 AddDeliveryOrder 페이지로 이동
-    navigate("/addDeliveryOrder", { state: { orderData: updatedOrderData } });
+    navigate("/addDeliveryOrder", {
+      state: { orderData: updatedOrderData, productType: productType },
+    });
   };
 
   const open = useDaumPostcodePopup(postcodeScriptUrl);

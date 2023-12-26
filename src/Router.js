@@ -64,23 +64,40 @@ function Router() {
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />
-        <Route path="/getOrikkiriSignUpList/:orikkiriId" element={<GetOrikkiriSignUpList />} />
-        <Route path="/addOrikkiriSignUp/:orikkiriId" element={<AddOrikkiriSignUp />} />
+        <Route
+          path="/getOrikkiriSignUpList/:orikkiriId"
+          element={<GetOrikkiriSignUpList />}
+        />
+        <Route
+          path="/addOrikkiriSignUp/:orikkiriId"
+          element={<AddOrikkiriSignUp />}
+        />
         <Route path="/addOrikkiriSchedule" element={<AddOrikkiriSchedule />} />
         <Route path="/addOrikkiriPost" element={<AddOrikkiriPost />} />
         <Route path="/addOrikkiriAlbum" element={<AddOrikkiriAlbum />} />
         <Route path="/addOrikkiriNotice" element={<AddOrikkiriNotice />} />
-        <Route path="/orikkiriScheduleList/:orikkiriId" element={<OrikkiriScheduleList />} />
-        <Route path="/addOrikkiriPost/:orikkiriId" element={<AddOrikkiriPost />} />
-        <Route path="/addOrikkiriAlbum/:orikkiriId" element={<AddOrikkiriAlbum />} />
-        <Route path="/addOrikkiriNotice/:orikkiriId" element={<AddOrikkiriNotice />} />
+        <Route
+          path="/orikkiriScheduleList/:orikkiriId"
+          element={<OrikkiriScheduleList />}
+        />
+        <Route
+          path="/addOrikkiriPost/:orikkiriId"
+          element={<AddOrikkiriPost />}
+        />
+        <Route
+          path="/addOrikkiriAlbum/:orikkiriId"
+          element={<AddOrikkiriAlbum />}
+        />
+        <Route
+          path="/addOrikkiriNotice/:orikkiriId"
+          element={<AddOrikkiriNotice />}
+        />
 
         <Route
           path="/nadeuliPay/nadeuliPayCharge"
           element={<NadeuliPayCharge />}
         />
-        <Route path="/nadeuliPay/charge" element={<Charge />}
-        />
+        <Route path="/nadeuliPay/charge" element={<Charge />} />
         <Route
           path="/nadeuliPay/nadeuliPayPay/:productId"
           element={<NadeuliPayPay />}
@@ -89,7 +106,10 @@ function Router() {
           path="/nadeuliPay/nadeuliPayWithdraw"
           element={<NadeuliPayWithdraw />}
         />
-        <Route path="/nadeuliPay/getNadeuliPayList" element={<GetNadeuliPayList />} />
+        <Route
+          path="/nadeuliPay/getNadeuliPayList"
+          element={<GetNadeuliPayList />}
+        />
         <Route
           path="/trade/addTradeReview/:productId"
           element={<AddTradeReview />}
@@ -118,7 +138,7 @@ function Router() {
         <Route path="/getMyProfile" element={<GetMyProfile />} />
         <Route path="/getOtherProfile" element={<GetOtherProfile />} />
         <Route path="/getMemberList" element={<GetMemberList />} />
-        <Route path="/report" element={<Report />} />
+        <Route path="/report/:type/:id" element={<Report />} />
         <Route path="/addOrikkiri" element={<AddOrikkiri />} />
         <Route path="/modify/:postid" element={<Modify />} />
         <Route path="/detail/:postid" element={<Detail />} />
@@ -129,7 +149,10 @@ function Router() {
         <Route path="*" element={<NotFound />} />
 
         <Route path="/addDeliveryOrder" element={<AddDeliveryOrder />} />
-        <Route path="/updateDeliveryOrder" element={<UpdateDeliveryOrder />} />
+        <Route
+          path="/updateDeliveryOrder/:nadeuliDeliveryId"
+          element={<UpdateDeliveryOrder />}
+        />
         <Route
           path="/getDeliveryOrder/:nadeuliDeliveryId"
           element={<GetDeliveryOrder />}

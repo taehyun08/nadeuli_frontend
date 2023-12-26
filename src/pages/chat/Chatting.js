@@ -168,7 +168,7 @@ return (
                 <img className="img" src={list.picture} style={list.style} />
               </span> */}
 
-              <span className="message" style={{background :'#FF7E36', color:'white'}}>
+              <span className="message" style={{background :'#508bfc', color:'white'}}>
                 {list.message}</span>
               <span className="time">{moment(list.createdAt).format("A h:mm")}</span>
 

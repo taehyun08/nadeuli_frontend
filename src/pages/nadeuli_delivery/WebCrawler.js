@@ -1,5 +1,5 @@
-import { post } from "../../util/chatAxios";
 import { useEffect, useState } from "react";
+import { post } from "../../util/chatAxios";
 
 const WebCrawler = ({ searchQuery, onAveragePriceChange }) => {
   const [isPriceCalculated, setIsPriceCalculated] = useState(false);

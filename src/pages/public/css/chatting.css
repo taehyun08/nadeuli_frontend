@@ -151,7 +151,7 @@ html, body{
 .inputArea{
     height: 100%;
     flex: 0.8;
-    background: lightgray;
+    background: #508bfc;
 
     display: flex;
     align-items: stretch;
@@ -179,6 +179,7 @@ html, body{
     margin-left: 10px;
     flex: 1;
     height: 100%;
+    color: white;
 }
 
 

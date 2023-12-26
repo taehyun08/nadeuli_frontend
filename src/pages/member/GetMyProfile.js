@@ -23,6 +23,7 @@ import {
     MDBModalBody,
     MDBModalFooter,
     MDBInput,
+    MDBBadge,
 } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,6 +35,7 @@ import { FaLocationDot } from 'react-icons/fa6';
 import {
     checkAuthNum,
     checkPortOneAccountName,
+    deleteMemberBackAccount,
     getAuthNumCellphone,
     getAuthNumEmail,
     getMemberFavoriteList,
@@ -343,7 +345,7 @@ export default function GetMyProfile() {
 
             // 실제로 회원 정보를 업데이트하는 API 호출
             const updateResponse = await updateTo(memberDTO);
-            console.log(updateResponse)
+            console.log(updateResponse);
             // 회원 정보 업데이트 성공 시의 처리
             dispatch(setMember(updateResponse.data));
             alert('이메일이 성공적으로 수정되었습니다.');
@@ -355,6 +357,10 @@ export default function GetMyProfile() {
         } catch (error) {
             // 회원 정보 업데이트에 실패한 경우
             alert('이미 존재하는 이메일입니다.');
+            setEmail(member.email); // 이메일 초기값으로 설정
+            setEmailAuthNum(''); // 인증번호 초기값으로 설정
+            setIsEmailAuthNumReceived(false); // 인증번호 받은 여부 초기값으로 설정
+            setIsEmailAuthNumCheck(false);
         }
     };
 
@@ -527,17 +533,39 @@ export default function GetMyProfile() {
                 const response = await checkPortOneAccountName(portOneAccountDTO);
 
                 // 서버 응답에 대한 처리
-                console.log('서버 응답:', response);
+                dispatch(setMember(response.data));
             } else {
-                console.error('입력값이 부족합니다.');
+                alert('입력값이 부족합니다.');
             }
         } catch (error) {
             // 예외 상황에 대한 처리
-            console.error('에러 발생:', error);
+            alert('계좌 정보를 확인해주세요.');
         }
     };
 
-    const deleteBankAccount = async () => {};
+    const deleteBankAccount = async () => {
+        try {
+            const memberDTO = {
+                tag: member.tag,
+                bankName: null,
+                bankAccountNum: null,
+            };
+
+            // deleteMemberBackAccount 함수가 완료될 때까지 기다림
+            const response = await deleteMemberBackAccount(memberDTO);
+
+            // response.data가 정상적인 데이터를 포함하고 있는지 확인
+            if (response.data) {
+                dispatch(setMember(response.data));
+            } else {
+                // 에러 처리 또는 다른 작업 수행
+                console.error('Invalid data in the response');
+            }
+        } catch (error) {
+            // 에러 처리
+            console.error('Error deleting bank account:', error);
+        }
+    };
 
     const [account, setAccount] = useState({
         name: '',
@@ -557,6 +585,12 @@ export default function GetMyProfile() {
     };
 
     const showForm = member.bankAccountNum === null;
+
+    // 은행 코드에 해당하는 은행명을 반환하는 함수
+    const getBankNameByCode = (code) => {
+        const bankInfo = banks.find((bank) => bank.code === code);
+        return bankInfo ? bankInfo.name : code;
+    };
     return (
         <section style={{ backgroundColor: '#eee' }}>
             <MDBContainer>
@@ -632,7 +666,13 @@ export default function GetMyProfile() {
                                 <MDBRow>
                                     <MDBCol sm="3">
                                         <MDBCardText>
-                                            Email{' '}
+                                            <MDBBadge
+                                                color="info"
+                                                light
+                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                            >
+                                                이메일
+                                            </MDBBadge>
                                             <MDBIcon
                                                 far
                                                 icon="edit"
@@ -649,7 +689,13 @@ export default function GetMyProfile() {
                                 <MDBRow>
                                     <MDBCol sm="3">
                                         <MDBCardText>
-                                            Phone
+                                        <MDBBadge
+                                                color="info"
+                                                light
+                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                            >
+                                                휴대폰
+                                            </MDBBadge>
                                             <MDBIcon
                                                 far
                                                 icon="edit"
@@ -666,7 +712,21 @@ export default function GetMyProfile() {
                                 <MDBRow>
                                     <MDBCol sm="3">
                                         <MDBCardText>
-                                            BankAccount
+                                        <MDBBadge
+                                                color="info"
+                                                light
+                                                style={{ marginRight: '5px' ,fontSize:"15px"}}
+                                            >
+                                                대표 계좌
+                                            </MDBBadge>
+                                            {!showForm && (
+                                                <MDBIcon
+                                                    far
+                                                    icon="edit"
+                                                    style={{ fontSize: '20px', marginLeft: '10px', cursor: 'pointer' }}
+                                                    onClick={deleteBankAccount}
+                                                />
+                                            )}
                                             {showForm && (
                                                 <Box
                                                     component="form"
@@ -738,12 +798,7 @@ export default function GetMyProfile() {
                                             )}
                                             {!showForm && (
                                                 <p>
-                                                    {member.bankName} {member.bankAccountNum}{' '}
-                                                    <i
-                                                        className="far fa-square-minus"
-                                                        style={{ cursor: 'pointer', fontSize: '25px' }}
-                                                        onClick={deleteBankAccount}
-                                                    ></i>
+                                                    {getBankNameByCode(member.bankName)} {member.bankAccountNum}{' '}
                                                 </p>
                                             )}
                                         </MDBCardText>
