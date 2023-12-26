@@ -37,7 +37,7 @@ function Main () {
           </div>        
         </div>
       </div> */}
-      <BottomBar/>
+      <BottomBar selected='main'/>
     </div>
   )
 }

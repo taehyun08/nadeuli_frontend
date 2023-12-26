@@ -7,9 +7,10 @@ import { IoChatbubblesSharp } from "react-icons/io5";
 import { MdDeliveryDining } from "react-icons/md";
 import { HiClipboardDocumentList } from "react-icons/hi2";
 
-const BottomBar = () => {
+const BottomBar = (props) => {
+  
   const navigate = useNavigate();
-  const [selectedMenu, setSelectedMenu] = useState('main');
+  const [selectedMenu, setSelectedMenu] = useState(props.selected || 'main');
 
   const handleMenuClick = (menu) => {
     navigate(`/${menu}`);

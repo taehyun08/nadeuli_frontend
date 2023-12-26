@@ -64,7 +64,7 @@ const GetChatRoomList = () => {
     <div>
       
       <ChatRoomList chatRooms={chatRooms} />
-      <BottomBar/>
+      <BottomBar selected='chat'/>
     </div>
   );
 };
