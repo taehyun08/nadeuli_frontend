@@ -31,6 +31,7 @@ function Chatting(){
   const [picture,setPicture] =useState('');
   const [isSold,setIsSolde] =useState('');
   const [productId,setProductId] =useState('');
+  const [buyerTag,setBuyerTag] =useState('');
 
 
   // const handleButtonClick = () => {
@@ -39,8 +40,7 @@ function Chatting(){
   // };
 
   const handleTradeButtonClick = () => {
-    // 클릭 시 네비게이션 처리
-    // navigate(`/trade/addTradeSchedule`); // 원하는 경로로 수정
+    navigate(`/trade/addTradeSchedule/${member.tag}/${buyerTag}/${productId}`); // 원하는 경로로 수정
   };
 
   const handlePayButtonClick = () => {
@@ -58,7 +58,8 @@ function Chatting(){
         picture: picture,
         createdAt : createdAt
       }
-      setChat((chat)=> chat.concat(addChat));  
+      setChat((chat)=> chat.concat(addChat));
+      setBuyerTag(sender.tag);
       console.log('메세지 받아옴');
     });
 
