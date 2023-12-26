@@ -13,7 +13,7 @@ export const createOrikkiri = (formData, navigate) => {
             'Content-Type': 'multipart/form-data',
           },
         });
-        console.log(res.orikkiriId)
+        // console.log(res.orikkiriId)
         dispatch(addOrikkiri(formData));
       navigate(`/orikkiriHome/${res.orikkiriId}`);
       } catch (err) {
@@ -32,7 +32,7 @@ export const modifyOrikkiri = (formData, navigate) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(res)
+      // console.log(res)
       dispatch(updateOrikkiri(formData));
     navigate("/main");
     } catch (err) {
@@ -47,10 +47,10 @@ export const getOrikkiriDetail = (orikkiriId) => {
   return async function (dispatch, getState) {
     await get(`/orikkiriManage/getOrikkiri/${orikkiriId}`)
       .then((res) => {
-        console.log(res.orikkiriId);
+        // console.log(res.orikkiriId);
         dispatch(getLoadOrikkiri(res));
         const currentState = getState();
-        console.log('get이후 Current state:', currentState);
+        // console.log('get이후 Current state:', currentState);
       })
       .catch((err) => {
         console.log(err);
@@ -66,10 +66,10 @@ export const getOrikkiriList= (tag, currentPage) => {
     return async function (dispatch, getState) {
       await get(`/orikkiri/getMyOrikkiriList/${tag}/0`)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           dispatch(loadMyOrikkiris(res));
           const currentState = getState();
-          console.log('Current state:', currentState);
+          // console.log('Current state:', currentState);
         })
         .catch((err) => {
           console.log(err);
@@ -82,10 +82,10 @@ export const getOrikkiriList= (tag, currentPage) => {
     return async function (dispatch, getState) {
       await get(`/orikkiriManage/allOrikkiri`)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           dispatch(loadOrikkiris(res));
           const currentState = getState();
-          console.log('Current state:', currentState);
+          // console.log('Current state:', currentState);
         })
         .catch((err) => {
           console.log(err);
@@ -113,10 +113,10 @@ export const getOrikkiriMemberList= (orikkiriId) => {
   return async function (dispatch, getState) {
     await get(`/orikkiri/getOrikkiriMemberList/${orikkiriId}`)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         dispatch(loadMyOrikkiriMembers(res));
         const currentState = getState();
-        console.log('Current state:', currentState);
+        // console.log('Current state:', currentState);
       })
       .catch((err) => {
         console.log(err);

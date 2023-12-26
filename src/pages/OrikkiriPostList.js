@@ -52,7 +52,7 @@ function OrikkiriPostList({orikkiriId ,updatePostCount}) {
       <MainListBox>
         {filteredDongNePostList.map((dongNePost) => (
           <CardBox key={dongNePost.postId}>
-            <div onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
+            <div onClick={() => navigate("/getOrikkiriPost/" + dongNePost.postId)}>
             {dongNePost.images && dongNePost.images.length > 0 && (
                   <Img src={dongNePost.images[0]} alt="Post Image" />
                 )}

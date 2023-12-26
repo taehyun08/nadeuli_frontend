@@ -14,10 +14,29 @@ export const dongNePost = (formData, navigate, redirectPath) => {
         },
       });
       const postId = res.data.postId;
-      console.log(postId); 
+      // console.log(postId); 
       dispatch(addDongNePost(formData));
       navigate(redirectPath);
       // navigate('/getDongNePost');
+    } catch (err) {
+      console.log(err);
+    }
+  };
+};
+
+
+// 게시물 수정
+export const modifyDongNePost = (formData, navigate, redirectPath) => {
+  return async function (dispatch) {
+    try {
+      const res = await axios.post(`${BASE_URL}/dongNe/updatePost`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      // console.log(res)
+      dispatch(updateDongNePost(formData));
+    navigate(redirectPath);
     } catch (err) {
       console.log(err);
     }
@@ -29,7 +48,7 @@ export const GetDongNePostDetail = (postId) => {
   return async function (dispatch) {
     try {
       const res = await axiosInstance.get(`/dongNe/getPost/${postId}`);
-      console.log(res.data);
+      // console.log(res.data);
       dispatch(getLoadDongNePost(res.data));
     } catch (err) {
       console.log(err);
@@ -44,31 +63,14 @@ export const GetDongNePostList= (currentPage, gu, searchKeyword) => {
     try {
       const res = await axiosInstance.get(`/dongNe/dongNeHome/${currentPage}?gu=${gu}&searchKeyword=${searchKeyword}`);
       dispatch(loadDongNePosts(res.data));
-      console.log(res.data);
-      console.log("searchKeyword:" + searchKeyword)
+      // console.log(res.data);
+      // console.log("searchKeyword:" + searchKeyword)
     } catch (error) {
       console.log(error);
     }
   };
 };
 
-// 게시물 수정
-export const modifyDongNePost = (formData, navigate, redirectPath) => {
-  return async function (dispatch) {
-    try {
-      const res = await axios.orikkiri(`${BASE_URL}/dongNe/updatePost`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      console.log(res)
-      dispatch(updateDongNePost(formData));
-    navigate("/main");
-    } catch (err) {
-      console.log(err);
-    }
-  };
-};
 
 // 동네 게시물 삭제
 export const removeDongNePost = (postId, navigate) => {

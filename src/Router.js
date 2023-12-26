@@ -54,6 +54,8 @@ import OrikkiriScheduleList from "./pages/orikkiri/OrikkiriScheduleList";
 import AddTradeSchedule from "./pages/trade/AddTradeSchedule";
 import OrikkiriMemberList from "./pages/OrikkiriMemberList";
 import UpdateDongNePost from "./pages/dongne/UpdateDongNePost"
+import UpdateOrikkiriPost from "./pages/orikkiri/UpdateOrikkiriPost"
+import GetOrikkiriPost from "./pages/orikkiri/GetOrikkiriPost";
 
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
@@ -65,7 +67,9 @@ function Router() {
         <Route path="/dongNeHome" element={<DongNeHome />} />
         <Route path="/addDongNePost" element={<AddDongNePost />} />
         <Route path="/getDongNePost/:postId" element={<GetDongNePost />} />
+        <Route path="/getOrikkiriPost/:postId" element={<GetOrikkiriPost />} />
         <Route path="/updateDongNePost/:postId" element={<UpdateDongNePost />} />
+        <Route path="/updateOrikkiriPost/:postId" element={<UpdateOrikkiriPost />} />
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />

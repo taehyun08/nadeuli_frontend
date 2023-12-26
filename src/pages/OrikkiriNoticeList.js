@@ -21,10 +21,6 @@ function OrikkiriNoticeList({orikkiriId, orikkiriMasterTag}) {
   console.log(checkOrikkiriMaster)
   console.log(member.tag)
 
-  // useEffect(() => {
-  //   dispatch(GetDongNePostList(currentPage, location, ''));
-  // }, [currentPage, location, dispatch]);
-
   const dongNePostList = useSelector((state) => state.dongNePost.dongNePostList);
 
   
@@ -32,13 +28,7 @@ function OrikkiriNoticeList({orikkiriId, orikkiriMasterTag}) {
     if (selectedCategory !== null && dongNePost.postCategory !== selectedCategory) {
       return false;
     }
-    // if (dongNePost.images && dongNePost.images.length > 0) {
-    //   const extension = dongNePost.images[0].split('.').pop().toLowerCase();
-    //   if (extension === 'mp4') {
-    //     return false;
-    //   }
-    // }
-    // console.log(dongNePost?.orikkiri?.orikkiriId)
+
     if (dongNePost.orikkiri?.orikkiriId != checkOrikkiriId) {
       return false;
     }
@@ -55,7 +45,7 @@ function OrikkiriNoticeList({orikkiriId, orikkiriMasterTag}) {
       <MainListBox>
         {filteredDongNePostList.map((dongNePost) => (
           <CardBox key={dongNePost.postId}>
-            <div onClick={() => navigate("/getDongNePost/" + dongNePost.postId)}>
+            <div onClick={() => navigate("/getOrikkiriPost/" + dongNePost.postId)}>
             {dongNePost.images && dongNePost.images.length > 0 && (
                   <Img src={dongNePost.images[0]} alt="Post Image" />
                 )}
