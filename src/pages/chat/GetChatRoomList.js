@@ -61,7 +61,8 @@ const GetChatRoomList = () => {
 
 
   return (
-    <div>
+    <div style={{ backgroundColor: '#87CEEB' }}>
+
       
       <ChatRoomList chatRooms={chatRooms} />
       <BottomBar selected='chat'/>
