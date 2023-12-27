@@ -56,6 +56,7 @@ import OrikkiriMemberList from "./pages/OrikkiriMemberList";
 import UpdateDongNePost from "./pages/dongne/UpdateDongNePost"
 import UpdateOrikkiriPost from "./pages/orikkiri/UpdateOrikkiriPost"
 import GetOrikkiriPost from "./pages/orikkiri/GetOrikkiriPost";
+import UpdateOrikkiriAlbum from "./pages/orikkiri/UpdateOrikkiriAlbum";
 
 // import GetShortestWay from "./pages/nadeuli_delivery/GetShortestWay";
 // import AddTradeReview from "./pages/trade/AddTradeReview";
@@ -70,6 +71,7 @@ function Router() {
         <Route path="/getOrikkiriPost/:postId" element={<GetOrikkiriPost />} />
         <Route path="/updateDongNePost/:postId" element={<UpdateDongNePost />} />
         <Route path="/updateOrikkiriPost/:postId" element={<UpdateOrikkiriPost />} />
+        <Route path="/updateOrikkiriAlbum/:postId" element={<UpdateOrikkiriAlbum />} />
         <Route path="/addStreaming" element={<AddStreaming />} />
         <Route path="/orikkiriHome/:orikkiriId" element={<OrikkiriHome />} />
         <Route path="/addOkkiri" element={<AddOrikkiri />} />

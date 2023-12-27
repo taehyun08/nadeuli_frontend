@@ -54,6 +54,7 @@ export function OrikkiriAlbumList({orikkiriId}) {
       </ImageListItem>
       {filteredDongNePostList.map((dongNePost) => (
         <ImageListItem key={dongNePost.images[0]}>
+           <div onClick={() => navigate("/getOrikkiriPost/" + dongNePost.postId)}>
           <img
             srcSet={`${dongNePost.images[0]}?w=248&fit=crop&auto=format&dpr=2 2x`}
             src={`${dongNePost.images[0]}?w=248&fit=crop&auto=format`}
@@ -61,9 +62,11 @@ export function OrikkiriAlbumList({orikkiriId}) {
             loading="lazy"
           />
           <ImageListItemBar
+          
             title={dongNePost?.title}
             subtitle={dongNePost?.writer?.nickname}
           />
+          </div>
         </ImageListItem>
       ))}
     {selectedCategory === 4 && (

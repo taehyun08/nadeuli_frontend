@@ -66,7 +66,12 @@ function GetOrikkiriPost() {
 
   const handleupdate = async () => {
     setPendingAction(() => () => {
-      navigate(`/updateOrikkiriPost/${postId}`);
+      // postCategory가 4인지 확인하고, 맞다면 /updateOrikkiriAlbum/{postId}로 네비게이션합니다.
+      if (getDongNePost?.postCategory === 4) {
+        navigate(`/updateOrikkiriAlbum/${postId}`);
+      } else {
+        navigate(`/updateOrikkiriPost/${postId}`);
+      }
     });
     setDialogTitle("수정 확인");
     setDialogDescription("이 게시물을 수정하시겠습니까?");
@@ -74,6 +79,7 @@ function GetOrikkiriPost() {
     setDialogDisagreeText("취소");
     setDialogOpen(true);
   }
+  
 
   const dropdownMenus1 = [
     { label: '수정', onClick: handleupdate },

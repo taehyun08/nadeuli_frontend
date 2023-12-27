@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import {dongNePost, modifyDongNePost,GetDongNePostDetail } from "../../redux/modules/dongNePost";
 
-function UpdateOrikkiriPost() {
+function UpdateOrikkiriAlbum() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const params = useParams();
@@ -34,7 +34,6 @@ function UpdateOrikkiriPost() {
     // 게시물 데이터가 로드되면 input 참조에 값을 할당
     if (getDongNePost) {
       title_ref.current.value = getDongNePost?.title;
-      content_ref.current.value = getDongNePost?.content;
       setCategory(getDongNePost?.category);  // 카테고리 상태도 업데이트
       // 이미지 미리보기나 다른 상태를 업데이트할 수도 있음
     }
@@ -69,10 +68,9 @@ function UpdateOrikkiriPost() {
     const orikkiri = {orikkiriId: getOrikkiriId}
     const writer = {tag: member.tag};
     const title = title_ref.current.value;
-    const content = content_ref.current.value;
     const postCategory = getDongNePost.postCategory;
 
-    if (!title || !content) {
+    if (!title ) {
       alert('모든 칸을 입력해주세요.');
       return;
     }
@@ -82,7 +80,6 @@ function UpdateOrikkiriPost() {
       postId: postId,
       orikkiri: orikkiri,
       title,
-      content,
       postCategory: postCategory,
       gu: location,
       dongNe: getMember.dongNe,
@@ -106,7 +103,7 @@ function UpdateOrikkiriPost() {
           size="30"
           onClick={() => navigate("/dongNeHome")}
         />
-        <h4>우리끼리 수정</h4>
+        <h4>우리끼리 앨범 수정</h4>
         <h5 onClick={addDongNePost}>완료</h5>
       </Header>
 
@@ -115,14 +112,8 @@ function UpdateOrikkiriPost() {
           <Title>
             <input placeholder="제목을 입력하세요" ref={title_ref} />
           </Title>
-
         </div>
-        <textarea
-          cols="40"
-          rows="5"
-          placeholder={`${location}와 관련된 질문이나 이야기를 해보세요.`}
-          ref={content_ref}
-        />
+       
         {/* 파일 업로드 */}
         <File>
           <label htmlFor="file-input">
@@ -246,4 +237,4 @@ select {
 `;
 
 
-export default UpdateOrikkiriPost;
+export default UpdateOrikkiriAlbum;
