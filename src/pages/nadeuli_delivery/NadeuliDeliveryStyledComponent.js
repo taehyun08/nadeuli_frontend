@@ -51,8 +51,9 @@ export const OrderTitle = styled.span`
 `;
 
 export const HeaderContainer = styled.div`
+  position: relative;
   display: flex;
-  // justify-content: space-between;
+  justify-content: space-between;
   align-items: center;
 `;
 

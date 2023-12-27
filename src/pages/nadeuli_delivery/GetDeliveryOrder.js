@@ -20,6 +20,8 @@ import {
 import HeaderBack from "../../components/HeaderBack";
 import { useDispatch, useSelector } from "react-redux";
 import { setMember } from "../../redux/modules/member";
+import TopDropdownMenu from "../../components/TopDropdownMenu";
+import AlertDialog from "../../components/AlertDialog";
 
 const GetDeliveryOrder = () => {
   // 배달 주문을 조회한다.
@@ -30,6 +32,12 @@ const GetDeliveryOrder = () => {
   // const memberNickName = useSelector((state) => state.member.nickname);
   const member = useSelector((state) => state.member);
   const dispatch = useDispatch();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogDescription, setDialogDescription] = useState("");
+  const [pendingAction, setPendingAction] = useState(null);
+  const [dialogAgreeText, setDialogAgreeText] = useState("");
+  const [dialogDisagreeText, setDialogDisagreeText] = useState("");
 
   useEffect(() => {
     get(`/nadeulidelivery/getDeliveryOrder/${nadeuliDeliveryId}`)
@@ -131,13 +139,41 @@ const GetDeliveryOrder = () => {
     }).format(value);
   };
 
+  const openReportDialog = () => {
+    setPendingAction(() => () => {
+      // 신고 관련 로직
+    });
+    setDialogTitle("신고 확인");
+    setDialogDescription("이 채널을 신고하시겠습니까?");
+    setDialogAgreeText("신고");
+    setDialogDisagreeText("취소");
+    setDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const executePendingAction = () => {
+    if (pendingAction) pendingAction();
+    setPendingAction(null);
+    closeDialog();
+    navigate(`/report/nadeuliDelivery/${nadeuliDeliveryId}`);
+  };
+
+  const dropdownMenus3 = [
+    { label: "신고", onClick: openReportDialog },
+    // 원하는 만큼 추가
+  ];
+
   return (
     <>
       <HeaderContainer>
         <HeaderBack />
-        <Box style={{ paddingLeft: "100px" }}>
+        <Box>
           <OrderTitle>배달 주문</OrderTitle>
         </Box>
+        <TopDropdownMenu dropdownMenus={dropdownMenus3} />
       </HeaderContainer>
       <StyledContainer>
         <DetailContainer>
@@ -291,6 +327,15 @@ const GetDeliveryOrder = () => {
             </>
           ) : null}
         </ButtonContainer>
+        <AlertDialog
+          open={dialogOpen}
+          handleClose={closeDialog}
+          onAgree={executePendingAction}
+          title={dialogTitle}
+          description={dialogDescription}
+          agreeText={dialogAgreeText}
+          disagreeText={dialogDisagreeText}
+        />
       </StyledContainer>
     </>
   );

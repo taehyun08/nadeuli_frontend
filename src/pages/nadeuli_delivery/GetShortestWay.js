@@ -310,9 +310,10 @@ const GetShortestWay = () => {
     <>
       <HeaderContainer>
         <HeaderBack />
-        <Box style={{ paddingLeft: "80px" }}>
+        <Box style={{ paddingRight: "40px" }}>
           <OrderTitle>추천 경로 조회</OrderTitle>
         </Box>
+        <Box></Box>
       </HeaderContainer>
       <StyledContainer>
         <div
