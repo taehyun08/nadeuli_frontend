@@ -10,7 +10,7 @@ const NadeuliPay = ({ title, buttonName , handleButton, inputNumber, setInputNum
     }, [inputNumber]);
   
     return (
-      <div style={{ marginTop: '20px', marginLeft: '10px' }}>
+      <div style={{ marginTop: '20px', marginLeft: '10px', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <HeaderBack title={title} />
         <div
           style={{
@@ -19,13 +19,14 @@ const NadeuliPay = ({ title, buttonName , handleButton, inputNumber, setInputNum
             alignItems: 'center', // Center align
           }}
         >
+          <img src="/nadeuli_icon.ico" alt="NadeuliPay" style={{ display: 'block',  marginTop: '200px' }} />
           <input
             type="number"
             placeholder="금액을 입력해주세요."
             value={inputNumber}
             onChange={(e) => setInputNumber(e.target.value)}
             style={{
-              marginTop: '90%',
+              marginTop: '10%',
               marginBottom: '60px',
               padding: '10px',
               width: '250px', // Adjust width
