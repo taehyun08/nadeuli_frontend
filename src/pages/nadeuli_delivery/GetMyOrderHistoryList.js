@@ -8,6 +8,7 @@ import {
   DetailRow,
   DetailTimeAgoColumn,
   HeaderContainer,
+  InfoText,
   OrderImage,
   OrderInfo,
   OrderTitle,
@@ -76,6 +77,11 @@ const GetMyOrderHistoryList = () => {
         </Box>
         <Box></Box>
       </HeaderContainer>
+      {!responseDTOList.length > 0 && (
+        <InfoText style={{ paddingTop: "300px", fontWeight: "bold" }}>
+          게시물이 없습니다.
+        </InfoText>
+      )}
       {responseDTOList.map((responseDTO, index) => (
         <CardBox
           className="card"
