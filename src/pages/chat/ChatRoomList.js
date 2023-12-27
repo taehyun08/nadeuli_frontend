@@ -6,11 +6,11 @@ const ChatRoomList = (probs) => {
   const { chatRooms } = probs;
 
   return (
-    <section style={{ backgroundColor: '#eee' }}>
+    <section style={{ backgroundColor: '#fff', minHeight: '100vh' }}>
         <div className="container py-5">
             <div className="row">
                 <div className="col-md-6 col-lg-5 col-xl-4 mb-4 mb-md-0">
-                    <h5 className="font-weight-bold mb-3 text-center text-lg-start">채팅</h5>
+                    <h5 className="font-weight-bold mb-3 text-center text-lg-start" style={{ position: 'absolute', top: '10px', left: '10px', zIndex: '1', fontWeight: 'bold', fontSize: '1.5rem' }}>채팅</h5>
                     <div className="card">
                         <div className="card-body">
                             <ul className="list-unstyled mb-0">
@@ -19,7 +19,7 @@ const ChatRoomList = (probs) => {
                                     <li
                                         key={chatRoom.id}
                                         className="p-2 border-bottom"
-                                        style={{ backgroundColor: '#eee' }}
+                                        style={{ backgroundColor: '#fff' }}
                                     >
                                          <Link to={`/chat/chatting/${chatRoom._id}${chatRoom.productId !== 0 ? `/${chatRoom.productId}/1` : `/${chatRoom.orikkiriId}/0`}`} className="d-flex justify-content-between">
                                             <div className="d-flex flex-row">
