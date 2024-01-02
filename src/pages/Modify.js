@@ -269,7 +269,7 @@ const Header = styled.header`
     font-weight: 800;
   }
   h5 {
-    color: #ff7e36;
+    color: #508BFC;
   }
 `;
 const Container = styled.div`

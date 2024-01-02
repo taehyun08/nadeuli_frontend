@@ -139,7 +139,7 @@ return (
         <div className="arrow" onClick={()=>{
           navigate(-1);
         }}><AiOutlineArrowLeft /></div>
-        <label className="nickname">{title}</label>
+        <label className="nickname" style={{ marginRight: '100px' }}>{title}</label>
       </div>
       
        {params.isProduct === "1" && (<div className="saleList">
