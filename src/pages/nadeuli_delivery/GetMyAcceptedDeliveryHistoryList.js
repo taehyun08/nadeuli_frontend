@@ -100,10 +100,11 @@ const GetMyAcceptedDeliveryHistoryList = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle style={{ paddingLeft: "80px" }}>
+          <OrderTitle style={{ paddingRight: "40px" }}>
             주문 수락 목록
           </OrderTitle>
         </Box>
+        <Box></Box>
       </HeaderContainer>
       {!responseDTOList.length > 0 && (
         <InfoText style={{ paddingTop: "300px", fontWeight: "bold" }}>

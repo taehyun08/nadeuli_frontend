@@ -284,10 +284,11 @@ const UpdateDeliveryOrder = () => {
       <HeaderContainer>
         <HeaderBack />
         <Box>
-          <OrderTitle style={{ paddingLeft: "80px" }}>
+          <OrderTitle style={{ paddingRight: "40px" }}>
             배달 주문 수정
           </OrderTitle>
         </Box>
+        <Box></Box>
       </HeaderContainer>
       <StyledContainer>
         <StyledForm onSubmit={handleSubmit}>

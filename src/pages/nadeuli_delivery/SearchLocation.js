@@ -218,9 +218,10 @@ const SearchLocation = () => {
     <>
       <HeaderContainer>
         <HeaderBack />
-        <Box style={{ paddingLeft: "80px" }}>
+        <Box style={{ paddingRight: "40px" }}>
           <OrderTitle>출발/도착지 설정</OrderTitle>
         </Box>
+        <Box></Box>
       </HeaderContainer>
       <StyledContainer style={{ justifyContent: "center" }}>
         <div

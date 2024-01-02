@@ -8,6 +8,7 @@ import {
   DetailRow,
   DetailTimeAgoColumn,
   GetMyAcceptedDeliveryHistoryListButton,
+  InfoText,
   OrderButton,
   OrderImage,
   OrderInfo,
@@ -127,6 +128,11 @@ const NadeuliDeliveryHome = () => {
       <NadeuliDeliveryHomeTopBar onSearch={handleSearch} />
       <Box></Box>
 
+      {!responseDTOList.length > 0 && (
+        <InfoText style={{ paddingTop: "300px", fontWeight: "bold" }}>
+          게시물이 없습니다.
+        </InfoText>
+      )}
       {filteredDTOList.map((responseDTO, index) => (
         <div className="MainListBox">
           <CardBox
