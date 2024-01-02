@@ -126,7 +126,7 @@ function Register() {
                 }
             })
             .catch((err) => {
-                alert("이미 가입된 휴대폰 번호입니다.");
+                alert("이미 가입된 휴대폰 번호이거나 위치설정에 문제가 발생했습니다.");
                 setTo('')
                 setAuthNum('')
                 setIsAuthNumBtnDisabled(false);
